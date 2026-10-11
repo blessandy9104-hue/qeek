@@ -13,14 +13,27 @@ function hasMathcore(): boolean {
 const HAS_MATHCORE = hasMathcore();
 
 function waitForOutput(
+  proc: ChildProcess,
   stream: NodeJS.ReadableStream,
   text: string,
   timeout = 60000
 ): Promise<string> {
   return new Promise((resolve, reject) => {
     let buffer = '';
+    let errBuffer = '';
+    proc.stderr?.on('data', (d) => {
+      errBuffer += d.toString();
+    });
+    proc.on('exit', (code) => {
+      errBuffer += `\n[child exited code=${code}]`;
+    });
     const timer = setTimeout(
-      () => reject(new Error(`Timeout waiting for: ${text}`)),
+      () =>
+        reject(
+          new Error(
+            `Timeout waiting for: ${text}\n--- stdout so far ---\n${buffer}\n--- stderr so far ---\n${errBuffer}`
+          )
+        ),
       timeout
     );
     stream.on('data', (data) => {
@@ -37,10 +50,10 @@ test.describe('CLI Application', () => {
   test('boots and lists tools', async () => {
     const cli = spawn('node', [CLI], { stdio: ['pipe', 'pipe', 'pipe'] });
     try {
-      await waitForOutput(cli.stdout, 'qeek — local-first assistant');
+      await waitForOutput(cli, cli.stdout, 'qeek — local-first assistant');
       cli.stdin.write('/tools\n');
       // vault_graph sorts last; waiting for it guarantees the full list.
-      const out = await waitForOutput(cli.stdout, 'vault_graph');
+      const out = await waitForOutput(cli, cli.stdout, 'vault_graph');
       expect(out).toContain('mathcore_compute');
       expect(out).toContain('sysinfo_snapshot');
     } finally {
@@ -53,9 +66,9 @@ test.describe('CLI Application', () => {
     test.skip(!HAS_MATHCORE, 'mathcore-mcp not installed');
     const cli = spawn('node', [CLI], { stdio: ['pipe', 'pipe', 'pipe'] });
     try {
-      await waitForOutput(cli.stdout, 'local-first assistant');
+      await waitForOutput(cli, cli.stdout, 'local-first assistant');
       cli.stdin.write('/math 2+2\n');
-      const out = await waitForOutput(cli.stdout, '"value": "4"');
+      const out = await waitForOutput(cli, cli.stdout, '"value": "4"');
       expect(out).toContain('VERIFIED');
     } finally {
       cli.stdin.write('/quit\n');
@@ -65,7 +78,7 @@ test.describe('CLI Application', () => {
 
   test('exits zero on /quit', async () => {
     const cli = spawn('node', [CLI], { stdio: ['pipe', 'pipe', 'pipe'] });
-    await waitForOutput(cli.stdout, 'local-first assistant');
+    await waitForOutput(cli, cli.stdout, 'local-first assistant');
     cli.stdin.write('/quit\n');
     const code = await new Promise((r) => cli.on('close', r));
     expect(code).toBe(0);
