@@ -7,8 +7,8 @@ settings:
 catalogs:
   default:
     oxlint:
-      specifier: ^0.2.0
-      version: 0.2.18
+      specifier: ^0.18.1
+      version: 0.18.1
     typescript:
       specifier: ^5.3.0
       version: 5.9.3
@@ -33,8 +33,8 @@ importers:
         specifier: ^1.6.0
         version: 1.6.1(vitest@1.6.1)
       oxlint:
-        specifier: ^0.2.0
-        version: 0.2.18
+        specifier: ^0.18.1
+        version: 0.18.1
       typescript:
         specifier: ^5.3.0
         version: 5.9.3
@@ -50,7 +50,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -68,7 +68,7 @@ importers:
         version: 44.7.0
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       vitest:
         specifier: 'catalog:'
         version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
@@ -84,7 +84,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -109,7 +109,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -131,7 +131,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -159,7 +159,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -184,7 +184,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -206,7 +206,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -231,7 +231,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -256,7 +256,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -281,7 +281,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -306,7 +306,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -325,7 +325,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -347,7 +347,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -372,7 +372,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -394,7 +394,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -416,7 +416,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -441,7 +441,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -466,7 +466,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -488,7 +488,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -510,7 +510,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -532,7 +532,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -554,7 +554,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -573,7 +573,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -595,7 +595,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -614,7 +614,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -639,7 +639,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -661,7 +661,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -686,7 +686,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -708,7 +708,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -730,7 +730,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -752,7 +752,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -777,7 +777,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -799,7 +799,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -821,7 +821,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -843,7 +843,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -862,7 +862,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -884,7 +884,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -909,7 +909,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -931,7 +931,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -953,7 +953,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -978,7 +978,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -1000,7 +1000,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -1022,7 +1022,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -1047,7 +1047,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -1072,7 +1072,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -1100,7 +1100,7 @@ importers:
         version: 6.4.24
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -1119,7 +1119,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -1144,7 +1144,7 @@ importers:
         version: 20.19.43
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -1166,7 +1166,7 @@ importers:
         version: 20.19.43
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -1185,7 +1185,7 @@ importers:
     devDependencies:
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -1207,7 +1207,7 @@ importers:
         version: 20.19.43
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -1229,7 +1229,7 @@ importers:
         version: 20.19.43
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -1293,7 +1293,7 @@ importers:
         version: 20.19.43
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -1315,7 +1315,7 @@ importers:
         version: 20.19.43
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -1337,7 +1337,7 @@ importers:
         version: 20.19.43
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -1359,7 +1359,7 @@ importers:
         version: 20.19.43
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -1381,7 +1381,7 @@ importers:
         version: 20.19.43
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -1403,7 +1403,7 @@ importers:
         version: 20.19.43
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -1461,7 +1461,7 @@ importers:
         version: 20.19.43
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -1479,7 +1479,7 @@ importers:
         version: 20.19.43
       oxlint:
         specifier: 'catalog:'
-        version: 0.2.18
+        version: 0.18.1
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
@@ -2033,47 +2033,47 @@ packages:
   '@oxc-project/types@0.153.0':
     resolution: {integrity: sha512-jSNrRIyvPVLL5E1z/tS5zLAprosGz/FuI1PWwEOz59j3E4TTTzSpqKb/RDGqJhhW0QHYISGXxq582wGx6T11Tw==}
 
-  '@oxlint/darwin-arm64@0.2.18':
-    resolution: {integrity: sha512-DpPId0O8hHh1/PjbtJSMi3DvgK5ol49hB+jiogYGXvBPOF2/8/tG1v7dtbACx4pcorUMu4EHHKHigasnx114cQ==}
+  '@oxlint/darwin-arm64@0.18.1':
+    resolution: {integrity: sha512-FqDrcQJmEGNkgmZgI4wbCrGyJl1tiRZa3udxvyYaXag8W80A0zLFNCyWVvHIgUJ0DHlZjRc7O72xUGjiyvQrqQ==}
     cpu: [arm64]
     os: [darwin]
 
-  '@oxlint/darwin-x64@0.2.18':
-    resolution: {integrity: sha512-hdnPhG/nxF2F8YI9lg3uYMH1ZYxSKiDPu2srey1Xvo2LZChNnvbvxXNS5UYAxG9f/U6VbH4WYfUcqbNZW5Tnzw==}
+  '@oxlint/darwin-x64@0.18.1':
+    resolution: {integrity: sha512-YUcyWBJdNuMcJxAwdV/i25/kvnKrVsA+vLn7SsL87cAwiD//rqGdOixk0r8sKUYa71Kx3h0Fg2ToUOjdE6ddYw==}
     cpu: [x64]
     os: [darwin]
 
-  '@oxlint/linux-arm64-gnu@0.2.18':
-    resolution: {integrity: sha512-bhCHYlIn8I5bw5AulQKhYJzanLFoi7mgIkqzfiJibCrGrQh3IKv3h0k8bWHqLEYMmufhGz7yhS96oY3Pe0K1Aw==}
+  '@oxlint/linux-arm64-gnu@0.18.1':
+    resolution: {integrity: sha512-ol3jhmUv5VI/omMrt6DkwY/jVTSVJlflFyU1SnSb/BuVVf3TyBiCHmZ4wVtcrcT5k3sWjrvYWw2kSozvmuE4tg==}
     cpu: [arm64]
     os: [linux]
     libc: [glibc]
 
-  '@oxlint/linux-arm64-musl@0.2.18':
-    resolution: {integrity: sha512-TbZONlryL36xWLUCNRhYZ0m92io6hiN0Ho8ez4T5BoTWwaKwyTdAvpbH7vFDlVDAsp33GB81DXsFSAjPq8PIng==}
+  '@oxlint/linux-arm64-musl@0.18.1':
+    resolution: {integrity: sha512-iKDj1ZwlU4KpXuIL1qkVP6NJzri2VSJreqXCIAe1Bf5RZXMAGSO3xjldgiX+HBvFOKSBIarLcqONYDbYco9uaQ==}
     cpu: [arm64]
     os: [linux]
     libc: [musl]
 
-  '@oxlint/linux-x64-gnu@0.2.18':
-    resolution: {integrity: sha512-Leupfl0E85BC1t8zB+vqUeeKami+Lo/8HiihLUQAbjz+O8J2WuNaOmt/GURK5jINQhEASBw8dnhNFBMKYe6ZgA==}
+  '@oxlint/linux-x64-gnu@0.18.1':
+    resolution: {integrity: sha512-A3g+fZhlOivUdK7xU/IrbhBcMHig5GLrfMX0HYjXL1fiSqKYu9n1o1p42WpT6KfPL3L2uncSg/iyg7hspcN6qA==}
     cpu: [x64]
     os: [linux]
     libc: [glibc]
 
-  '@oxlint/linux-x64-musl@0.2.18':
-    resolution: {integrity: sha512-THG4LZ8KeCy87E4tHqC765acRW0dyXdgzqERi3idjSupCH8juTpk9UfZVcpxcqEicXnEuZDkBQpO8nboyFng3Q==}
+  '@oxlint/linux-x64-musl@0.18.1':
+    resolution: {integrity: sha512-LA02SdATWZEZBy8ZZpR2GlUbDg7+Jq1/WKkywMXqxdClkcoyyFozj8aQD2iTMKELSra4OSyqqZpOYroqjSSKmw==}
     cpu: [x64]
     os: [linux]
     libc: [musl]
 
-  '@oxlint/win32-arm64@0.2.18':
-    resolution: {integrity: sha512-X/boJsMQiuO2Wfu3eabWefFlb0+O5oSXjcG0gmIE9aySNMy/pVyCno2/RGy+0f4xSjBZXmamCsEoQp/E8NeDQQ==}
+  '@oxlint/win32-arm64@0.18.1':
+    resolution: {integrity: sha512-FNL+OxDflqLGXRgLxfBM/X4RnLYgtOKTsb1mNSqsjSCEfUi1Oqivh7KvZ09IfAMZeJ85/fL6EI6hSOyY7nNYUg==}
     cpu: [arm64]
     os: [win32]
 
-  '@oxlint/win32-x64@0.2.18':
-    resolution: {integrity: sha512-LmwDhDaZYd20WKmHPeITYNazGVUBFvs7D9+WJ+ecx+bX/6euFp8j+e/4sUzxR5gk6pecqyA6WEld52Gy6W92jg==}
+  '@oxlint/win32-x64@0.18.1':
+    resolution: {integrity: sha512-W+aVE9Siqs6Oe3NDaDOTTOYsN9X3znl+whfqWK1EcLpqJXX1kdB8Hf45HkGjqnHoFoP96GRgUnXQHQvmUybjvg==}
     cpu: [x64]
     os: [win32]
 
@@ -2772,9 +2772,9 @@ packages:
     resolution: {integrity: sha512-1FlR+gjXK7X+AsAHso35MnyN5KqGwJRi/31ft6x0M194ht7S+rWAvd7PHss9xSKMzE0asv1pyIHaJYq+BbacAQ==}
     engines: {node: '>=12'}
 
-  oxlint@0.2.18:
-    resolution: {integrity: sha512-/6tR2hm9vN/cjJarItkDPeSWDqPbkQ6pVDzePR2La5cNA+kn1Gt7k0ZHxcpTuhZOI/lhRD2z4C0v/m9kja/0cQ==}
-    engines: {node: '>=14.*'}
+  oxlint@0.18.1:
+    resolution: {integrity: sha512-JGcQvbhd00Qb+nq4f9sYYRh7mZIb0K/7rbMepNdJDMzo8pbmBpx1N2XOG61RjHDsNnY6ImAmVk3h4QVwFenwUQ==}
+    engines: {node: '>=8.*'}
     hasBin: true
 
   p-limit@5.0.0:
@@ -3641,28 +3641,28 @@ snapshots:
 
   '@oxc-project/types@0.153.0': {}
 
-  '@oxlint/darwin-arm64@0.2.18':
+  '@oxlint/darwin-arm64@0.18.1':
     optional: true
 
-  '@oxlint/darwin-x64@0.2.18':
+  '@oxlint/darwin-x64@0.18.1':
     optional: true
 
-  '@oxlint/linux-arm64-gnu@0.2.18':
+  '@oxlint/linux-arm64-gnu@0.18.1':
     optional: true
 
-  '@oxlint/linux-arm64-musl@0.2.18':
+  '@oxlint/linux-arm64-musl@0.18.1':
     optional: true
 
-  '@oxlint/linux-x64-gnu@0.2.18':
+  '@oxlint/linux-x64-gnu@0.18.1':
     optional: true
 
-  '@oxlint/linux-x64-musl@0.2.18':
+  '@oxlint/linux-x64-musl@0.18.1':
     optional: true
 
-  '@oxlint/win32-arm64@0.2.18':
+  '@oxlint/win32-arm64@0.18.1':
     optional: true
 
-  '@oxlint/win32-x64@0.2.18':
+  '@oxlint/win32-x64@0.18.1':
     optional: true
 
   '@playwright/test@1.64.0':
@@ -4237,16 +4237,16 @@ snapshots:
     dependencies:
       mimic-fn: 4.0.0
 
-  oxlint@0.2.18:
+  oxlint@0.18.1:
     optionalDependencies:
-      '@oxlint/darwin-arm64': 0.2.18
-      '@oxlint/darwin-x64': 0.2.18
-      '@oxlint/linux-arm64-gnu': 0.2.18
-      '@oxlint/linux-arm64-musl': 0.2.18
-      '@oxlint/linux-x64-gnu': 0.2.18
-      '@oxlint/linux-x64-musl': 0.2.18
-      '@oxlint/win32-arm64': 0.2.18
-      '@oxlint/win32-x64': 0.2.18
+      '@oxlint/darwin-arm64': 0.18.1
+      '@oxlint/darwin-x64': 0.18.1
+      '@oxlint/linux-arm64-gnu': 0.18.1
+      '@oxlint/linux-arm64-musl': 0.18.1
+      '@oxlint/linux-x64-gnu': 0.18.1
+      '@oxlint/linux-x64-musl': 0.18.1
+      '@oxlint/win32-arm64': 0.18.1
+      '@oxlint/win32-x64': 0.18.1
 
   p-limit@5.0.0:
     dependencies:
