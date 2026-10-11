@@ -2,15 +2,18 @@
   "name": "@personal-assistant/assistant-desktop",
   "version": "0.1.0",
   "private": true,
-  "description": "Personal Assistant Desktop app (Electron placeholder - desktop shell wiring is future work)",
+  "description": "qeek desktop shell (Electron): spawns the local web server and opens it in a window",
+  "main": "dist/main.js",
   "scripts": {
-    "build": "echo \"assistant-desktop: no build step yet\"",
-    "dev": "echo \"assistant-desktop: Electron shell not yet wired; use pnpm run web instead\"",
+    "build": "tsc -p tsconfig.json",
+    "dev": "electron .",
+    "start": "electron .",
     "test": "vitest run --passWithNoTests",
     "lint": "oxlint",
     "clean": "echo clean"
   },
   "devDependencies": {
+    "electron": "^44.7.0",
     "vitest": "catalog:",
     "oxlint": "catalog:"
   }

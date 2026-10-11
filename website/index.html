@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>qeek — local-first AI assistant with verified math</title>
+<meta name="description" content="qeek is a local-first personal AI assistant. Every computation is verified, your data never leaves your machine." />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header>
+  <h1>qeek</h1>
+  <p class="tagline">The assistant that proves its math, owns your data, and knows its own capabilities.</p>
+  <p>
+    <a class="btn" href="https://github.com/blessandy9104-hue/qeek">GitHub</a>
+    <a class="btn" href="#quickstart">Get started</a>
+  </p>
+</header>
+
+<section>
+  <h2>Verified mathematics, not guesses</h2>
+  <p>Every computation runs through <strong>mathcore</strong>: independent methods must agree before any value is released. Real output from this project:</p>
+  <pre><code>$ mathcore "solve x^2 - 5x + 6 = 0"
+VERIFIED  solve x^2 - 5x + 6 = 0 for x
+    x = 2; x = 3
+    confirmed by: sympy-solve, numeric-polynomial-roots,
+                  check:exact-substitution, check:distinct-root-count
+    certificate 9c8739cbf1e5ad80</code></pre>
+  <p>Wrong answers are caught, not repeated: <code>MISMATCH: the claim differs from the verified result</code>.</p>
+</section>
+
+<section>
+  <h2>Local-first by construction</h2>
+  <ul>
+    <li><strong>Obsidian-compatible vault</strong> — your memory is plain Markdown files you own.</li>
+    <li><strong>Offline math + tools</strong> — 38 local tools work with no API key and no network.</li>
+    <li><strong>Passwordless login</strong> — email codes for any inbox including <code>@proton.me</code>. No passwords stored, no OAuth middleman.</li>
+    <li><strong>Capability awareness</strong> — the assistant knows what it can do and says when it can't.</li>
+  </ul>
+</section>
+
+<section id="quickstart">
+  <h2>Quickstart</h2>
+  <pre><code>git clone https://github.com/blessandy9104-hue/qeek.git
+cd qeek
+pip install -e ../mathcore   # sibling checkout, provides mathcore-mcp
+pnpm install                 # pnpm 11.7.0
+pnpm run build
+pnpm start                   # CLI — try: /math solve x^2 - 5x + 6 = 0</code></pre>
+  <p>Checks every contributor runs: <code>pnpm run lint</code> · <code>pnpm run typecheck</code> · <code>pnpm test</code> · Playwright e2e across Chromium, Firefox, WebKit.</p>
+</section>
+
+<section>
+  <h2>Architecture</h2>
+  <ul>
+    <li><strong>qeek-host</strong> — plugin loader, tool registry, REPL, optional LLM chat (any OpenAI-compatible endpoint).</li>
+    <li><strong>55 plugins</strong> — agent, session, tools, workflows, subagents, LSP, sandbox, browser, terminal, skills, memory, 17-language tooling, system/hardware awareness, security scanner, telemetry.</li>
+    <li><strong>Apps</strong> — CLI (working), Web UI + HTTP API (working), Electron desktop shell (working, unsigned).</li>
+  </ul>
+  <p>Full docs live in the repo: <code>docs/architecture.md</code>, ADRs, runbooks, and API reference.</p>
+</section>
+
+<footer>
+  <p>MIT licensed. Built in the open at <a href="https://github.com/blessandy9104-hue/qeek">blessandy9104-hue/qeek</a>.</p>
+</footer>
+</body>
+</html>
