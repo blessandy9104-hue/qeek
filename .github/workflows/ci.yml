@@ -230,11 +230,13 @@ jobs:
           sarif_file: trivy-results.sarif
 
       - name: Secret scanning
+        # Filesystem mode: base/head diff scanning fails on push-to-main
+        # ("BASE and HEAD commits are the same"). --only-verified fails
+        # the build only on live, verifiable secrets.
         uses: trufflesecurity/trufflehog@main
         with:
           path: ./
-          base: main
-          head: HEAD
+          extra_args: --only-verified
 
   build-docker:
     name: Build Docker Images
