@@ -2,6 +2,8 @@
 
 > The only AI assistant that proves its math, owns your data, and knows its own capabilities.
 
+Website: **https://blessandy9104-hue.github.io/qeek/**
+
 [![CI](https://github.com/blessandy9104-hue/qeek/actions/workflows/ci.yml/badge.svg)](https://github.com/blessandy9104-hue/qeek/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue.svg)](https://www.typescriptlang.org/)

@@ -12,6 +12,11 @@ updates:
       - "npm"
     commit-message:
       prefix: "chore(deps):"
+    # Major bumps (typescript 7, vitest 5, node 26) break the build and
+    # need deliberate migration PRs, not automated ones.
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
     groups:
       dev-dependencies:
         patterns:
@@ -48,6 +53,9 @@ updates:
       - "github-actions"
     commit-message:
       prefix: "chore(ci):"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: "docker"
     directory: "/"
@@ -61,3 +69,6 @@ updates:
       - "docker"
     commit-message:
       prefix: "chore(docker):"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
