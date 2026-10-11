@@ -11,7 +11,9 @@ on:
 env:
   NODE_VERSION: '20'
   PYTHON_VERSION: '3.11'
-  PNPM_VERSION: '8.15.0'
+  # Must match packageManager in package.json: pnpm 8 cannot read the
+  # v9 lockfile (catalogs, allowBuilds) and fails with NO_LOCKFILE.
+  PNPM_VERSION: '11.7.0'
 
 jobs:
   lint-and-typecheck:
@@ -101,14 +103,6 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-
-      - name: Install mathcore
-        run: pip install -e ../mathcore
-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
@@ -144,8 +138,11 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
-      - name: Install mathcore
-        run: pip install -e ../mathcore
+      - name: Install mathcore (best effort)
+        # mathcore lives in a sibling checkout that CI clones do not have
+        # (its license was never published, so it is not vendored).
+        # Math-dependent e2e tests skip when the binary is absent.
+        run: pip install -e ../mathcore || echo "::warning::mathcore sibling missing; math e2e will skip"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -154,7 +151,7 @@ jobs:
         run: pnpm run build
 
       - name: Install Playwright
-        run: pnpm exec playwright install --with-deps chromium
+        run: pnpm exec playwright install --with-deps chromium firefox webkit
 
       - name: Run E2E tests
         run: pnpm exec playwright test --reporter=json --output-file=e2e-results.json

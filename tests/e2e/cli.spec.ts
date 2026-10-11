@@ -1,7 +1,16 @@
 import { test, expect } from '@playwright/test';
-import { spawn, ChildProcess } from 'child_process';
+import { spawn, ChildProcess, spawnSync } from 'child_process';
 
 const CLI = 'apps/assistant-cli/dist/cli.js';
+
+// mathcore-mcp comes from a sibling checkout that CI clones do not have.
+// Math-dependent tests skip cleanly when it is absent (and run for real
+// where it is installed, e.g. local dev).
+function hasMathcore(): boolean {
+  const r = spawnSync('mathcore-mcp', ['--help'], { timeout: 15000 });
+  return !r.error;
+}
+const HAS_MATHCORE = hasMathcore();
 
 function waitForOutput(
   stream: NodeJS.ReadableStream,
@@ -41,6 +50,7 @@ test.describe('CLI Application', () => {
   });
 
   test('verified math over stdio', async () => {
+    test.skip(!HAS_MATHCORE, 'mathcore-mcp not installed');
     const cli = spawn('node', [CLI], { stdio: ['pipe', 'pipe', 'pipe'] });
     try {
       await waitForOutput(cli.stdout, 'local-first assistant');
@@ -80,6 +90,7 @@ test.describe('Web Application', () => {
   });
 
   test('chat API verifies bare arithmetic', async ({ request }) => {
+    test.skip(!HAS_MATHCORE, 'mathcore-mcp not installed');
     const res = await request.post('/api/chat', { data: { message: '2+2' } });
     const body = await res.json();
     expect(body.verified).toBe(true);
@@ -87,6 +98,7 @@ test.describe('Web Application', () => {
   });
 
   test('UI sends a message and shows VERIFIED badge', async ({ page }) => {
+    test.skip(!HAS_MATHCORE, 'mathcore-mcp not installed');
     await page.goto('/');
     await expect(page.locator('h1')).toContainText('qeek');
     await page.fill('[data-testid="chat-input"]', '2+2');
