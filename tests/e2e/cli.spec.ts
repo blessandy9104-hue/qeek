@@ -52,6 +52,32 @@ test.describe('CLI Application', () => {
   // Spawning node + booting 15 plugins is slow on loaded CI runners;
   // test.slow() triples the timeout so helper diagnostics (20s) always win.
   test.slow();
+
+  test('canary: spawn node and read piped stdout', async () => {
+    const p = spawn('node', ['-e', "console.log('hello-child')"], {
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+    const out = await new Promise<string>((resolve, reject) => {
+      let buf = '';
+      const t = setTimeout(
+        () => reject(new Error(`canary timeout; node=${process.version} platform=${process.platform} buf=${JSON.stringify(buf)}`)),
+        20000
+      );
+      p.stdout.on('data', (d) => {
+        buf += d.toString();
+        if (buf.includes('hello-child')) {
+          clearTimeout(t);
+          resolve(buf);
+        }
+      });
+      p.on('error', (e) => {
+        clearTimeout(t);
+        reject(new Error(`canary spawn error: ${e.message}`));
+      });
+    });
+    expect(out).toContain('hello-child');
+  });
+
   test('boots and lists tools', async () => {
     const cli = spawn('node', [CLI], { stdio: ['pipe', 'pipe', 'pipe'] });
     try {

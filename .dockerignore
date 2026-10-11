@@ -1,0 +1,16 @@
+node_modules
+dist
+coverage
+playwright-report
+test-results
+.git
+.github
+.vscode
+.idea
+*.log
+npm-debug.log*
+knowledge-vault/.obsidian
+test-vault
+test-auth-data
+test-audit.jsonl
+.DS_Store

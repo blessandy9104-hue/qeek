@@ -1,29 +1,29 @@
 # Syntax: Dockerfile
 # qeek CLI image: offline-capable assistant console.
 # Run interactively: docker run --rm -i qeek-cli
-FROM node:20-alpine AS builder
+# NOTE: node:22 minimum — pnpm 11 requires node:sqlite (Node 22.5+).
+FROM node:22-alpine AS builder
 
 WORKDIR /app
 
 # Install pnpm (must match packageManager in package.json)
 RUN corepack enable && corepack prepare pnpm@11.7.0 --activate
 
-# Copy workspace manifests first for layer caching
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY packages/*/package.json ./packages/*/
-COPY apps/*/package.json ./apps/*/
+# Copy source (.dockerignore keeps node_modules/dist/.git out).
+# Single COPY keeps all 60 workspace manifests aligned with sources;
+# split manifest/source layers cannot enumerate 60 package.json paths
+# with Docker's glob rules, so we trade a little layer caching for
+# correctness.
+COPY . .
 
 # Install dependencies
 RUN pnpm install --frozen-lockfile --prod=false
-
-# Copy source
-COPY . .
 
 # Build all packages (tsc emit)
 RUN pnpm run build
 
 # Runtime stage
-FROM node:20-alpine AS runtime
+FROM node:22-alpine AS runtime
 
 WORKDIR /app
 
