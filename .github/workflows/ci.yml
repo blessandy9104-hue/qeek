@@ -44,6 +44,11 @@ jobs:
       - name: Run oxlint
         run: pnpm run lint
 
+      # Type declarations resolve through built dist/ output, so the
+      # workspace must be built before typechecking on a fresh clone.
+      - name: Build packages
+        run: pnpm run build
+
       - name: Run TypeScript type check
         run: pnpm run typecheck
 
