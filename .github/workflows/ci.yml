@@ -319,7 +319,7 @@ jobs:
       # (e.g. `pnpm --filter "@qeek/*" publish --access public`) behind
       # an NPM_TOKEN secret check — never `publish -r` unscoped.
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v3
         with:
           generate_release_notes: true
           files: |
