@@ -1,0 +1,35 @@
+{
+  "name": "@personal-assistant/assistant-core",
+  "version": "0.1.0",
+  "description": "Core integration layer for Personal Assistant AI - combines DeepSeek Harness with mathcore and memory",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    },
+    "./mathcore-mcp": {
+      "types": "./dist/mathcore-mcp.d.ts",
+      "import": "./dist/mathcore-mcp.js",
+      "require": "./dist/mathcore-mcp.js"
+    }
+  },
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "test": "vitest run",
+    "lint": "oxlint",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@deepseek-ai/dsh-core": "workspace:*"
+  },
+  "devDependencies": {
+    "tsdown": "^0.3.0",
+    "typescript": "catalog:",
+    "vitest": "catalog:",
+    "oxlint": "catalog:"
+  }
+}

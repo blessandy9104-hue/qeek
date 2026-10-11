@@ -1,0 +1,17 @@
+{
+  "name": "@personal-assistant/assistant-desktop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Personal Assistant Desktop app (Electron placeholder - desktop shell wiring is future work)",
+  "scripts": {
+    "build": "echo \"assistant-desktop: no build step yet\"",
+    "dev": "echo \"assistant-desktop: Electron shell not yet wired; use pnpm run web instead\"",
+    "test": "vitest run --passWithNoTests",
+    "lint": "oxlint",
+    "clean": "echo clean"
+  },
+  "devDependencies": {
+    "vitest": "catalog:",
+    "oxlint": "catalog:"
+  }
+}

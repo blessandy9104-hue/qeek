@@ -1,0 +1,33 @@
+{
+  "name": "qeek",
+  "version": "0.1.0",
+  "private": true,
+  "description": "qeek - Personal Assistant AI Intelligence Subsystem with Capability Awareness. Merged DeepSeek Harness + mathcore + Obsidian Vault.",
+  "scripts": {
+    "build": "pnpm --filter \"./packages/*\" --filter \"./apps/*\" exec tsc -p tsconfig.json",
+    "start": "node apps/assistant-cli/dist/cli.js",
+    "typecheck": "pnpm --filter \"./packages/*\" --filter \"./apps/*\" exec tsc --noEmit",
+    "dev": "pnpm --filter @personal-assistant/assistant-cli run dev",
+    "web": "pnpm --filter @personal-assistant/assistant-web run dev",
+    "desktop": "pnpm --filter @personal-assistant/assistant-desktop run dev",
+    "install:mathcore": "pip install -e ../mathcore",
+    "mathcore:mcp": "mathcore-mcp",
+    "test": "vitest run",
+    "lint": "oxlint packages apps tests scripts --ignore-pattern \"**/dist/**\" --ignore-pattern \"**/node_modules/**\" --ignore-pattern \"**/coverage/**\"",
+    "clean": "node scripts/clean.mjs",
+    "capability:scan": "node scripts/scan-capabilities.js",
+    "capability:report": "node scripts/capability-report.js"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@playwright/test": "^1.49.0",
+    "@vitest/ui": "^1.6.0",
+    "oxlint": "^0.2.0",
+    "typescript": "^5.3.0",
+    "vitest": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "packageManager": "pnpm@11.7.0"
+}

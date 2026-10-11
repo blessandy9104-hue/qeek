@@ -1,0 +1,158 @@
+# Personal Assistant Headless Profile (CLI) - Full Feature Set
+# Complete profile for terminal usage with all harness features
+
+- id: dsh-base
+  name: '@deepseek-ai/dsh-base'
+
+- id: dsh-headless
+  name: '@deepseek-ai/dsh-headless'
+
+# Personal Assistant custom plugins - CLI Core
+- insert:
+    - id: personal-assistant-core
+      name: '@personal-assistant/assistant-core'
+    - id: personal-assistant-agent
+      name: '@personal-assistant/assistant-agent'
+    - id: personal-assistant-session
+      name: '@personal-assistant/assistant-session'
+    - id: personal-assistant-tools
+      name: '@personal-assistant/assistant-tools'
+    - id: personal-assistant-llm
+      name: '@personal-assistant/assistant-llm'
+    - id: personal-assistant-mcp
+      name: '@personal-assistant/assistant-mcp'
+    - id: personal-assistant-fs
+      name: '@personal-assistant/assistant-fs'
+    - id: personal-assistant-shell
+      name: '@personal-assistant/assistant-shell'
+    - id: personal-assistant-browser
+      name: '@personal-assistant/assistant-browser'
+    - id: personal-assistant-sandbox
+      name: '@personal-assistant/assistant-sandbox'
+    - id: personal-assistant-subagent
+      name: '@personal-assistant/assistant-subagent'
+    - id: personal-assistant-workflow
+      name: '@personal-assistant/assistant-workflow'
+    - id: personal-assistant-webhook
+      name: '@personal-assistant/assistant-webhook'
+    - id: personal-assistant-settings
+      name: '@personal-assistant/assistant-settings'
+    - id: personal-assistant-credentials
+      name: '@personal-assistant/assistant-credentials'
+    - id: personal-assistant-telemetry
+      name: '@personal-assistant/assistant-telemetry'
+    - id: personal-assistant-computer-use
+      name: '@personal-assistant/assistant-computer-use'
+    - id: personal-assistant-terminal
+      name: '@personal-assistant/assistant-terminal'
+    - id: personal-assistant-lsp
+      name: '@personal-assistant/assistant-lsp'
+    - id: personal-assistant-attachment
+      name: '@personal-assistant/assistant-attachment'
+    - id: personal-assistant-compaction
+      name: '@personal-assistant/assistant-compaction'
+    - id: personal-assistant-context
+      name: '@personal-assistant/assistant-context'
+    - id: personal-assistant-document
+      name: '@personal-assistant/assistant-document'
+    - id: personal-assistant-feedback
+      name: '@personal-assistant/assistant-feedback'
+    - id: personal-assistant-guard
+      name: '@personal-assistant/assistant-guard'
+    - id: personal-assistant-identity
+      name: '@personal-assistant/assistant-identity'
+    - id: personal-assistant-interaction
+      name: '@personal-assistant/assistant-interaction'
+    - id: personal-assistant-plan
+      name: '@personal-assistant/assistant-plan'
+    - id: personal-assistant-preset
+      name: '@personal-assistant/assistant-preset'
+    - id: personal-assistant-schedule
+      name: '@personal-assistant/assistant-schedule'
+    - id: personal-assistant-storage
+      name: '@personal-assistant/assistant-storage'
+    - id: personal-assistant-todo
+      name: '@personal-assistant/assistant-todo'
+    - id: personal-assistant-workspace
+      name: '@personal-assistant/assistant-workspace'
+    - id: personal-assistant-scope
+      name: '@personal-assistant/assistant-scope'
+    - id: personal-assistant-goals
+      name: '@personal-assistant/assistant-goals'
+    - id: personal-assistant-agent-teams
+      name: '@personal-assistant/assistant-agent-teams'
+    - id: personal-assistant-plugin-manager
+      name: '@personal-assistant/assistant-plugin-manager'
+    - id: personal-assistant-acp
+      name: '@personal-assistant/assistant-acp'
+    - id: personal-assistant-sdk
+      name: '@personal-assistant/assistant-sdk'
+    - id: personal-assistant-math
+      name: '@personal-assistant/assistant-math'
+    - id: personal-assistant-memory
+      name: '@personal-assistant/assistant-memory'
+    - id: personal-assistant-skills
+      name: '@personal-assistant/assistant-skills'
+    - id: qeek-languages
+      name: '@qeek/qeek-languages'
+    - id: qeek-capability
+      name: '@qeek/qeek-capability'
+    - id: qeek-event-logger
+      name: '@qeek/qeek-event-logger'
+    - id: qeek-search
+      name: '@qeek/qeek-search'
+    - id: qeek-telemetry
+      name: '@qeek/qeek-telemetry'
+    - id: qeek-code-analysis
+      name: '@qeek/qeek-code-analysis'
+    - id: qeek-docgen
+      name: '@qeek/qeek-docgen'
+    - id: qeek-health
+      name: '@qeek/qeek-health'
+    - id: qeek-graph
+      name: '@qeek/qeek-graph'
+    - id: qeek-scheduler
+      name: '@qeek/qeek-scheduler'
+    - id: qeek-secscan
+      name: '@qeek/qeek-secscan'
+    - id: qeek-sysinfo
+      name: '@qeek/qeek-sysinfo'
+
+# mathcore MCP integration
+- insert:
+    - id: mathcore-mcp
+      name: '@deepseek-ai/dsh-mcp-client'
+      config:
+        serverName: mathcore
+        transport: stdio
+        command: mathcore-mcp
+        cwd: !!js process.cwd()
+        env:
+          MATHCORE_AUDIT: !!js >-
+            process.env.MATHCORE_AUDIT?.trim() || 
+            process.getBuiltinModule('node:path').join(
+              process.getBuiltinModule('node:os').homedir(), 
+              '.mathcore', 
+              'audit.jsonl'
+            )
+
+# Knowledge vault filesystem access
+- insert:
+    - id: vault-fs
+      name: '@deepseek-ai/dsh-fs-local'
+      config:
+        root: !!js >-
+          process.env.ASSISTANT_VAULT_PATH || 
+          process.getBuiltinModule('node:path').join(process.cwd(), 'knowledge-vault')
+
+# Session persistence (real package: packages/session/session-persistence-jsonl)
+- insert:
+    - id: session-persistence
+      name: '@deepseek-ai/dsh-session-persistence-jsonl'
+      config:
+        directory: !!js >-
+          process.getBuiltinModule('node:path').join(
+            process.getBuiltinModule('node:os').homedir(), 
+            '.personal-assistant', 
+            'sessions'
+          )

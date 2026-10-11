@@ -1,0 +1,31 @@
+packages:
+  # Self-contained: qeek ships zero upstream-harness workspace members.
+  # Cordis profile configs still reference upstream bundle names for future
+  # launcher integration, but nothing is installed from there.
+  - packages/*
+  - apps/*
+
+# esbuild (bundler used by tsdown/vitest) needs its native binary
+# postinstall. node-pty/koffi remain allowlisted (same reviewed decision as
+# upstream): if any transitive dep ships them, their scripts are legitimate
+# (ConPTY setup / FFI bindings), and the entries are inert otherwise.
+allowBuilds:
+  esbuild: true
+  koffi: true
+  node-pty: true
+
+catalog:
+  typescript: ^5.3.0
+  vitest: ^1.0.0
+  "@types/node": ^20.10.0
+  oxlint: ^0.2.0
+
+minimumReleaseAgeExclude:
+  - rolldown-plugin-dts@0.28.7
+  - tsdown@0.23.1
+
+# tsdown@0.3.x depends on rolldown@nightly, a dist-tag that no longer exists
+# on npm (ERR_PNPM_NO_MATCHING_VERSION). Pin every workspace occurrence to a
+# modern tsdown whose rolldown dependency is a stable range.
+overrides:
+  tsdown: ^0.23.1

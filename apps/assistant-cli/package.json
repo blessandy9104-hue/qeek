@@ -1,0 +1,23 @@
+{
+  "name": "@personal-assistant/assistant-cli",
+  "version": "0.1.0",
+  "description": "Personal Assistant CLI",
+  "bin": {
+    "assistant": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "start": "node dist/cli.js",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@qeek/qeek-host": "workspace:*"
+  },
+  "devDependencies": {
+    "tsdown": "^0.3.0",
+    "typescript": "catalog:",
+    "vitest": "catalog:",
+    "oxlint": "catalog:"
+  }
+}

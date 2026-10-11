@@ -1,0 +1,35 @@
+{
+  "name": "@qeek/qeek-sysinfo",
+  "version": "0.1.0",
+  "description": "System and hardware awareness: OS, CPU, memory, disk, GPU, battery, network, and process insight (local-only, no network calls)",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    },
+    "./collectors": {
+      "types": "./dist/collectors.d.ts",
+      "import": "./dist/collectors.js"
+    }
+  },
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "test": "vitest run",
+    "lint": "oxlint",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@deepseek-ai/dsh-core": "workspace:*"
+  },
+  "devDependencies": {
+    "tsdown": "^0.3.0",
+    "typescript": "catalog:",
+    "vitest": "catalog:",
+    "oxlint": "catalog:",
+    "@types/node": "^20.10.0"
+  }
+}

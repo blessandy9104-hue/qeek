@@ -1,0 +1,29 @@
+{
+  "name": "@deepseek-ai/dsh-core",
+  "version": "0.0.1-shim.1",
+  "description": "LOCAL COMPATIBILITY SHIM (qeek). Provides the qeek plugin-authoring convention (definePlugin/defineSkill/Tool plus host stubs) so the workspace typechecks, builds, and tests without the upstream harness runtime. This is NOT the upstream DeepSeek Harness core: real Cordis runtime interop (Context.apply, service keys, event map) is future work tracked in docs/adr/001-cordis-plugin-architecture.md.",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "test": "vitest run --passWithNoTests",
+    "lint": "oxlint",
+    "clean": "rm -rf dist"
+  },
+  "devDependencies": {
+    "tsdown": "^0.3.0",
+    "typescript": "catalog:",
+    "vitest": "catalog:",
+    "oxlint": "catalog:",
+    "@types/node": "^20.10.0"
+  }
+}

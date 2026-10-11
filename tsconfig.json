@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ES2022"],
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "baseUrl": "."
+  },
+  "exclude": ["node_modules", "dist", "**/dist/**"],
+  "references": [
+    { "path": "./packages/assistant-core" },
+    { "path": "./packages/assistant-math" },
+    { "path": "./packages/assistant-memory" },
+    { "path": "./packages/assistant-skills" },
+    { "path": "./apps/assistant-cli" },
+    { "path": "./apps/assistant-web" },
+    { "path": "./apps/assistant-desktop" },
+    { "path": "./packages/qeek-languages" },
+    { "path": "./packages/qeek-capability" },
+    { "path": "./packages/qeek-event-logger" },
+    { "path": "./packages/qeek-search" },
+    { "path": "./packages/qeek-telemetry" },
+    { "path": "./packages/qeek-code-analysis" },
+    { "path": "./packages/qeek-docgen" },
+    { "path": "./packages/qeek-health" },
+    { "path": "./packages/qeek-graph" },
+    { "path": "./packages/qeek-scheduler" },
+    { "path": "./packages/qeek-secscan" },
+    { "path": "./packages/qeek-sysinfo" },
+    { "path": "./packages/qeek-host" }
+  ]
+}
