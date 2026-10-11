@@ -1,5 +1,4 @@
 import * as readline from 'node:readline';
-import * as fs from 'node:fs';
 import type { QeekHost } from './host.js';
 import { chatConfigFromEnv, chat } from './chat.js';
 import { mathcore } from '@personal-assistant/assistant-core/mathcore-mcp';
@@ -40,12 +39,6 @@ export async function runRepl(host: QeekHost, agent: { systemSections: string[] 
     ...agent.systemSections,
   ].join('\n\n');
 
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-    prompt: chatCfg ? 'qeek> ' : 'qeek (tools-only, set DEEPSEEK_API_KEY for chat)> ',
-  });
-
   console.log('qeek — local-first assistant. Type /help for commands, /quit to exit.');
   if (!chatCfg) {
     console.log(
@@ -54,6 +47,9 @@ export async function runRepl(host: QeekHost, agent: { systemSections: string[] 
     );
   }
 
+  // Created lazily in TTY mode only: an Interface starts consuming stdin
+  // immediately, which would steal bytes from batch mode below.
+  let rl: readline.Interface | null = null;
   const shutdown = () => {
     try {
       mathcore.stop();
@@ -61,7 +57,7 @@ export async function runRepl(host: QeekHost, agent: { systemSections: string[] 
       // already stopped
     }
     try {
-      rl.close();
+      rl?.close();
     } catch {
       // already closed
     }
@@ -130,18 +126,68 @@ export async function runRepl(host: QeekHost, agent: { systemSections: string[] 
   };
 
   if (!process.stdin.isTTY) {
-    // Batch mode (piped stdin): drain the whole stream before processing.
-    // readline discards buffered lines when EOF arrives mid-tool-call, so
-    // the async iterator is only safe for interactive TTYs.
-    const data = fs.readFileSync(0, 'utf-8');
-    for (const raw of data.split(/\r?\n/)) {
-      const cont = await handleLine(raw);
-      if (!cont) break;
-    }
-    shutdown();
+    // Batch mode (piped stdin): consume the stream incrementally so an
+    // always-open pipe (e.g. a test harness holding stdin) does not block
+    // startup, and EOF arriving mid-tool-call cannot discard buffered
+    // lines the way readline's async iterator does.
+    await new Promise<void>((resolve) => {
+      let remainder = '';
+      let busy = false;
+      let ended = false;
+      let quit = false;
+      const queue: string[] = [];
+      const pump = async (): Promise<void> => {
+        if (busy) return;
+        busy = true;
+        try {
+          while (queue.length > 0 && !quit) {
+            const raw = queue.shift() as string;
+            const cont = await handleLine(raw);
+            if (!cont) {
+              quit = true;
+            }
+          }
+        } finally {
+          busy = false;
+        }
+        if (quit || (ended && queue.length === 0)) {
+          shutdown();
+          resolve();
+        }
+      };
+      process.stdin.setEncoding('utf-8');
+      process.stdin.on('data', (chunk: string) => {
+        remainder += chunk;
+        const parts = remainder.split(/\r?\n/);
+        remainder = parts.pop() ?? '';
+        queue.push(...parts);
+        void pump();
+      });
+      process.stdin.on('end', () => {
+        if (remainder.trim()) queue.push(remainder);
+        remainder = '';
+        ended = true;
+        void pump();
+      });
+      process.stdin.on('error', () => {
+        ended = true;
+        void pump();
+      });
+      process.stdin.resume();
+    });
+    // Detach so an always-open pipe cannot hold the event loop after quit.
+    process.stdin.removeAllListeners('data');
+    process.stdin.removeAllListeners('end');
+    process.stdin.removeAllListeners('error');
+    process.stdin.pause();
     return;
   }
 
+  rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+    prompt: chatCfg ? 'qeek> ' : 'qeek (tools-only, set DEEPSEEK_API_KEY for chat)> ',
+  });
   rl.prompt();
   try {
     for await (const line of rl) {

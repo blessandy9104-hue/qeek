@@ -6,6 +6,8 @@ tags: ["preference", "settings", "config"]
 
 # Personal Preferences
 
+> Example starter content — replace with your own. The assistant stores what it learns about you here.
+
 ## Communication Style
 - Concise and direct
 - Technical depth when asked

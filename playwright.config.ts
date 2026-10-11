@@ -19,37 +19,27 @@ export default defineConfig({
     actionTimeout: 10000,
     navigationTimeout: 30000
   },
+  // Chromium only: the suite must run on a fresh clone with a single
+  // `playwright install chromium`. Add firefox/webkit when CI needs them.
   projects: [
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] }
-    },
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] }
-    },
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] }
-    },
-    {
-      name: 'mobile-chrome',
-      use: { ...devices['Pixel 5'] }
-    },
-    {
-      name: 'mobile-safari',
-      use: { ...devices['iPhone 12'] }
     }
   ],
   webServer: {
-    command: 'pnpm run web',
-    url: 'http://localhost:3080',
+    command: 'node apps/assistant-web/dist/server.js',
+    url: 'http://localhost:3080/health',
     reuseExistingServer: !process.env.CI,
     timeout: 120000,
     env: {
       NODE_ENV: 'test',
       ASSISTANT_VAULT_PATH: './test-vault',
-      MATHCORE_AUDIT: './test-audit.jsonl'
+      MATHCORE_AUDIT: './test-audit.jsonl',
+      // Test-only: echo OTP codes in /api/auth/request responses so e2e
+      // can complete login without an SMTP server. Never set in production.
+      QEEK_AUTH_DEV_ECHO: '1',
+      QEEK_AUTH_DIR: './test-auth-data'
     }
   },
   expect: {

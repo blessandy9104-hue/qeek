@@ -6,6 +6,8 @@ tags: ["project", "tracking", "active"]
 
 # Active Projects
 
+> Example starter content — replace with your own projects.
+
 ## Personal Assistant AI Subsystem
 - **Status**: In Development
 - **Goal**: Merge DeepSeek Harness + mathcore + Obsidian Vault

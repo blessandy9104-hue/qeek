@@ -312,17 +312,12 @@ jobs:
       - name: Build packages
         run: pnpm run build
 
-      - name: Publish to npm
-        run: pnpm publish -r --access public --no-git-checks
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Generate changelog
-        run: pnpm exec changeset version && pnpm exec changeset publish
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
+      # NOTE: npm publishing is intentionally disabled. The workspace
+      # publishes nothing today: the @personal-assistant/* and @qeek/*
+      # scopes are unclaimed and @changesets/cli is not installed. When a
+      # scope is claimed, re-add a scoped publish step here
+      # (e.g. `pnpm --filter "@qeek/*" publish --access public`) behind
+      # an NPM_TOKEN secret check — never `publish -r` unscoped.
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:

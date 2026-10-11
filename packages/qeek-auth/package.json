@@ -1,0 +1,33 @@
+{
+  "name": "@qeek/qeek-auth",
+  "version": "0.1.0",
+  "description": "Passwordless email-OTP auth for qeek. Works with any inbox including @proton.me (no OAuth partnership needed)",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "test": "vitest run",
+    "lint": "oxlint",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@deepseek-ai/dsh-core": "workspace:*",
+    "nodemailer": "^10.1.0"
+  },
+  "devDependencies": {
+    "tsdown": "^0.3.0",
+    "typescript": "catalog:",
+    "vitest": "catalog:",
+    "oxlint": "catalog:",
+    "@types/node": "^20.10.0",
+    "@types/nodemailer": "^6.4.17"
+  }
+}

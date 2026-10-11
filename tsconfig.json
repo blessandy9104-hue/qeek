@@ -35,6 +35,7 @@
     { "path": "./packages/qeek-scheduler" },
     { "path": "./packages/qeek-secscan" },
     { "path": "./packages/qeek-sysinfo" },
-    { "path": "./packages/qeek-host" }
+    { "path": "./packages/qeek-host" },
+    { "path": "./packages/qeek-auth" }
   ]
 }

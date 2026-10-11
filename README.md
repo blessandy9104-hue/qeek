@@ -2,9 +2,7 @@
 
 > The only AI assistant that proves its math, owns your data, and knows its own capabilities.
 
-[![CI](https://github.com/blessandy9104/qeek/workflows/CI/badge.svg)](https://github.com/blessandy9104/qeek/actions/workflows/ci.yml)
-[![Security](https://github.com/blessandy9104/qeek/workflows/Security/badge.svg)](https://github.com/blessandy9104/qeek/actions/workflows/ci.yml)
-[![npm version](https://img.shields.io/npm/v/qeek.svg)](https://www.npmjs.com/package/qeek)
+[![CI](https://github.com/blessandy9104-hue/qeek/actions/workflows/ci.yml/badge.svg)](https://github.com/blessandy9104-hue/qeek/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue.svg)](https://www.typescriptlang.org/)
 [![Node](https://img.shields.io/badge/Node-20%2B-green.svg)](https://nodejs.org/)
@@ -53,6 +51,7 @@ with tool use. Try: `/math solve x^2 - 5x + 6 = 0` · `/sys` · `/tools`.
 - **🗓️ Smart Scheduler** - energy-aware prioritization + time-blocking
 - **🛡️ Security Scanner** - secrets + risky-pattern scanning
 - **📊 Telemetry** - in-memory meters + Prometheus/OTLP + Grafana
+- **🔑 Passwordless login** - email OTP for any inbox incl. @proton.me, `GET /login`
 - **🔒 Privacy-First** - Runs locally, no cloud required, MIT/Apache-2.0 licenses
 
 ## Documentation
