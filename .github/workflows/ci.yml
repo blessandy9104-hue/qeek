@@ -161,7 +161,9 @@ jobs:
         run: pnpm exec playwright install --with-deps chromium firefox webkit
 
       - name: Run E2E tests
-        run: pnpm exec playwright test --reporter=json --output-file=e2e-results.json
+        # Reporter outputs are configured in playwright.config.ts;
+        # playwright has no --output-file flag.
+        run: pnpm exec playwright test
         env:
           NODE_ENV: test
 
@@ -177,6 +179,10 @@ jobs:
     name: Security Scan
     runs-on: ubuntu-latest
     needs: lint-and-typecheck
+    # SARIF upload (CodeQL action) requires security-events: write.
+    permissions:
+      contents: read
+      security-events: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
