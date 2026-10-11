@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { spawn, ChildProcess, spawnSync } from 'child_process';
+import { spawn, spawnSync } from 'child_process';
 
 const CLI = 'apps/assistant-cli/dist/cli.js';
 
@@ -12,45 +12,55 @@ function hasMathcore(): boolean {
 }
 const HAS_MATHCORE = hasMathcore();
 
-function waitForOutput(
-  proc: ChildProcess,
-  stream: NodeJS.ReadableStream,
-  text: string,
-  // Must stay well below the test timeout so this rejection (with
-  // captured child output) surfaces instead of a bare timeout.
-  timeout = 20000
-): Promise<string> {
+/**
+ * Run the CLI once with scripted stdin, then close stdin and wait for
+ * exit. Closing stdin up front removes every timing race: the batch pump
+ * drains the scripted lines deterministically and the process must exit
+ * on its own. Any hang or crash surfaces with full captured output.
+ */
+function runCliOnce(
+  input: string,
+  timeout = 60000
+): Promise<{ stdout: string; stderr: string; code: number | null }> {
   return new Promise((resolve, reject) => {
-    let buffer = '';
-    let errBuffer = '';
-    proc.stderr?.on('data', (d) => {
-      errBuffer += d.toString();
-    });
-    proc.on('exit', (code) => {
-      errBuffer += `\n[child exited code=${code}]`;
-    });
-    const timer = setTimeout(
-      () =>
-        reject(
-          new Error(
-            `Timeout waiting for: ${text}\n--- stdout so far ---\n${buffer}\n--- stderr so far ---\n${errBuffer}`
-          )
-        ),
-      timeout
-    );
-    stream.on('data', (data) => {
-      buffer += data.toString();
-      if (buffer.includes(text)) {
-        clearTimeout(timer);
-        resolve(buffer);
+    const cli = spawn('node', [CLI], { stdio: ['pipe', 'pipe', 'pipe'] });
+    let stdout = '';
+    let stderr = '';
+    const timer = setTimeout(() => {
+      try {
+        cli.kill('SIGKILL');
+      } catch {
+        // already gone
       }
+      reject(
+        new Error(
+          `CLI timed out with input ${JSON.stringify(input)}\n--- stdout so far ---\n${stdout}\n--- stderr so far ---\n${stderr}`
+        )
+      );
+    }, timeout);
+    cli.stdout.on('data', (d) => {
+      stdout += d.toString();
     });
+    cli.stderr.on('data', (d) => {
+      stderr += d.toString();
+    });
+    cli.on('error', (e) => {
+      clearTimeout(timer);
+      reject(new Error(`CLI spawn error: ${e.message}`));
+    });
+    cli.on('close', (code) => {
+      clearTimeout(timer);
+      resolve({ stdout, stderr, code });
+    });
+    cli.stdin.write(input);
+    cli.stdin.end();
   });
 }
 
 test.describe('CLI Application', () => {
   // Spawning node + booting 15 plugins is slow on loaded CI runners;
-  // test.slow() triples the timeout so helper diagnostics (20s) always win.
+  // test.slow() triples the timeout. runCliOnce carries its own 60s
+  // watchdog with full captured output, so failures stay diagnosable.
   test.slow();
 
   test('canary: spawn node and read piped stdout', async () => {
@@ -79,40 +89,27 @@ test.describe('CLI Application', () => {
   });
 
   test('boots and lists tools', async () => {
-    const cli = spawn('node', [CLI], { stdio: ['pipe', 'pipe', 'pipe'] });
-    try {
-      await waitForOutput(cli, cli.stdout, 'qeek — local-first assistant');
-      cli.stdin.write('/tools\n');
-      // vault_graph sorts last; waiting for it guarantees the full list.
-      const out = await waitForOutput(cli, cli.stdout, 'vault_graph');
-      expect(out).toContain('mathcore_compute');
-      expect(out).toContain('sysinfo_snapshot');
-    } finally {
-      cli.stdin.write('/quit\n');
-      await new Promise((r) => cli.on('close', r));
-    }
+    const run = await runCliOnce('/tools\n/quit\n');
+    expect(run.code).toBe(0);
+    expect(run.stdout).toContain('qeek — local-first assistant');
+    expect(run.stdout).toContain('mathcore_compute');
+    expect(run.stdout).toContain('sysinfo_snapshot');
+    // vault_graph sorts last: proves the full list printed.
+    expect(run.stdout).toContain('vault_graph');
   });
 
   test('verified math over stdio', async () => {
     test.skip(!HAS_MATHCORE, 'mathcore-mcp not installed');
-    const cli = spawn('node', [CLI], { stdio: ['pipe', 'pipe', 'pipe'] });
-    try {
-      await waitForOutput(cli, cli.stdout, 'local-first assistant');
-      cli.stdin.write('/math 2+2\n');
-      const out = await waitForOutput(cli, cli.stdout, '"value": "4"');
-      expect(out).toContain('VERIFIED');
-    } finally {
-      cli.stdin.write('/quit\n');
-      await new Promise((r) => cli.on('close', r));
-    }
+    const run = await runCliOnce('/math 2+2\n/quit\n');
+    expect(run.code).toBe(0);
+    expect(run.stdout).toContain('"value": "4"');
+    expect(run.stdout).toContain('VERIFIED');
   });
 
   test('exits zero on /quit', async () => {
-    const cli = spawn('node', [CLI], { stdio: ['pipe', 'pipe', 'pipe'] });
-    await waitForOutput(cli, cli.stdout, 'local-first assistant');
-    cli.stdin.write('/quit\n');
-    const code = await new Promise((r) => cli.on('close', r));
-    expect(code).toBe(0);
+    const run = await runCliOnce('/quit\n');
+    expect(run.code).toBe(0);
+    expect(run.stdout).toContain('local-first assistant');
   });
 });
 
