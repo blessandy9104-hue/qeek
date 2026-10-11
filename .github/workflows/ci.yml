@@ -166,6 +166,9 @@ jobs:
         run: pnpm exec playwright test
         env:
           NODE_ENV: test
+          # Makes child shutdowns print live-handle diagnostics to
+          # stderr on hang (captured by the CLI e2e helper on timeout).
+          QEEK_DEBUG: '1'
 
       - name: Upload Playwright report
         if: always()

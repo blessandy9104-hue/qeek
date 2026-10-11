@@ -61,6 +61,16 @@ export async function runRepl(host: QeekHost, agent: { systemSections: string[] 
     } catch {
       // already closed
     }
+    // QEEK_DEBUG=1 dumps live handles so a hung shutdown names its owner.
+    if (process.env.QEEK_DEBUG === '1') {
+      try {
+        const handles = (process as any)._getActiveHandles?.() ?? [];
+        const kinds = handles.map((h: any) => h?.constructor?.name ?? typeof h);
+        console.error(`[qeek-debug] shutdown with ${handles.length} live handles: ${kinds.join(',')}`);
+      } catch {
+        // diagnostics must never break shutdown
+      }
+    }
   };
   process.once('SIGINT', () => {
     shutdown();
