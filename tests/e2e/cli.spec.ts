@@ -16,9 +16,9 @@ function waitForOutput(
   proc: ChildProcess,
   stream: NodeJS.ReadableStream,
   text: string,
-  // Must stay below Playwright's 30s per-test timeout so this rejection
-  // (with captured child output) surfaces instead of a bare timeout.
-  timeout = 25000
+  // Must stay well below the test timeout so this rejection (with
+  // captured child output) surfaces instead of a bare timeout.
+  timeout = 20000
 ): Promise<string> {
   return new Promise((resolve, reject) => {
     let buffer = '';
@@ -49,6 +49,9 @@ function waitForOutput(
 }
 
 test.describe('CLI Application', () => {
+  // Spawning node + booting 15 plugins is slow on loaded CI runners;
+  // test.slow() triples the timeout so helper diagnostics (20s) always win.
+  test.slow();
   test('boots and lists tools', async () => {
     const cli = spawn('node', [CLI], { stdio: ['pipe', 'pipe', 'pipe'] });
     try {
