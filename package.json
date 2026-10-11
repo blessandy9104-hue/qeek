@@ -19,7 +19,7 @@
     "capability:report": "node scripts/capability-report.js"
   },
   "devDependencies": {
-    "@types/node": "^20.10.0",
+    "@types/node": "^26.6.4",
     "@playwright/test": "^1.49.0",
     "@vitest/ui": "^1.6.0",
     "oxlint": "^0.2.0",

@@ -27,8 +27,8 @@ importers:
         specifier: ^1.49.0
         version: 1.64.0
       '@types/node':
-        specifier: ^20.10.0
-        version: 20.19.43
+        specifier: ^26.6.4
+        version: 26.6.4
       '@vitest/ui':
         specifier: ^1.6.0
         version: 1.6.1(vitest@1.6.1)
@@ -40,7 +40,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^1.0.0
-        version: 1.6.1(@types/node@20.19.43)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+        version: 1.6.1(@types/node@26.6.4)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
   apps/assistant-cli:
     dependencies:
@@ -1093,8 +1093,8 @@ importers:
         version: 10.1.0
     devDependencies:
       '@types/node':
-        specifier: ^20.10.0
-        version: 20.19.43
+        specifier: ^26.6.4
+        version: 26.6.4
       '@types/nodemailer':
         specifier: ^6.4.17
         version: 6.4.24
@@ -1109,7 +1109,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 'catalog:'
-        version: 1.6.1(@types/node@20.19.43)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+        version: 1.6.1(@types/node@26.6.4)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
   packages/qeek-capability:
     dependencies:
@@ -1140,8 +1140,8 @@ importers:
         version: link:../shim-dsh-core
     devDependencies:
       '@types/node':
-        specifier: ^20.10.0
-        version: 20.19.43
+        specifier: ^26.6.4
+        version: 26.6.4
       oxlint:
         specifier: 'catalog:'
         version: 0.2.18
@@ -1153,7 +1153,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 'catalog:'
-        version: 1.6.1(@types/node@20.19.43)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+        version: 1.6.1(@types/node@26.6.4)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
   packages/qeek-docgen:
     dependencies:
@@ -1162,8 +1162,8 @@ importers:
         version: link:../shim-dsh-core
     devDependencies:
       '@types/node':
-        specifier: ^20.10.0
-        version: 20.19.43
+        specifier: ^26.6.4
+        version: 26.6.4
       oxlint:
         specifier: 'catalog:'
         version: 0.2.18
@@ -1175,7 +1175,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 'catalog:'
-        version: 1.6.1(@types/node@20.19.43)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+        version: 1.6.1(@types/node@26.6.4)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
   packages/qeek-event-logger:
     dependencies:
@@ -1203,8 +1203,8 @@ importers:
         version: link:../shim-dsh-core
     devDependencies:
       '@types/node':
-        specifier: ^20.10.0
-        version: 20.19.43
+        specifier: ^26.6.4
+        version: 26.6.4
       oxlint:
         specifier: 'catalog:'
         version: 0.2.18
@@ -1216,7 +1216,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 'catalog:'
-        version: 1.6.1(@types/node@20.19.43)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+        version: 1.6.1(@types/node@26.6.4)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
   packages/qeek-health:
     dependencies:
@@ -1225,8 +1225,8 @@ importers:
         version: link:../shim-dsh-core
     devDependencies:
       '@types/node':
-        specifier: ^20.10.0
-        version: 20.19.43
+        specifier: ^26.6.4
+        version: 26.6.4
       oxlint:
         specifier: 'catalog:'
         version: 0.2.18
@@ -1238,7 +1238,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 'catalog:'
-        version: 1.6.1(@types/node@20.19.43)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+        version: 1.6.1(@types/node@26.6.4)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
   packages/qeek-host:
     dependencies:
@@ -1289,8 +1289,8 @@ importers:
         version: link:../qeek-sysinfo
     devDependencies:
       '@types/node':
-        specifier: ^20.10.0
-        version: 20.19.43
+        specifier: ^26.6.4
+        version: 26.6.4
       oxlint:
         specifier: 'catalog:'
         version: 0.2.18
@@ -1302,7 +1302,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 'catalog:'
-        version: 1.6.1(@types/node@20.19.43)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+        version: 1.6.1(@types/node@26.6.4)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
   packages/qeek-languages:
     dependencies:
@@ -1311,8 +1311,8 @@ importers:
         version: link:../shim-dsh-core
     devDependencies:
       '@types/node':
-        specifier: ^20.10.0
-        version: 20.19.43
+        specifier: ^26.6.4
+        version: 26.6.4
       oxlint:
         specifier: 'catalog:'
         version: 0.2.18
@@ -1324,7 +1324,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 'catalog:'
-        version: 1.6.1(@types/node@20.19.43)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+        version: 1.6.1(@types/node@26.6.4)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
   packages/qeek-scheduler:
     dependencies:
@@ -1333,8 +1333,8 @@ importers:
         version: link:../shim-dsh-core
     devDependencies:
       '@types/node':
-        specifier: ^20.10.0
-        version: 20.19.43
+        specifier: ^26.6.4
+        version: 26.6.4
       oxlint:
         specifier: 'catalog:'
         version: 0.2.18
@@ -1346,7 +1346,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 'catalog:'
-        version: 1.6.1(@types/node@20.19.43)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+        version: 1.6.1(@types/node@26.6.4)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
   packages/qeek-search:
     dependencies:
@@ -1355,8 +1355,8 @@ importers:
         version: link:../shim-dsh-core
     devDependencies:
       '@types/node':
-        specifier: ^20.10.0
-        version: 20.19.43
+        specifier: ^26.6.4
+        version: 26.6.4
       oxlint:
         specifier: 'catalog:'
         version: 0.2.18
@@ -1368,7 +1368,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 'catalog:'
-        version: 1.6.1(@types/node@20.19.43)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+        version: 1.6.1(@types/node@26.6.4)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
   packages/qeek-secscan:
     dependencies:
@@ -1377,8 +1377,8 @@ importers:
         version: link:../shim-dsh-core
     devDependencies:
       '@types/node':
-        specifier: ^20.10.0
-        version: 20.19.43
+        specifier: ^26.6.4
+        version: 26.6.4
       oxlint:
         specifier: 'catalog:'
         version: 0.2.18
@@ -1390,7 +1390,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 'catalog:'
-        version: 1.6.1(@types/node@20.19.43)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+        version: 1.6.1(@types/node@26.6.4)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
   packages/qeek-sysinfo:
     dependencies:
@@ -1399,8 +1399,8 @@ importers:
         version: link:../shim-dsh-core
     devDependencies:
       '@types/node':
-        specifier: ^20.10.0
-        version: 20.19.43
+        specifier: ^26.6.4
+        version: 26.6.4
       oxlint:
         specifier: 'catalog:'
         version: 0.2.18
@@ -1412,7 +1412,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 'catalog:'
-        version: 1.6.1(@types/node@20.19.43)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+        version: 1.6.1(@types/node@26.6.4)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
   packages/qeek-telemetry:
     dependencies:
@@ -1457,8 +1457,8 @@ importers:
         version: 1.43.0
     devDependencies:
       '@types/node':
-        specifier: ^20.10.0
-        version: 20.19.43
+        specifier: ^26.6.4
+        version: 26.6.4
       oxlint:
         specifier: 'catalog:'
         version: 0.2.18
@@ -1470,13 +1470,13 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 'catalog:'
-        version: 1.6.1(@types/node@20.19.43)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+        version: 1.6.1(@types/node@26.6.4)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
   packages/shim-dsh-core:
     devDependencies:
       '@types/node':
-        specifier: ^20.10.0
-        version: 20.19.43
+        specifier: ^26.6.4
+        version: 26.6.4
       oxlint:
         specifier: 'catalog:'
         version: 0.2.18
@@ -1488,7 +1488,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 'catalog:'
-        version: 1.6.1(@types/node@20.19.43)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+        version: 1.6.1(@types/node@26.6.4)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
 packages:
 
@@ -2361,8 +2361,11 @@ packages:
   '@types/node@20.19.43':
     resolution: {integrity: sha512-6oYBAi5ikg4Pl+kGsoYtawUMBT2zZMCvPNF7pVLnHZfd1zf38DRiWn/gT01RYCdUqkv7Fhr+C9ot4/tb+2sVvA==}
 
-  '@types/node@24.19.2':
-    resolution: {integrity: sha512-93d49wCWJkCyN87MxLpNN6KXPCwFw7bVUg79mGUV1OS40JGWwVCr8n61DXCSqz7CV6/VfPkb7xec7uP2M+QHWQ==}
+  '@types/node@24.19.1':
+    resolution: {integrity: sha512-aS3/DG0oM05K0RIXXP+hKjinGG5IgSSVGzswZxW3O0sS3pH4/fycXundUC9XsszgKCk4gHXylTEK6hyFxVxnoQ==}
+
+  '@types/node@26.6.4':
+    resolution: {integrity: sha512-ldVPDCzj7fsaGZrLB0NuHuTvJcsNasysBAqMolr/cgxrLd1xbqxIr3XJiPnHHJUCxj5sNF1vnRj9aWnrVh5Jcg==}
 
   '@types/node@26.6.5':
     resolution: {integrity: sha512-uMzsv9stDdofIZBx4UGh4Z9ZgXnGC9seRDscilBcTHAeOFk67MZg/k9bWVfO+bk4qZmG+l52hRnLwUiH2LnJTg==}
@@ -3825,9 +3828,13 @@ snapshots:
     dependencies:
       undici-types: 6.21.0
 
-  '@types/node@24.19.2':
+  '@types/node@24.19.1':
     dependencies:
       undici-types: 7.24.6
+
+  '@types/node@26.6.4':
+    dependencies:
+      undici-types: 8.9.0
 
   '@types/node@26.6.5':
     dependencies:
@@ -3877,7 +3884,7 @@ snapshots:
       pathe: 1.1.2
       picocolors: 1.1.1
       sirv: 2.0.4
-      vitest: 1.6.1(@types/node@20.19.43)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+      vitest: 1.6.1(@types/node@26.6.4)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
   '@vitest/utils@1.6.1':
     dependencies:
@@ -4007,7 +4014,7 @@ snapshots:
     dependencies:
       '@electron-internal/extract-zip': 1.0.5
       '@electron/get': 5.1.0
-      '@types/node': 24.19.2
+      '@types/node': 24.19.1
     transitivePeerDependencies:
       - supports-color
 
@@ -4512,21 +4519,20 @@ snapshots:
 
   undici-types@7.24.6: {}
 
-  undici-types@8.9.0:
-    optional: true
+  undici-types@8.9.0: {}
 
   undici@7.30.0:
     optional: true
 
   verkit@0.5.0: {}
 
-  vite-node@1.6.1(@types/node@20.19.43):
+  vite-node@1.6.1(@types/node@26.6.4):
     dependencies:
       cac: 6.7.14
       debug: 4.4.3
       pathe: 1.1.2
       picocolors: 1.1.1
-      vite: 5.4.21(@types/node@20.19.43)
+      vite: 5.4.21(@types/node@26.6.4)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -4556,13 +4562,13 @@ snapshots:
       - supports-color
       - terser
 
-  vite@5.4.21(@types/node@20.19.43):
+  vite@5.4.21(@types/node@26.6.4):
     dependencies:
       esbuild: 0.21.5
       postcss: 8.5.29
       rollup: 4.64.5
     optionalDependencies:
-      '@types/node': 20.19.43
+      '@types/node': 26.6.4
       fsevents: 2.3.3
 
   vite@5.4.21(@types/node@26.6.5):
@@ -4574,7 +4580,7 @@ snapshots:
       '@types/node': 26.6.5
       fsevents: 2.3.3
 
-  vitest@1.6.1(@types/node@20.19.43)(@vitest/ui@1.6.1)(happy-dom@20.14.6):
+  vitest@1.6.1(@types/node@26.6.4)(@vitest/ui@1.6.1)(happy-dom@20.14.6):
     dependencies:
       '@vitest/expect': 1.6.1
       '@vitest/runner': 1.6.1
@@ -4593,11 +4599,11 @@ snapshots:
       strip-literal: 2.1.1
       tinybench: 2.9.0
       tinypool: 0.8.4
-      vite: 5.4.21(@types/node@20.19.43)
-      vite-node: 1.6.1(@types/node@20.19.43)
+      vite: 5.4.21(@types/node@26.6.4)
+      vite-node: 1.6.1(@types/node@26.6.4)
       why-is-node-running: 2.3.0
     optionalDependencies:
-      '@types/node': 20.19.43
+      '@types/node': 26.6.4
       '@vitest/ui': 1.6.1(vitest@1.6.1)
       happy-dom: 20.14.6
     transitivePeerDependencies:
