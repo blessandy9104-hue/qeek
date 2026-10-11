@@ -13,6 +13,11 @@ allowBuilds:
   esbuild: true
   koffi: true
   node-pty: true
+  # No-op install scripts we do not need (same reviewed decision as
+  # upstream): denying still installs the packages, it just never runs
+  # their scripts. pnpm 11 hard-fails when a script has no decision.
+  '@google/genai': false
+  protobufjs: false
 
 catalog:
   typescript: ^5.3.0
