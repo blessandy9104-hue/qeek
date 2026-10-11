@@ -10,7 +10,7 @@ By participating in this project, you agree to abide by our [Code of Conduct](CO
 
 ### Prerequisites
 
-- Node.js 20+
+- Node.js 22+ (pnpm 11 needs `node:sqlite`, unavailable on Node 20)
 - Python 3.11+
 - pnpm 11.7.0 (`npm install -g pnpm@11.7.0`; matches `packageManager` and upstream)
 - Git

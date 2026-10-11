@@ -9,7 +9,9 @@ on:
     types: [published]
 
 env:
-  NODE_VERSION: '20'
+  # pnpm 11 requires node:sqlite (Node 22.5+); Node 20 crashes pnpm itself
+  # with ERR_UNKNOWN_BUILTIN_MODULE.
+  NODE_VERSION: '22'
   PYTHON_VERSION: '3.11'
   # Must match packageManager in package.json: pnpm 8 cannot read the
   # v9 lockfile (catalogs, allowBuilds) and fails with NO_LOCKFILE.

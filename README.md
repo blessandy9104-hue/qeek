@@ -5,11 +5,11 @@
 [![CI](https://github.com/blessandy9104-hue/qeek/actions/workflows/ci.yml/badge.svg)](https://github.com/blessandy9104-hue/qeek/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue.svg)](https://www.typescriptlang.org/)
-[![Node](https://img.shields.io/badge/Node-20%2B-green.svg)](https://nodejs.org/)
+[![Node](https://img.shields.io/badge/Node-22%2B-green.svg)](https://nodejs.org/)
 
 ## Quick Start
 
-Prerequisites: Node.js 20+, Python 3.11+, pnpm 11.7.0+ (`npm install -g pnpm@11.7.0`).
+Prerequisites: Node.js 22+, Python 3.11+, pnpm 11.7.0+ (`npm install -g pnpm@11.7.0`).
 
 ```bash
 # Clone and install
