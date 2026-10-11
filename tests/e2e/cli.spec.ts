@@ -16,7 +16,9 @@ function waitForOutput(
   proc: ChildProcess,
   stream: NodeJS.ReadableStream,
   text: string,
-  timeout = 60000
+  // Must stay below Playwright's 30s per-test timeout so this rejection
+  // (with captured child output) surfaces instead of a bare timeout.
+  timeout = 25000
 ): Promise<string> {
   return new Promise((resolve, reject) => {
     let buffer = '';
