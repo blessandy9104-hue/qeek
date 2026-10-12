@@ -1,6 +1,6 @@
 import * as readline from 'node:readline';
 import type { ZoveliHost } from './host.js';
-import { chatConfigFromEnv, chat } from './chat.js';
+import { resolveChatConfig, chat } from './chat.js';
 import { mathcore } from '@zoveli/core/mathcore-mcp';
 
 /** True for the error Node throws when piped stdin ends mid-session. */
@@ -29,10 +29,10 @@ const HELP = `zoveli commands:
   /sys                  host snapshot (OS/CPU/RAM/disk/GPU)
   /caps                 capability summary
   /quit                 exit
-Anything else: chat (needs DEEPSEEK_API_KEY) or math when it looks like math.`;
+Anything else: chat (any API key, or free local Ollama) or math when it looks like math.`;
 
 export async function runRepl(host: ZoveliHost, agent: { systemSections: string[] }): Promise<void> {
-  const chatCfg = chatConfigFromEnv();
+  const chatCfg = await resolveChatConfig();
   const baseSystem = [
     'You are Zoveli, a personal assistant with verified computation and persistent memory.',
     'For any arithmetic, algebra, calculus, linear algebra, number theory, logic, statistics or unit conversion: do not compute in your head. Call the mathcore tools and state only verified values. If a result is WITHHELD, say so; never guess.',
@@ -42,9 +42,18 @@ export async function runRepl(host: ZoveliHost, agent: { systemSections: string[
   console.log('zoveli — local-first assistant. Type /help for commands, /quit to exit.'); // banner: keep 'local-first assistant' substring (e2e asserts it)
   if (!chatCfg) {
     console.log(
-      'No DEEPSEEK_API_KEY set: chat is disabled, but all local tools work ' +
-        '(math, memory, sysinfo, languages, search, scheduler, ...).'
+      'No chat model found: all local tools work ' +
+        '(math, memory, sysinfo, languages, search, scheduler, ...). ' +
+        'For free offline chat set any API key (OPENAI_API_KEY, DEEPSEEK_API_KEY, ' +
+        'OPENROUTER_API_KEY, GROQ_API_KEY, TOGETHER_API_KEY or ZOVELI_API_KEY), or ' +
+        'install Ollama (https://ollama.com) and run: ollama pull llama3.1'
     );
+  } else if (chatCfg.provider === 'ollama') {
+    console.log(
+      `Local Ollama detected: free offline chat enabled (model ${chatCfg.model}), no API key needed.`
+    );
+  } else {
+    console.log(`Chat enabled via ${chatCfg.provider} (model ${chatCfg.model}).`);
   }
   // First-30-seconds starters (TTY only, so piped/batch output stays
   // byte-identical for scripts and tests): show what to try first.
@@ -132,8 +141,10 @@ export async function runRepl(host: ZoveliHost, agent: { systemSections: string[
         });
       } else {
         console.log(
-          'That looks like a chat request, but no model is configured.\n' +
-            'Set DEEPSEEK_API_KEY (or ZOVELI_API_BASE for a local OpenAI-compatible server) to enable chat.\n' +
+          'That looks like a chat request, but no chat model is configured.\n' +
+            'Set any API key (OPENAI_API_KEY, DEEPSEEK_API_KEY, OPENROUTER_API_KEY, ' +
+            'GROQ_API_KEY, TOGETHER_API_KEY or ZOVELI_API_KEY with ZOVELI_API_BASE), ' +
+            'or run local Ollama for free: ollama pull llama3.1\n' +
             'Meanwhile try: /math 2+2 · /sys · /tools · /help'
         );
       }
@@ -216,7 +227,7 @@ export async function runRepl(host: ZoveliHost, agent: { systemSections: string[
   rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
-    prompt: chatCfg ? 'zoveli> ' : 'zoveli (tools-only, set DEEPSEEK_API_KEY for chat)> ',
+    prompt: chatCfg ? 'zoveli> ' : 'zoveli (tools-only, no chat model)> ',
   });
   rl.prompt();
   try {

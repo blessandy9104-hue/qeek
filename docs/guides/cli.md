@@ -24,14 +24,41 @@ node apps/cli/dist/cli.js
 - **Host facts:** `/sys` → OS/CPU/RAM/disk/GPU snapshot
 - **Capabilities:** `/caps` → available/total count
 - **Tool list:** `/tools` → all ~37 local tools
-- **Chat:** any other text, once `DEEPSEEK_API_KEY` is set
-  (or `ZOVELI_API_BASE` for a local OpenAI-compatible server)
+- **Chat:** any other text, once a chat model is available (see below —
+  any API key or free local Ollama)
+
+## Chat models (your preference, zero cost possible)
+
+Resolution order: any API key → free local Ollama → tools-only offline.
+
+```bash
+# Option A — free and local, no keys, no cost:
+# 1. Install from https://ollama.com, then:
+ollama pull llama3.1
+pnpm start   # auto-detects Ollama, chat just works
+
+# Option B — any API key (OpenAI-compatible providers):
+OPENAI_API_KEY=sk-... pnpm start        # or DEEPSEEK_API_KEY,
+# OPENROUTER_API_KEY, GROQ_API_KEY, TOGETHER_API_KEY, ZOVELI_API_KEY
+ZOVELI_MODEL=gpt-4o-mini pnpm start     # pick any model name
+ZOVELI_API_BASE=https://my-proxy/v1 ZOVELI_API_KEY=... pnpm start  # custom endpoint
+
+# Docker: ollama runs as a sibling service, already wired:
+docker compose --profile local-llm up ollama
+docker exec zoveli-ollama ollama pull llama3.1
+docker compose --profile cli up --build
+```
+
+`ZOVELI_OLLAMA_URL` overrides the Ollama address (default
+`http://localhost:11434`; Docker Compose sets it to `http://ollama:11434`).
 
 ## Env
 
 `ZOVELI_VAULT_PATH`, `MATHCORE_AUDIT`, `MATHCORE_TIMEOUT_MS`,
-`TELEMETRY_ENABLED`, `OTLP_ENDPOINT`, `PROM_PORT`, `DEEPSEEK_API_KEY`,
-`ZOVELI_API_BASE`, `ZOVELI_MODEL`.
+`TELEMETRY_ENABLED`, `OTLP_ENDPOINT`, `PROM_PORT`, `ZOVELI_API_KEY`,
+`OPENAI_API_KEY`, `DEEPSEEK_API_KEY`, `OPENROUTER_API_KEY`, `GROQ_API_KEY`,
+`TOGETHER_API_KEY`, `ZOVELI_API_BASE`, `ZOVELI_MODEL`, `ZOVELI_OLLAMA_URL`,
+`ZOVELI_OLLAMA_MODEL`.
 
 ## Troubleshooting
 

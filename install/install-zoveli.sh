@@ -243,7 +243,8 @@ Docker:
   docker compose -f docker/docker-compose.yml --profile web up --build
 
 Try in the CLI: /math solve x^2 - 5x + 6 = 0  ·  /sys  ·  /tools  ·  /help
-For open-ended chat set DEEPSEEK_API_KEY (or ZOVELI_API_BASE for local Ollama).
+Free offline chat (no keys): install Ollama (https://ollama.com), run 'ollama pull llama3.1'.
+Or set any API key: OPENAI_API_KEY, DEEPSEEK_API_KEY, OPENROUTER_API_KEY, GROQ_API_KEY, TOGETHER_API_KEY.
 EOF
 
 if [ -n "${GITHUB_ACTIONS:-}" ] && [ "${GITHUB_ACTIONS}" = "true" ] && [ -n "${GITHUB_PATH:-}" ]; then

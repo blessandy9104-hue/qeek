@@ -16,6 +16,10 @@ services:
       - NODE_ENV=development
       - ZOVELI_VAULT_PATH=/app/data/vault
       - MATHCORE_AUDIT=/app/data/audit/audit.jsonl
+      # Free local chat: points the app at the `ollama` service below.
+      # Bring it up with: docker compose --profile local-llm up ollama
+      # then: docker exec zoveli-ollama ollama pull llama3.1
+      - ZOVELI_OLLAMA_URL=http://ollama:11434
     stdin_open: true
     tty: true
     profiles:
@@ -39,6 +43,8 @@ services:
       - PORT=3080
       - ZOVELI_VAULT_PATH=/app/data/vault
       - MATHCORE_AUDIT=/app/data/audit/audit.jsonl
+      # Free local chat: points the app at the `ollama` service below.
+      - ZOVELI_OLLAMA_URL=http://ollama:11434
     healthcheck:
       test: ["CMD", "wget", "-q", "--spider", "http://localhost:3080/health"]
       interval: 30s

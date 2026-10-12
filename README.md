@@ -94,9 +94,12 @@ pnpm run desktop      # Electron shell (dev mode)
 
 The CLI works fully offline for all local tools (verified math via
 mathcore, memory vault, sysinfo, languages, search, scheduler, ...).
-Set `DEEPSEEK_API_KEY` (optionally with `ZOVELI_API_BASE` for any
-OpenAI-compatible endpoint, e.g. local Ollama) to enable open-ended chat
-with tool use. Try: `/math solve x^2 - 5x + 6 = 0` · `/sys` · `/tools`.
+For free offline chat with no keys: install Ollama and run
+`ollama pull llama3.1` — Zoveli detects it automatically. Or set any API
+key (`OPENAI_API_KEY`, `DEEPSEEK_API_KEY`, `OPENROUTER_API_KEY`,
+`GROQ_API_KEY`, `TOGETHER_API_KEY` or `ZOVELI_API_KEY`) with optional
+`ZOVELI_MODEL` / `ZOVELI_API_BASE` to use any OpenAI-compatible model.
+Try: `/math solve x^2 - 5x + 6 = 0` · `/sys` · `/tools`.
 
 ## Features (all runnable today)
 

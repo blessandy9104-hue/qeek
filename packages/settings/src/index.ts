@@ -26,7 +26,7 @@ export const zoveliSettings = definePlugin({
         icon: 'bot',
         order: 2,
         settings: [
-          { key: 'defaultModel', type: 'select', options: ['deepseek-chat', 'deepseek-coder', 'local-llama'], default: 'deepseek-chat' },
+          { key: 'defaultModel', type: 'select', options: ['deepseek-chat', 'deepseek-coder', 'local-llama', 'gpt-4o-mini', 'llama3.1'], default: 'deepseek-chat' },
           { key: 'maxTurns', type: 'number', min: 10, max: 200, default: 50 },
           { key: 'mathVerification', type: 'select', options: ['required', 'optional', 'disabled'], default: 'required' },
           { key: 'systemPrompt', type: 'textarea', default: '' }
