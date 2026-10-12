@@ -11,6 +11,13 @@ Website: **https://blessandy9104-hue.github.io/zoveli-ai/**
 
 ## Download & install
 
+> One-line install (opencode-style, review before running):
+> ```bash
+> curl -fsSL https://raw.githubusercontent.com/blessandy9104-hue/zoveli-ai/fix/installer/opencode-style/install/install-zoveli.sh | bash -s -- --yes
+> ```
+> Windows PowerShell: `irm https://raw.githubusercontent.com/blessandy9104-hue/zoveli-ai/fix/installer/opencode-style/install/install-zoveli.ps1 | iex`
+> See [`install/install-zoveli.sh`](install/install-zoveli.sh) (idempotent, `--yes/--dir/--branch` flags, no telemetry). After merge, replace the branch with `main`.
+
 Prerequisites: Node.js 22+, Python 3.11+, pnpm 11.7.0+.
 
 **Windows (PowerShell):**
