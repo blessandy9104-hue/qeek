@@ -46,6 +46,14 @@ export async function runRepl(host: ZoveliHost, agent: { systemSections: string[
         '(math, memory, sysinfo, languages, search, scheduler, ...).'
     );
   }
+  // First-30-seconds starters (TTY only, so piped/batch output stays
+  // byte-identical for scripts and tests): show what to try first.
+  if (process.stdin.isTTY) {
+    console.log('Try in 30 seconds (all offline, math is verified or withheld):');
+    console.log('  /math solve x^2 - 5x + 6 = 0   proven answer + certificate');
+    console.log('  /sys                           this machine: OS/CPU/RAM/disk/GPU');
+    console.log('  /tools                         every local tool (~39), no API key needed');
+  }
 
   // Created lazily in TTY mode only: an Interface starts consuming stdin
   // immediately, which would steal bytes from batch mode below.

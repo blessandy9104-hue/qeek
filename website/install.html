@@ -18,7 +18,7 @@
   <h2>0. What you need</h2>
   <ul>
     <li><strong>Node.js 22+</strong>, <strong>Python 3.11+</strong>, <strong>pnpm 11.7.0+</strong>, <strong>Git</strong></li>
-    <li>Optional but recommended for verified math: a <strong>mathcore</strong> checkout next to this repo (<code>pip install -e ../mathcore</code>)</li>
+    <li>Optional but recommended for verified math: <strong>mathcore</strong> ships vendored in <code>./mathcore</code> (<code>pip install -e ./mathcore</code>)</li>
   </ul>
 </section>
 
@@ -28,7 +28,7 @@
 npm install -g pnpm@11.7.0
 git clone https://github.com/blessandy9104-hue/zoveli-ai.git
 cd zoveli-ai
-pip install -e ..\mathcore   # optional: enables verified math
+pip install -e .\mathcore   # vendored: enables verified math
 pnpm install
 pnpm run build
 pnpm test                    # 70 unit tests, all green
@@ -41,7 +41,7 @@ pnpm start                   # launch the CLI assistant</code></pre>
 npm install -g pnpm@11.7.0
 git clone https://github.com/blessandy9104-hue/zoveli-ai.git
 cd zoveli-ai
-pip install -e ../mathcore   # optional: enables verified math
+pip install -e ./mathcore   # vendored: enables verified math
 pnpm install
 pnpm run build
 pnpm test
@@ -54,7 +54,7 @@ pnpm start</code></pre>
 npm install -g pnpm@11.7.0
 git clone https://github.com/blessandy9104-hue/zoveli-ai.git
 cd zoveli-ai
-pip install -e ../mathcore   # optional: enables verified math
+pip install -e ./mathcore   # vendored: enables verified math
 pnpm install
 pnpm run build
 pnpm test

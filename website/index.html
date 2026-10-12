@@ -11,12 +11,38 @@
 <header>
   <nav><a href="index.html">Zoveli AI</a> · <a href="install.html">Install</a> · <a href="features.html">Features</a> · <a href="https://github.com/blessandy9104-hue/zoveli-ai">GitHub</a></nav>
   <h1>Zoveli AI</h1>
-  <p class="tagline">The assistant that proves its math, owns your data, and knows its own capabilities.</p>
+  <p class="tagline">The assistant that proves its math, runs on your hardware, and never trains on your data.</p>
   <p>
-    <a class="btn" href="install.html">Download &amp; launch</a>
+    <a class="btn" href="install.html">Download &amp; launch — free</a>
     <a class="btn secondary" href="features.html">Explore features</a>
   </p>
+  <p><small>Free forever · No account needed · Works fully offline · MIT licensed</small></p>
 </header>
+
+<section>
+  <h2>Why not just use ChatGPT or Claude?</h2>
+  <p>They are great — and $20/month, cloud-only, and they learn from what you type unless you opt out. Zoveli is built on the opposite bet:</p>
+  <table>
+    <tr><th></th><th>Zoveli AI</th><th>ChatGPT / Claude</th></tr>
+    <tr><td>Price</td><td><strong>Free</strong>, runs on your machine</td><td>$8–$20+/month subscriptions</td></tr>
+    <tr><td>Your data</td><td><strong>Stays home</strong> — plain Markdown vault you own, never used for training</td><td>Sent to the cloud; training opt-out buried in settings</td></tr>
+    <tr><td>Offline</td><td><strong>Fully offline</strong> for ~39 local tools</td><td>Requires internet, always</td></tr>
+    <tr><td>Math</td><td><strong>Verified or withheld</strong> — independent methods must agree, sealed certificate</td><td>Best-effort guesses, stated confidently</td></tr>
+    <tr><td>Model choice</td><td>Bring your own key (<code>DEEPSEEK_API_KEY</code>) or local Ollama — swap anytime</td><td>Locked to one vendor's models</td></tr>
+  </table>
+  <p>Use Zoveli when the work is yours: private notes, exact computation, and tools that must work on a plane.</p>
+</section>
+
+<section>
+  <h2>Value in 30 seconds</h2>
+  <pre><code>$ git clone https://github.com/blessandy9104-hue/zoveli-ai.git
+$ cd zoveli-ai &amp;&amp; pnpm install &amp;&amp; pnpm run build
+$ pnpm start
+zoveli — local-first assistant. Type /help for commands, /quit to exit.
+zoveli&gt; /math solve x^2 - 5x + 6 = 0
+VERIFIED  x = 2; x = 3  (certificate 9c8739cbf1e5ad80)</code></pre>
+  <p><a href="install.html">Full installation guides for Windows, macOS, and Linux →</a></p>
+</section>
 
 <section>
   <h2>Verified mathematics, not guesses</h2>
@@ -45,7 +71,8 @@ VERIFIED  solve x^2 - 5x + 6 = 0 for x
   <pre><code>git clone https://github.com/blessandy9104-hue/zoveli-ai.git
 cd zoveli-ai
 pnpm install &amp;&amp; pnpm run build
-pnpm start   # → /math solve x^2 - 5x + 6 = 0</code></pre>
+pnpm start   # CLI — works fully offline
+pnpm run web # Web UI + API at http://127.0.0.1:3080</code></pre>
   <p><a href="install.html">Full installation guides for Windows, macOS, and Linux →</a></p>
 </section>
 

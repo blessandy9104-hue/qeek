@@ -53,15 +53,23 @@ const PAGE = `<!doctype html>
   form { display: flex; gap: 8px; }
   input { flex: 1; padding: 8px; }
   button { padding: 8px 16px; }
+  #starters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1rem; }
+  #starters button { font-size: 0.85rem; border: 1px solid #ccc; border-radius: 16px; background: #f6f8fa; cursor: pointer; }
   #tools { font-size: 0.85rem; color: #444; }
 </style>
 </head>
 <body>
 <h1>Zoveli AI</h1>
 <p>Local-first assistant. Math is verified by mathcore; everything runs on your machine. <a href="/login" data-testid="login-link">Log in / sign up</a> with any email address, including your @proton.me address — we send a login code, no password needed.</p>
+<p>No account needed for local tools. Math answers carry a <span class="badge">VERIFIED</span> badge — anything unverified is withheld, never guessed.</p>
+<div id="starters" data-testid="suggestion-chips">
+  <button type="button" data-testid="suggestion-chip" data-q="2+2">2+2</button>
+  <button type="button" data-testid="suggestion-chip" data-q="(3+4)*5">(3+4)*5</button>
+  <button type="button" data-testid="suggestion-chip" data-q="10!">10!</button>
+</div>
 <div id="log" data-testid="chat-log"></div>
 <form id="composer">
-  <input id="chat-input" data-testid="chat-input" placeholder="Ask anything — try: derivative of x^2" autocomplete="off" />
+  <input id="chat-input" data-testid="chat-input" placeholder="Ask anything — try: 2+2 (verified offline)" autocomplete="off" />
   <button type="submit" data-testid="send-button">Send</button>
 </form>
 <h2>Tools</h2>
@@ -70,6 +78,12 @@ const PAGE = `<!doctype html>
 const log = document.getElementById('log');
 const form = document.getElementById('composer');
 const input = document.getElementById('chat-input');
+document.querySelectorAll('[data-testid="suggestion-chip"]').forEach((chip) => {
+  chip.addEventListener('click', () => {
+    input.value = chip.getAttribute('data-q') || '';
+    form.requestSubmit();
+  });
+});
 function addMsg(role, text, verified) {
   const div = document.createElement('div');
   div.setAttribute('data-testid', role === 'user' ? 'user-message' : 'assistant-message');
