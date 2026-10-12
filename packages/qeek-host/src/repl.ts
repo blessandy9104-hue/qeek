@@ -186,10 +186,22 @@ export async function runRepl(host: QeekHost, agent: { systemSections: string[] 
       process.stdin.resume();
     });
     // Detach so an always-open pipe cannot hold the event loop after quit.
+    // Order matters on Linux: destroy() releases the pipe handle itself
+    // (paused stdio pipes have been observed keeping the loop alive there),
+    // while removeAllListeners stops our own callbacks first.
     process.stdin.removeAllListeners('data');
     process.stdin.removeAllListeners('end');
     process.stdin.removeAllListeners('error');
+    try {
+      process.stdin.destroy();
+    } catch {
+      // already gone
+    }
     process.stdin.pause();
+    // Backstop: if any handle still pins the loop (platform drain quirks),
+    // leave deterministically instead of hanging forever. Unref'd so a
+    // clean drain exits on its own first.
+    setTimeout(() => process.exit(0), 250).unref();
     return;
   }
 
