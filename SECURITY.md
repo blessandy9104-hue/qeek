@@ -75,7 +75,7 @@ We follow coordinated vulnerability disclosure:
 
 ## Security Contacts
 
-- **Primary**: Andy (blessandy9104) - blessandy9104@gmail.com
+- **Primary**: Andy ([@blessandy9104-hue](https://github.com/blessandy9104-hue)) - blessandy9104@gmail.com
 - **GPG Key**: Available on GitHub profile
 
 ## Bug Bounty

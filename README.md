@@ -41,7 +41,7 @@ with tool use. Try: `/math solve x^2 - 5x + 6 = 0` · `/sys` · `/tools`.
 
 - **🔬 Verified Mathematics** - mathcore MCP provides zero-hallucination math with audit trail
 - **🧠 Local-First Memory** - Obsidian-compatible vault with wiki-links and tags
-- **🤖 Full Agent Framework** - 55 plugins: agent loop, tools, LLM, MCP, sandbox, subagents, workflows
+- **🤖 Full Agent Framework** - 57 plugins: agent loop, tools, LLM, MCP, sandbox, subagents, workflows (`/tools` or `GET /api/tools` lists all ~39 live tools)
 - **🖥️ System & Hardware Awareness** - local OS/CPU/memory/disk/GPU/battery/network insight with budget checks (`@qeek/qeek-sysinfo`)
 - **💻 Programming Languages** - detection, analysis, formatting, linting, testing, tooling for 17+ languages (`@qeek/qeek-languages`)
 - **⚡ Capability Awareness** - Dynamic discovery, introspection, and adaptation
@@ -73,4 +73,4 @@ MIT - See [LICENSE](LICENSE)
 
 ## Author
 
-**Andy** - [@blessandy9104](https://github.com/blessandy9104) - blessandy9104@gmail.com
+Founded by **Andy** — [@blessandy9104-hue](https://github.com/blessandy9104-hue) — blessandy9104@gmail.com
