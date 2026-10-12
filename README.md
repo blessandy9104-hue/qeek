@@ -1,6 +1,6 @@
 # Zoveli AI — local-first personal assistant
 
-> The assistant that proves its math, owns your data, and knows its own capabilities.
+> The assistant that proves its math, runs on your hardware, and never trains on your data.
 
 Website: **https://blessandy9104-hue.github.io/zoveli-ai/**
 
@@ -8,6 +8,30 @@ Website: **https://blessandy9104-hue.github.io/zoveli-ai/**
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue.svg)](https://www.typescriptlang.org/)
 [![Node](https://img.shields.io/badge/Node-22%2B-green.svg)](https://nodejs.org/)
+
+## Why Zoveli instead of ChatGPT / Claude?
+
+| | Zoveli AI | ChatGPT / Claude |
+|---|---|---|
+| Price | **Free forever**, MIT | $8–$20+/mo subscriptions |
+| Your data | **Stays on your machine**, never trained on | Processed in their cloud |
+| Offline | **Yes** — ~39 tools, no network needed | Internet required |
+| Math | **Verified or withheld** (+ audit certificate) | Confident best-effort guesses |
+| Lock-in | None — BYO key or local Ollama | One vendor's models |
+
+Details + honest "when not to pick us": [docs/why-zoveli.md](docs/why-zoveli.md).
+
+## Try it in 30 seconds
+
+```bash
+git clone https://github.com/blessandy9104-hue/zoveli-ai.git
+cd zoveli-ai
+pip install -e ./mathcore   # verified-math backend
+pnpm install && pnpm run build
+pnpm start                  # then type: /math solve x^2 - 5x + 6 = 0
+```
+
+No account, no API key needed — local tools (math, memory, sysinfo, …) work fully offline.
 
 ## Download & install
 
