@@ -37,7 +37,11 @@ export const zoveliCredentials = definePlugin({
         { key: 'DEEPSEEK_API_KEY', label: 'DeepSeek API Key', type: 'password' },
         { key: 'GITHUB_TOKEN', label: 'GitHub Token', type: 'password', optional: true },
         { key: 'OPENAI_API_KEY', label: 'OpenAI API Key', type: 'password', optional: true },
-        { key: 'ANTHROPIC_API_KEY', label: 'Anthropic API Key', type: 'password', optional: true }
+        { key: 'ANTHROPIC_API_KEY', label: 'Anthropic API Key', type: 'password', optional: true },
+        { key: 'ZOVELI_API_KEY', label: 'Universal API Key (any OpenAI-compatible endpoint)', type: 'password', optional: true },
+        { key: 'OPENROUTER_API_KEY', label: 'OpenRouter API Key', type: 'password', optional: true },
+        { key: 'GROQ_API_KEY', label: 'Groq API Key', type: 'password', optional: true },
+        { key: 'TOGETHER_API_KEY', label: 'Together API Key', type: 'password', optional: true }
       ],
       optional: [
         { key: 'SLACK_BOT_TOKEN', label: 'Slack Bot Token', type: 'password', optional: true },

@@ -23,6 +23,34 @@ export const zoveliLLM = definePlugin({
           capabilities: ['chat', 'streaming', 'tools', 'code']
         },
         {
+          id: 'openai',
+          name: 'OpenAI',
+          model: 'gpt-4o-mini',
+          apiBase: 'https://api.openai.com/v1',
+          capabilities: ['chat', 'streaming', 'tools', 'vision']
+        },
+        {
+          id: 'openrouter',
+          name: 'OpenRouter (any model)',
+          model: 'openai/gpt-4o-mini',
+          apiBase: 'https://openrouter.ai/api/v1',
+          capabilities: ['chat', 'streaming', 'tools']
+        },
+        {
+          id: 'groq',
+          name: 'Groq (fast local-class inference)',
+          model: 'llama-3.3-70b-versatile',
+          apiBase: 'https://api.groq.com/openai/v1',
+          capabilities: ['chat', 'streaming', 'tools']
+        },
+        {
+          id: 'together',
+          name: 'Together AI (open models)',
+          model: 'meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo',
+          apiBase: 'https://api.together.xyz/v1',
+          capabilities: ['chat', 'streaming', 'tools']
+        },
+        {
           id: 'local-llama',
           name: 'Local Llama (Ollama)',
           model: 'llama3.1',

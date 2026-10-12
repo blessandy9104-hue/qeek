@@ -1,5 +1,5 @@
 import * as http from 'node:http';
-import { ZoveliHost, defaultPlugins, chatConfigFromEnv, chat } from '@zoveli/host';
+import { ZoveliHost, defaultPlugins, resolveChatConfig, chat } from '@zoveli/host';
 import {
   zoveliAuth, issueCode, verifyCode, mintSession,
   sessionEmailFromCookie, sessionCookie, clearSessionCookie,
@@ -122,7 +122,9 @@ async function main(): Promise<void> {
   const host = new ZoveliHost();
   const agent = host.mount([...(defaultPlugins as any), zoveliAuth]);
   const systemSections = agent.systemSections;
-  const chatCfg = chatConfigFromEnv();
+  // Any API key wins; otherwise a free local Ollama server when one answers;
+  // otherwise tools-only offline mode (probe refuses instantly when absent).
+  const chatCfg = await resolveChatConfig();
   const baseSystem = [
     'You are Zoveli, a personal assistant with verified computation and persistent memory.',
     'For any arithmetic, algebra, calculus, linear algebra, number theory, logic, statistics or unit conversion: do not compute in your head. Call the mathcore tools and state only verified values. If a result is WITHHELD, say so; never guess.',
@@ -255,7 +257,7 @@ document.getElementById('code-form').addEventListener('submit', async (e) => {
             ok: true,
             verified: false,
             reply:
-              'Chat needs a model (set DEEPSEEK_API_KEY). Meanwhile I can run tools: try /api/run, e.g. {"tool":"sysinfo_snapshot"}.',
+              'Chat needs a model (set any API key: OPENAI_API_KEY, DEEPSEEK_API_KEY, OPENROUTER_API_KEY, GROQ_API_KEY, TOGETHER_API_KEY or ZOVELI_API_KEY — or run local Ollama for free: ollama pull llama3.1). Meanwhile I can run tools: try /api/run, e.g. {"tool":"sysinfo_snapshot"}.',
           });
           return;
         }

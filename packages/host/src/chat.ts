@@ -17,26 +17,105 @@ export interface ChatConfig {
   baseUrl: string;
   model: string;
   maxSteps?: number;
+  /** Which provider this config talks to ('ollama' = free local, no key). */
+  provider?: string;
+}
+
+interface ProviderDef {
+  id: string;
+  envKey: string;
+  baseUrl: string;
+  model: string;
+}
+
+/**
+ * Any API key works — first set key wins. All of these providers speak the
+ * OpenAI chat-completions protocol, so one code path serves every model:
+ * set the key, optionally ZOVELI_MODEL, and (only for custom endpoints)
+ * ZOVELI_API_BASE. ZOVELI_API_KEY is the universal override for any
+ * OpenAI-compatible endpoint.
+ */
+const PROVIDERS: ProviderDef[] = [
+  { id: 'openai', envKey: 'OPENAI_API_KEY', baseUrl: 'https://api.openai.com/v1', model: 'gpt-4o-mini' },
+  { id: 'deepseek', envKey: 'DEEPSEEK_API_KEY', baseUrl: 'https://api.deepseek.com', model: 'deepseek-chat' },
+  { id: 'openrouter', envKey: 'OPENROUTER_API_KEY', baseUrl: 'https://openrouter.ai/api/v1', model: 'openai/gpt-4o-mini' },
+  { id: 'groq', envKey: 'GROQ_API_KEY', baseUrl: 'https://api.groq.com/openai/v1', model: 'llama-3.3-70b-versatile' },
+  { id: 'together', envKey: 'TOGETHER_API_KEY', baseUrl: 'https://api.together.xyz/v1', model: 'meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo' },
+];
+
+function stripCompletionsSuffix(url: string): string {
+  return url.replace(/\/chat\/completions\/?$/, '');
 }
 
 /**
  * Read chat configuration from the environment. Null when not configured.
- * Any OpenAI-compatible endpoint works, e.g. ZOVELI_API_BASE=http://localhost:11434/v1
- * for a local Ollama server (some local servers accept any non-empty key).
+ * Precedence: ZOVELI_API_KEY (any OpenAI-compatible endpoint) →
+ * OPENAI/DEEPSEEK/OPENROUTER/GROQ/TOGETHER keys → null (callers then try
+ * free local Ollama via resolveChatConfig).
  */
 export function chatConfigFromEnv(): ChatConfig | null {
-  const apiKey = process.env.DEEPSEEK_API_KEY || '';
-  if (!apiKey) return null;
-  const baseUrl = (process.env.ZOVELI_API_BASE || 'https://api.deepseek.com').replace(
-    /\/chat\/completions\/?$/,
-    ''
-  );
-  return {
-    apiKey,
-    baseUrl,
-    model: process.env.ZOVELI_MODEL || 'deepseek-chat',
-    maxSteps: 10,
-  };
+  const overrideBase = process.env.ZOVELI_API_BASE || '';
+  const overrideModel = process.env.ZOVELI_MODEL || '';
+  const genericKey = process.env.ZOVELI_API_KEY || '';
+  if (genericKey) {
+    return {
+      apiKey: genericKey,
+      baseUrl: stripCompletionsSuffix(overrideBase) || 'https://api.openai.com/v1',
+      model: overrideModel || 'gpt-4o-mini',
+      provider: 'custom',
+      maxSteps: 10,
+    };
+  }
+  for (const p of PROVIDERS) {
+    const key = process.env[p.envKey] || '';
+    if (!key) continue;
+    return {
+      apiKey: key,
+      baseUrl: stripCompletionsSuffix(overrideBase) || p.baseUrl,
+      model: overrideModel || p.model,
+      provider: p.id,
+      maxSteps: 10,
+    };
+  }
+  return null;
+}
+
+/** Base URL of the local Ollama server (no API key needed, zero cost). */
+export function ollamaBaseUrl(): string {
+  return (process.env.ZOVELI_OLLAMA_URL || 'http://localhost:11434').replace(/\/+$/, '');
+}
+
+/**
+ * Probe for a free local Ollama server. Returns a keyless config when one
+ * answers, else null. Never throws and never waits longer than timeoutMs —
+ * safe to call at startup (a missing server refuses instantly on localhost).
+ */
+export async function probeOllama(timeoutMs = 1500): Promise<ChatConfig | null> {
+  const base = ollamaBaseUrl();
+  try {
+    const res = await fetch(`${base}/api/tags`, { signal: AbortSignal.timeout(timeoutMs) });
+    if (!res.ok) return null;
+    return {
+      apiKey: 'ollama',
+      baseUrl: `${base}/v1`,
+      model:
+        process.env.ZOVELI_MODEL || process.env.ZOVELI_OLLAMA_MODEL || 'llama3.1',
+      provider: 'ollama',
+      maxSteps: 10,
+    };
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Full resolution order for chat: any configured API key first, otherwise a
+ * free local Ollama server when one is running, otherwise null (tools-only
+ * offline mode). Install Ollama from https://ollama.com then
+ * `ollama pull llama3.1` for zero-cost local chat with no keys.
+ */
+export async function resolveChatConfig(): Promise<ChatConfig | null> {
+  return chatConfigFromEnv() ?? (await probeOllama());
 }
 
 function toFunctionTool(t: { name: string; description?: string; parameters?: unknown }) {
@@ -94,6 +173,13 @@ export async function chat(
     });
     if (!res.ok) {
       const body = await res.text().catch(() => '');
+      if (res.status === 404 && /localhost:11434|127\.0\.0\.1:11434|ollama/i.test(cfg.baseUrl)) {
+        throw new Error(
+          `chat API error 404: model '${cfg.model}' is not pulled into your local Ollama. ` +
+            `Run: ollama pull ${cfg.model} (start the server first with: ollama serve). ` +
+            `Server said: ${body.slice(0, 200)}`
+        );
+      }
       throw new Error(`chat API error ${res.status}: ${body.slice(0, 300)}`);
     }
     const data: any = await res.json();
