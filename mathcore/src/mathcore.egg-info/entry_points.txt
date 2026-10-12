@@ -1,3 +1,0 @@
-[console_scripts]
-mathcore = mathcore.cli:main
-mathcore-mcp = mathcore.mcp_server:main
