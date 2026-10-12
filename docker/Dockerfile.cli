@@ -47,7 +47,11 @@ COPY --from=builder --chown=zoveli:zoveli /app/mathcore ./mathcore
 
 # Install vendored mathcore (provides the mathcore-mcp server binary,
 # so verified math works inside the image with no sibling checkout)
-RUN pip install --break-system-packages ./mathcore
+# Install minimal build dependencies to allow z3-solver and other
+# pyproject-based packages to build, install mathcore, then remove build deps.
+RUN apk add --no-cache --virtual .build-deps build-base cmake && \
+    pip install --break-system-packages --no-cache-dir ./mathcore && \
+    apk del .build-deps
 
 # Create directories
 RUN mkdir -p /app/data/vault /app/data/sessions /app/data/audit && \
