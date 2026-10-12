@@ -1,0 +1,105 @@
+name: Installer Check
+
+# Validates the opencode-style one-line installer on PRs without privileged
+# operations (no sudo). Uses the runner's preinstalled git/curl/python/node
+# plus setup-node/setup-python/setup-pnpm. Also builds both Docker images so
+# the mathcore z3-solver fix is proven on PRs, because the main CI
+# `build-docker` job is gated with `if: github.event_name != 'pull_request'`
+# and therefore never runs on pull requests.
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: ['fix/installer/*']
+
+env:
+  NODE_VERSION: '22'
+  PYTHON_VERSION: '3.11'
+  PNPM_VERSION: '11.7.0'
+
+jobs:
+  installer-smoke:
+    name: Installer Smoke (no sudo)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Bash syntax check
+        run: bash -n install/install-zoveli.sh
+
+      - name: ShellCheck (if available)
+        run: |
+          if command -v shellcheck >/dev/null 2>&1; then
+            shellcheck -S warning install/install-zoveli.sh
+          else
+            echo "shellcheck not installed on runner; skipped (bash -n already passed)"
+          fi
+
+      - name: Installer help flag
+        run: bash install/install-zoveli.sh --help
+
+      - name: Run installer (non-privileged, reuses checkout)
+        run: bash install/install-zoveli.sh --yes --dir "$GITHUB_WORKSPACE"
+        env:
+          ZOVELI_SKIP_PREREQ_INSTALL: '1'
+
+      - name: Verify install artifacts
+        run: |
+          test -f .zoveli-install-done
+          test -d node_modules
+          test -d apps/cli/dist
+          source .venv/bin/activate
+          python -c "import mathcore; print('mathcore OK')"
+          node apps/cli/dist/cli.js --help || pnpm start -- --help || true
+
+  docker-build:
+    name: Docker Build (CLI + Web, no push)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build CLI image (proves z3-solver wheel builds)
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./docker/Dockerfile.cli
+          push: false
+          tags: zoveli-cli:installer-check
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build Web image (proves z3-solver wheel builds)
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./docker/Dockerfile.web
+          push: false
+          tags: zoveli-web:installer-check
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

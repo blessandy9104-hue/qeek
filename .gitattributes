@@ -1,0 +1,2 @@
+# Keep shell installers runnable on every OS checkout.
+install/*.sh text eol=lf
