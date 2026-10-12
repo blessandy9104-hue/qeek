@@ -26,9 +26,10 @@ WORKDIR /app
 # Install dumb-init
 RUN apk add --no-cache dumb-init
 
-# Create non-root user
-RUN addgroup -g 1000 -S qeek && \
-    adduser -u 1000 -S qeek -G qeek
+# Create non-root user (no fixed UID/GID: recent Alpine images already
+# occupy 1000, so `addgroup -g 1000` fails with "gid in use").
+RUN addgroup -S qeek && \
+    adduser -S qeek -G qeek
 
 # Copy built artifacts (workspace symlinks in node_modules resolve into packages/)
 COPY --from=builder --chown=qeek:qeek /app/package.json ./
