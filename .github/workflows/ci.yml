@@ -158,7 +158,10 @@ jobs:
       - name: Run mathcore fast tests (known answers + CLI)
         # Full adversarial/property suites are slow and run locally;
         # these 66 tests prove the vendored copy computes correctly.
-        run: python -m pytest mathcore/tests/test_known_answers.py mathcore/tests/test_cli.py -q
+        # The [test] extra provides pytest itself (not installed otherwise).
+        run: |
+          pip install -e "./mathcore[test]"
+          python -m pytest mathcore/tests/test_known_answers.py mathcore/tests/test_cli.py -q
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
