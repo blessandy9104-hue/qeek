@@ -1,0 +1,25 @@
+{
+  "name": "@zoveli/workflow",
+  "version": "0.1.0",
+  "description": "Workflow orchestration and execution",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "test": "vitest run",
+    "lint": "oxlint",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@deepseek-ai/dsh-core": "workspace:*",
+    "@zoveli/core": "workspace:*",
+    "@zoveli/agent": "workspace:*"
+  },
+  "devDependencies": {
+    "tsdown": "^0.3.0",
+    "typescript": "catalog:",
+    "vitest": "catalog:",
+    "oxlint": "catalog:"
+  }
+}

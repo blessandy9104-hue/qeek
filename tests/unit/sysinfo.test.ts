@@ -1,16 +1,16 @@
 import { describe, it, expect } from 'vitest';
-import { qeekSysinfo } from '../../packages/qeek-sysinfo/src/index';
+import { zoveliSysinfo } from '../../packages/sysinfo/src/index';
 import {
   collectOs, collectCpu, collectMemory, collectDisk,
   collectGpu, collectBattery, collectNetwork, collectProcess,
   collectSnapshot,
-} from '../../packages/qeek-sysinfo/src/collectors';
+} from '../../packages/sysinfo/src/collectors';
 import { createMockContext } from '../setup';
 
-describe('qeek-sysinfo plugin', () => {
+describe('zoveli sysinfo plugin', () => {
   it('registers sysinfo tools', () => {
     const ctx = createMockContext();
-    qeekSysinfo.setup(ctx);
+    zoveliSysinfo.setup(ctx);
     const call = ctx.register.mock.calls.find((c: any[]) => c[0] === 'sysinfo-tools');
     expect(call).toBeDefined();
     const names = call[1].map((t: any) => t.name);
@@ -22,7 +22,7 @@ describe('qeek-sysinfo plugin', () => {
 
   it('provides sysinfo api', () => {
     const ctx = createMockContext();
-    qeekSysinfo.setup(ctx);
+    zoveliSysinfo.setup(ctx);
     expect(ctx.provide).toHaveBeenCalledWith('sysinfo', expect.any(Object));
   });
 });
@@ -92,3 +92,5 @@ describe('collectors (local-only, never throw)', () => {
     expect(snap.collectedAt instanceof Date).toBe(true);
   });
 });
+
+

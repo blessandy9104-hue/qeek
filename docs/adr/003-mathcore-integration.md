@@ -77,10 +77,10 @@ Certificates are append-only in `audit.jsonl` with hash-chaining for tamper dete
 - **Maintenance**: Separate Python package to update
 
 ## Implementation
-- `packages/qeek-math/`: MCP client plugin
-- `packages/qeek-capability/src/scanner.ts`: Builtin capability registration
+- `packages/math/`: MCP client plugin
+- `packages/capability/src/scanner.ts`: Builtin capability registration
 - `config/*.cordis.yml`: MCP client configuration
-- System prompt enforcement in `packages/qeek-core/src/system-prompt.ts`
+- System prompt enforcement in `packages/core/src/system-prompt.ts`
 
 ## References
 - [mathcore Repository](https://github.com/.../mathcore)

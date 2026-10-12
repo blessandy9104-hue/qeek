@@ -1,0 +1,25 @@
+{
+  "name": "@zoveli/conversation",
+  "version": "0.1.0",
+  "description": "Conversation nodes and chat UI components",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "test": "vitest run",
+    "lint": "oxlint",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@deepseek-ai/dsh-core": "workspace:*",
+    "@zoveli/core": "workspace:*",
+    "@zoveli/session": "workspace:*"
+  },
+  "devDependencies": {
+    "tsdown": "^0.3.0",
+    "typescript": "catalog:",
+    "vitest": "catalog:",
+    "oxlint": "catalog:"
+  }
+}

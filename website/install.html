@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Install Zoveli AI — Windows, macOS, Linux</title>
+<meta name="description" content="Download Zoveli AI onto your hardware and launch it: step-by-step installation guides." />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header>
+  <nav><a href="index.html">Zoveli AI</a> · <a href="install.html">Install</a> · <a href="features.html">Features</a> · <a href="https://github.com/blessandy9104-hue/zoveli-ai">GitHub</a></nav>
+  <h1>Download &amp; launch Zoveli AI</h1>
+  <p class="tagline">Own hardware. Ten minutes. No account needed to start.</p>
+</header>
+
+<section>
+  <h2>0. What you need</h2>
+  <ul>
+    <li><strong>Node.js 22+</strong>, <strong>Python 3.11+</strong>, <strong>pnpm 11.7.0+</strong>, <strong>Git</strong></li>
+    <li>Optional but recommended for verified math: a <strong>mathcore</strong> checkout next to this repo (<code>pip install -e ../mathcore</code>)</li>
+  </ul>
+</section>
+
+<section>
+  <h2>1. Windows (PowerShell)</h2>
+  <pre><code>winget install OpenJS.NodeJS.LTS Python.Python.3.11 Git.Git
+npm install -g pnpm@11.7.0
+git clone https://github.com/blessandy9104-hue/zoveli-ai.git
+cd zoveli-ai
+pip install -e ..\mathcore   # optional: enables verified math
+pnpm install
+pnpm run build
+pnpm test                    # 70 unit tests, all green
+pnpm start                   # launch the CLI assistant</code></pre>
+</section>
+
+<section>
+  <h2>2. macOS</h2>
+  <pre><code>brew install node@22 python@3.11 git
+npm install -g pnpm@11.7.0
+git clone https://github.com/blessandy9104-hue/zoveli-ai.git
+cd zoveli-ai
+pip install -e ../mathcore   # optional: enables verified math
+pnpm install
+pnpm run build
+pnpm test
+pnpm start</code></pre>
+</section>
+
+<section>
+  <h2>3. Linux (Debian/Ubuntu)</h2>
+  <pre><code>sudo apt install -y nodejs python3 python3-pip git
+npm install -g pnpm@11.7.0
+git clone https://github.com/blessandy9104-hue/zoveli-ai.git
+cd zoveli-ai
+pip install -e ../mathcore   # optional: enables verified math
+pnpm install
+pnpm run build
+pnpm test
+pnpm start</code></pre>
+</section>
+
+<section>
+  <h2>4. Launch it</h2>
+  <pre><code>pnpm start            # CLI — works fully offline
+pnpm run web          # Web UI + API at http://127.0.0.1:3080
+pnpm run desktop      # Electron shell (dev mode)</code></pre>
+  <p>In the CLI, try: <code>/math solve x^2 - 5x + 6 = 0</code> · <code>/sys</code> · <code>/tools</code> · <code>/help</code></p>
+  <p>For open-ended chat, set <code>DEEPSEEK_API_KEY</code> — or point <code>ZOVELI_API_BASE</code> at any OpenAI-compatible endpoint such as local Ollama. No key needed for any local tool.</p>
+</section>
+
+<section>
+  <h2>5. Log in (web UI)</h2>
+  <p>Open <code>http://127.0.0.1:3080/login</code> and enter any email address — including <code>@proton.me</code>. Zoveli sends a 6-digit code (no password, no OAuth middleman). Without an SMTP server configured, the code prints to the server console (dev mode).</p>
+</section>
+
+<footer>
+  <p><a href="index.html">← Back to Zoveli AI home</a></p>
+</footer>
+</body>
+</html>

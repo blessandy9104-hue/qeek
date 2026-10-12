@@ -4,9 +4,9 @@ import { join } from 'path';
 import { mkdirSync, rmSync, writeFileSync } from 'fs';
 
 // Global test setup
-export const TEST_VAULT_PATH = join(tmpdir(), 'qeek-test-vault');
-export const TEST_AUDIT_PATH = join(tmpdir(), 'qeek-test-audit.jsonl');
-export const TEST_SESSION_PATH = join(tmpdir(), 'qeek-test-sessions');
+export const TEST_VAULT_PATH = join(tmpdir(), 'zoveli-test-vault');
+export const TEST_AUDIT_PATH = join(tmpdir(), 'zoveli-test-audit.jsonl');
+export const TEST_SESSION_PATH = join(tmpdir(), 'zoveli-test-sessions');
 
 beforeAll(() => {
   // Create test directories
@@ -15,17 +15,17 @@ beforeAll(() => {
   });
 
   // Write test vault files
-  writeFileSync(join(TEST_VAULT_PATH, 'welcome.md'), `# Welcome\nTest vault for qeek`);
+  writeFileSync(join(TEST_VAULT_PATH, 'welcome.md'), `# Welcome\nTest vault for Zoveli`);
   writeFileSync(join(TEST_VAULT_PATH, 'preferences.md'), `# Preferences\n- theme: dark\n- language: en`);
   writeFileSync(join(TEST_VAULT_PATH, 'test-note.md'), `# Test Note\nContent for testing\n#tag1 #tag2`);
 
-  // Set test environment
+  // Set test environment (isolated from the real vault/sessions)
   process.env.NODE_ENV = 'test';
-  process.env.ASSISTANT_VAULT_PATH = TEST_VAULT_PATH;
+  process.env.ZOVELI_VAULT_PATH = TEST_VAULT_PATH;
   process.env.MATHCORE_AUDIT = TEST_AUDIT_PATH;
-  process.env.ASSISTANT_SESSION_PATH = TEST_SESSION_PATH;
+  process.env.ZOVELI_SESSION_PATH = TEST_SESSION_PATH;
   process.env.TELEMETRY_ENABLED = 'false';
-  process.env.ASSISTANT_PROFILE = 'personal-assistant-headless';
+  process.env.ZOVELI_PROFILE = 'zoveli-headless';
 });
 
 afterAll(() => {

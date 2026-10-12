@@ -7,7 +7,7 @@
  *   node scripts/scan-capabilities.js            # quick scan
  *   node scripts/scan-capabilities.js --deep    # with live verification probes
  */
-const { CapabilityScanner } = require('../packages/qeek-capability/dist/scanner.js');
+const { CapabilityScanner } = require('../packages/capability/dist/scanner.js');
 
 async function main() {
   const deep = process.argv.includes('--deep');
@@ -36,3 +36,4 @@ main().catch((e) => {
   console.error('scan failed:', e.message);
   process.exit(1);
 });
+

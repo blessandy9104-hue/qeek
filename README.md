@@ -1,60 +1,91 @@
-# qeek - Personal Assistant AI Intelligence Subsystem
+# Zoveli AI — local-first personal assistant
 
-> The only AI assistant that proves its math, owns your data, and knows its own capabilities.
+> The assistant that proves its math, owns your data, and knows its own capabilities.
 
-Website: **https://blessandy9104-hue.github.io/qeek/**
+Website: **https://blessandy9104-hue.github.io/zoveli-ai/**
 
-[![CI](https://github.com/blessandy9104-hue/qeek/actions/workflows/ci.yml/badge.svg)](https://github.com/blessandy9104-hue/qeek/actions/workflows/ci.yml)
+[![CI](https://github.com/blessandy9104-hue/zoveli-ai/actions/workflows/ci.yml/badge.svg)](https://github.com/blessandy9104-hue/zoveli-ai/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue.svg)](https://www.typescriptlang.org/)
 [![Node](https://img.shields.io/badge/Node-22%2B-green.svg)](https://nodejs.org/)
 
-## Quick Start
+## Download & install
 
-Prerequisites: Node.js 22+, Python 3.11+, pnpm 11.7.0+ (`npm install -g pnpm@11.7.0`).
+Prerequisites: Node.js 22+, Python 3.11+, pnpm 11.7.0+.
+
+**Windows (PowerShell):**
+
+```powershell
+# 1. Toolchain
+winget install OpenJS.NodeJS.LTS Python.Python.3.11 Git.Git
+npm install -g pnpm@11.7.0
+
+# 2. Download
+git clone https://github.com/blessandy9104-hue/zoveli-ai.git
+cd zoveli-ai
+
+# 3. Verified-math backend (sibling checkout, optional but recommended)
+#    Place the mathcore repo next to this one, then:
+pip install -e ..\mathcore
+
+# 4. Install + build + verify
+pnpm install
+pnpm run build
+pnpm test
+```
+
+**macOS / Linux:**
 
 ```bash
-# Clone and install
-git clone https://github.com/blessandy9104-hue/qeek.git
-cd qeek
+# 1. Toolchain (macOS shown; apt/dnf equivalents on Linux)
+brew install node@22 python@3.11 git
+npm install -g pnpm@11.7.0
 
-# Install mathcore (verified mathematics)
+# 2. Download
+git clone https://github.com/blessandy9104-hue/zoveli-ai.git
+cd zoveli-ai
+
+# 3. Verified-math backend (sibling checkout, optional but recommended)
 pip install -e ../mathcore
 
-# Install Node dependencies (self-contained workspace, no other checkout needed)
+# 4. Install + build + verify
 pnpm install
-
-# Build all packages
 pnpm run build
+pnpm test
+```
 
-# Start the CLI assistant
-pnpm start
+## Launch it
+
+```bash
+pnpm start            # CLI assistant (works fully offline)
+pnpm run web          # Web UI + HTTP API at http://127.0.0.1:3080
+pnpm run desktop      # Electron shell (dev mode)
 ```
 
 The CLI works fully offline for all local tools (verified math via
 mathcore, memory vault, sysinfo, languages, search, scheduler, ...).
-Set `DEEPSEEK_API_KEY` (optionally with `QEEK_API_BASE` for any
+Set `DEEPSEEK_API_KEY` (optionally with `ZOVELI_API_BASE` for any
 OpenAI-compatible endpoint, e.g. local Ollama) to enable open-ended chat
 with tool use. Try: `/math solve x^2 - 5x + 6 = 0` · `/sys` · `/tools`.
 
-## Features
+## Features (all runnable today)
 
-- **🔬 Verified Mathematics** - mathcore MCP provides zero-hallucination math with audit trail
-- **🧠 Local-First Memory** - Obsidian-compatible vault with wiki-links and tags
-- **🤖 Full Agent Framework** - 57 plugins: agent loop, tools, LLM, MCP, sandbox, subagents, workflows (`/tools` or `GET /api/tools` lists all ~39 live tools)
-- **🖥️ System & Hardware Awareness** - local OS/CPU/memory/disk/GPU/battery/network insight with budget checks (`@qeek/qeek-sysinfo`)
-- **💻 Programming Languages** - detection, analysis, formatting, linting, testing, tooling for 17+ languages (`@qeek/qeek-languages`)
-- **⚡ Capability Awareness** - Dynamic discovery, introspection, and adaptation
-- **🔍 Vault Search** - Tantivy-powered full-text search with live indexing
-- **🕸️ Knowledge Graph** - wiki-link graph with orphans, hubs, DOT export
-- **🧪 Code Review** - complexity hotspots, duplication, dead code, secret detection
-- **📄 Doc Generator** - offline Markdown API docs from source exports
-- **❤️ Project Health** - tests/CI/docs/deps/TODO-debt scoring
-- **🗓️ Smart Scheduler** - energy-aware prioritization + time-blocking
-- **🛡️ Security Scanner** - secrets + risky-pattern scanning
-- **📊 Telemetry** - in-memory meters + Prometheus/OTLP + Grafana
-- **🔑 Passwordless login** - email OTP for any inbox incl. @proton.me, `GET /login`
-- **🔒 Privacy-First** - Runs locally, no cloud required, MIT/Apache-2.0 licenses
+- **🔬 Verified Mathematics** — mathcore MCP gives zero-hallucination math with hash-chained audit certificates
+- **🧠 Local-First Memory** — Obsidian-compatible vault with wiki-links and tags
+- **🤖 Full Agent Framework** — 57 plugins: agent loop, tools, LLM, MCP, sandbox, subagents, workflows (`/tools` or `GET /api/tools` lists all ~39 live tools)
+- **🖥️ System & Hardware Awareness** — local OS/CPU/memory/disk/GPU/battery/network insight with budget checks (`@zoveli/sysinfo`)
+- **💻 Programming Languages** — detection, analysis, formatting, linting, testing, tooling for 17+ languages (`@zoveli/languages`)
+- **⚡ Capability Awareness** — runtime discovery, introspection, adaptation, and gap reports
+- **🔍 Vault Search** — dependency-free full-text search with live indexing
+- **🕸️ Knowledge Graph** — wiki-link graph with orphans, hubs, DOT export
+- **🧪 Code Review** — complexity hotspots, duplication, dead code, secret detection
+- **📄 Doc Generator** — offline Markdown API docs from source exports
+- **❤️ Project Health** — tests/CI/docs/deps/TODO-debt scoring
+- **🗓️ Smart Scheduler** — energy-aware prioritization + time-blocking
+- **🛡️ Security Scanner** — secrets + risky-pattern scanning
+- **📊 Telemetry** — in-memory meters + Prometheus/OTLP + Grafana
+- **🔑 Passwordless login** — email OTP for any inbox incl. @proton.me, `GET /login`
+- **🔒 Privacy-First** — runs locally, no cloud required, MIT licensed
 
 ## Documentation
 
@@ -62,14 +93,17 @@ with tool use. Try: `/math solve x^2 - 5x + 6 = 0` · `/sys` · `/tools`.
 - [API Reference](docs/api/)
 - [Runbooks](docs/runbooks/)
 - [ADRs](docs/adr/)
+- [Desktop guide](docs/guides/desktop.md) · [CLI guide](docs/guides/cli.md) · [Web guide](docs/guides/web.md)
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md)
+See [CONTRIBUTING.md](CONTRIBUTING.md). Every PR runs lint, strict
+typecheck, unit + integration tests, Playwright e2e (Chromium, Firefox,
+WebKit), Trivy + secret scans, and Docker builds.
 
 ## License
 
-MIT - See [LICENSE](LICENSE)
+MIT — see [LICENSE](LICENSE).
 
 ## Author
 

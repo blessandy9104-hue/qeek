@@ -1,7 +1,7 @@
 {
   "name": "@deepseek-ai/dsh-core",
   "version": "0.0.1-shim.1",
-  "description": "LOCAL COMPATIBILITY SHIM (qeek). Provides the qeek plugin-authoring convention (definePlugin/defineSkill/Tool plus host stubs) so the workspace typechecks, builds, and tests without the upstream harness runtime. This is NOT the upstream DeepSeek Harness core: real Cordis runtime interop (Context.apply, service keys, event map) is future work tracked in docs/adr/001-cordis-plugin-architecture.md.",
+  "description": "LOCAL COMPATIBILITY SHIM (Zoveli). Provides the Zoveli plugin-authoring convention (definePlugin/defineSkill/Tool plus host stubs) so the workspace typechecks, builds, and tests without the upstream harness runtime. This is NOT the upstream DeepSeek Harness core: real Cordis runtime interop (Context.apply, service keys, event map) is future work tracked in docs/adr/001-cordis-plugin-architecture.md.",
   "private": true,
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

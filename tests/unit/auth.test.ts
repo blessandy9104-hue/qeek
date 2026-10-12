@@ -1,17 +1,17 @@
 import { describe, it, expect } from 'vitest';
-import { qeekAuth } from '../../packages/qeek-auth/src/index';
-import { issueCode, verifyCode } from '../../packages/qeek-auth/src/otp';
+import { zoveliAuth } from '../../packages/auth/src/index';
+import { issueCode, verifyCode } from '../../packages/auth/src/otp';
 import {
   mintSession, verifySession, sessionEmailFromCookie, COOKIE_NAME,
-} from '../../packages/qeek-auth/src/session';
+} from '../../packages/auth/src/session';
 import { createMockContext } from '../setup';
 
 const uniq = (tag: string) => `${tag}+${Date.now()}-${Math.random().toString(36).slice(2)}@proton.me`;
 
-describe('qeek-auth plugin', () => {
+describe('zoveli auth plugin', () => {
   it('registers auth tools', () => {
     const ctx = createMockContext();
-    qeekAuth.setup(ctx);
+    zoveliAuth.setup(ctx);
     const call = ctx.register.mock.calls.find((c: any[]) => c[0] === 'auth-tools');
     expect(call).toBeDefined();
     const names = call[1].map((t: any) => t.name);
@@ -21,7 +21,7 @@ describe('qeek-auth plugin', () => {
 
   it('provides auth api', () => {
     const ctx = createMockContext();
-    qeekAuth.setup(ctx);
+    zoveliAuth.setup(ctx);
     expect(ctx.provide).toHaveBeenCalledWith('auth', expect.any(Object));
   });
 });
@@ -84,3 +84,5 @@ describe('sessions', () => {
     expect(sessionEmailFromCookie('other=1')).toBeNull();
   });
 });
+
+

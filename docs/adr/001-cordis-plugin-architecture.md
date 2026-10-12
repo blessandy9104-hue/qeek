@@ -89,8 +89,8 @@ export const myPlugin = definePlugin({
 - id: base-bundle
   name: '@deepseek-ai/dsh-bundle-base'
 - insert:
-    - id: my-plugin
-      name: '@qeek/my-plugin'
+      - id: my-plugin
+        name: '@zoveli/my-plugin'
 ```
 
 ## References

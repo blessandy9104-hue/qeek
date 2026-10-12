@@ -42,11 +42,11 @@ importers:
         specifier: ^1.0.0
         version: 1.6.1(@types/node@20.19.43)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
-  apps/assistant-cli:
+  apps/cli:
     dependencies:
-      '@qeek/qeek-host':
+      '@zoveli/host':
         specifier: workspace:*
-        version: link:../../packages/qeek-host
+        version: link:../../packages/host
     devDependencies:
       oxlint:
         specifier: 'catalog:'
@@ -61,7 +61,7 @@ importers:
         specifier: 'catalog:'
         version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
-  apps/assistant-desktop:
+  apps/desktop:
     devDependencies:
       electron:
         specifier: ^44.7.0
@@ -73,14 +73,14 @@ importers:
         specifier: 'catalog:'
         version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
-  apps/assistant-web:
+  apps/web:
     dependencies:
-      '@qeek/qeek-auth':
+      '@zoveli/auth':
         specifier: workspace:*
-        version: link:../../packages/qeek-auth
-      '@qeek/qeek-host':
+        version: link:../../packages/auth
+      '@zoveli/host':
         specifier: workspace:*
-        version: link:../../packages/qeek-host
+        version: link:../../packages/host
     devDependencies:
       oxlint:
         specifier: 'catalog:'
@@ -95,39 +95,17 @@ importers:
         specifier: 'catalog:'
         version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
-  packages/assistant-acp:
-    dependencies:
-      '@deepseek-ai/dsh-core':
-        specifier: workspace:*
-        version: link:../shim-dsh-core
-      '@personal-assistant/assistant-agent':
-        specifier: workspace:*
-        version: link:../assistant-agent
-      '@personal-assistant/assistant-core':
-        specifier: workspace:*
-        version: link:../assistant-core
-    devDependencies:
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.2.18
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  packages/assistant-agent:
+  packages/acp:
     dependencies:
       '@deepseek-ai/dsh-core':
         specifier: workspace:*
         version: link:../shim-dsh-core
-      '@personal-assistant/assistant-core':
+      '@zoveli/agent':
         specifier: workspace:*
-        version: link:../assistant-core
+        version: link:../agent
+      '@zoveli/core':
+        specifier: workspace:*
+        version: link:../core
     devDependencies:
       oxlint:
         specifier: 'catalog:'
@@ -142,20 +120,14 @@ importers:
         specifier: 'catalog:'
         version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
-  packages/assistant-agent-teams:
+  packages/agent:
     dependencies:
       '@deepseek-ai/dsh-core':
         specifier: workspace:*
         version: link:../shim-dsh-core
-      '@personal-assistant/assistant-agent':
+      '@zoveli/core':
         specifier: workspace:*
-        version: link:../assistant-agent
-      '@personal-assistant/assistant-core':
-        specifier: workspace:*
-        version: link:../assistant-core
-      '@personal-assistant/assistant-subagent':
-        specifier: workspace:*
-        version: link:../assistant-subagent
+        version: link:../core
     devDependencies:
       oxlint:
         specifier: 'catalog:'
@@ -170,17 +142,20 @@ importers:
         specifier: 'catalog:'
         version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
-  packages/assistant-attachment:
+  packages/agent-teams:
     dependencies:
       '@deepseek-ai/dsh-core':
         specifier: workspace:*
         version: link:../shim-dsh-core
-      '@personal-assistant/assistant-core':
+      '@zoveli/agent':
         specifier: workspace:*
-        version: link:../assistant-core
-      '@personal-assistant/assistant-fs':
+        version: link:../agent
+      '@zoveli/core':
         specifier: workspace:*
-        version: link:../assistant-fs
+        version: link:../core
+      '@zoveli/subagent':
+        specifier: workspace:*
+        version: link:../subagent
     devDependencies:
       oxlint:
         specifier: 'catalog:'
@@ -195,14 +170,17 @@ importers:
         specifier: 'catalog:'
         version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
-  packages/assistant-browser:
+  packages/attachment:
     dependencies:
       '@deepseek-ai/dsh-core':
         specifier: workspace:*
         version: link:../shim-dsh-core
-      '@personal-assistant/assistant-core':
+      '@zoveli/core':
         specifier: workspace:*
-        version: link:../assistant-core
+        version: link:../core
+      '@zoveli/fs':
+        specifier: workspace:*
+        version: link:../fs
     devDependencies:
       oxlint:
         specifier: 'catalog:'
@@ -217,873 +195,7 @@ importers:
         specifier: 'catalog:'
         version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
-  packages/assistant-compaction:
-    dependencies:
-      '@deepseek-ai/dsh-core':
-        specifier: workspace:*
-        version: link:../shim-dsh-core
-      '@personal-assistant/assistant-core':
-        specifier: workspace:*
-        version: link:../assistant-core
-      '@personal-assistant/assistant-llm':
-        specifier: workspace:*
-        version: link:../assistant-llm
-    devDependencies:
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.2.18
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  packages/assistant-computer-use:
-    dependencies:
-      '@deepseek-ai/dsh-core':
-        specifier: workspace:*
-        version: link:../shim-dsh-core
-      '@personal-assistant/assistant-browser':
-        specifier: workspace:*
-        version: link:../assistant-browser
-      '@personal-assistant/assistant-core':
-        specifier: workspace:*
-        version: link:../assistant-core
-    devDependencies:
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.2.18
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  packages/assistant-context:
-    dependencies:
-      '@deepseek-ai/dsh-core':
-        specifier: workspace:*
-        version: link:../shim-dsh-core
-      '@personal-assistant/assistant-core':
-        specifier: workspace:*
-        version: link:../assistant-core
-      '@personal-assistant/assistant-session':
-        specifier: workspace:*
-        version: link:../assistant-session
-    devDependencies:
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.2.18
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  packages/assistant-conversation:
-    dependencies:
-      '@deepseek-ai/dsh-core':
-        specifier: workspace:*
-        version: link:../shim-dsh-core
-      '@personal-assistant/assistant-core':
-        specifier: workspace:*
-        version: link:../assistant-core
-      '@personal-assistant/assistant-session':
-        specifier: workspace:*
-        version: link:../assistant-session
-    devDependencies:
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.2.18
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  packages/assistant-core:
-    dependencies:
-      '@deepseek-ai/dsh-core':
-        specifier: workspace:*
-        version: link:../shim-dsh-core
-    devDependencies:
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.2.18
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  packages/assistant-credentials:
-    dependencies:
-      '@deepseek-ai/dsh-core':
-        specifier: workspace:*
-        version: link:../shim-dsh-core
-      '@personal-assistant/assistant-core':
-        specifier: workspace:*
-        version: link:../assistant-core
-    devDependencies:
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.2.18
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  packages/assistant-document:
-    dependencies:
-      '@deepseek-ai/dsh-core':
-        specifier: workspace:*
-        version: link:../shim-dsh-core
-      '@personal-assistant/assistant-attachment':
-        specifier: workspace:*
-        version: link:../assistant-attachment
-      '@personal-assistant/assistant-core':
-        specifier: workspace:*
-        version: link:../assistant-core
-    devDependencies:
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.2.18
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  packages/assistant-feedback:
-    dependencies:
-      '@deepseek-ai/dsh-core':
-        specifier: workspace:*
-        version: link:../shim-dsh-core
-      '@personal-assistant/assistant-core':
-        specifier: workspace:*
-        version: link:../assistant-core
-    devDependencies:
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.2.18
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  packages/assistant-fs:
-    dependencies:
-      '@deepseek-ai/dsh-core':
-        specifier: workspace:*
-        version: link:../shim-dsh-core
-      '@personal-assistant/assistant-core':
-        specifier: workspace:*
-        version: link:../assistant-core
-    devDependencies:
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.2.18
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  packages/assistant-goals:
-    dependencies:
-      '@deepseek-ai/dsh-core':
-        specifier: workspace:*
-        version: link:../shim-dsh-core
-      '@personal-assistant/assistant-core':
-        specifier: workspace:*
-        version: link:../assistant-core
-      '@personal-assistant/assistant-plan':
-        specifier: workspace:*
-        version: link:../assistant-plan
-    devDependencies:
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.2.18
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  packages/assistant-guard:
-    dependencies:
-      '@deepseek-ai/dsh-core':
-        specifier: workspace:*
-        version: link:../shim-dsh-core
-      '@personal-assistant/assistant-core':
-        specifier: workspace:*
-        version: link:../assistant-core
-      '@personal-assistant/assistant-tools':
-        specifier: workspace:*
-        version: link:../assistant-tools
-    devDependencies:
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.2.18
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  packages/assistant-identity:
-    dependencies:
-      '@deepseek-ai/dsh-core':
-        specifier: workspace:*
-        version: link:../shim-dsh-core
-      '@personal-assistant/assistant-core':
-        specifier: workspace:*
-        version: link:../assistant-core
-    devDependencies:
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.2.18
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  packages/assistant-interaction:
-    dependencies:
-      '@deepseek-ai/dsh-core':
-        specifier: workspace:*
-        version: link:../shim-dsh-core
-      '@personal-assistant/assistant-core':
-        specifier: workspace:*
-        version: link:../assistant-core
-    devDependencies:
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.2.18
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  packages/assistant-llm:
-    dependencies:
-      '@deepseek-ai/dsh-core':
-        specifier: workspace:*
-        version: link:../shim-dsh-core
-      '@personal-assistant/assistant-core':
-        specifier: workspace:*
-        version: link:../assistant-core
-    devDependencies:
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.2.18
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  packages/assistant-lsp:
-    dependencies:
-      '@deepseek-ai/dsh-core':
-        specifier: workspace:*
-        version: link:../shim-dsh-core
-      '@personal-assistant/assistant-core':
-        specifier: workspace:*
-        version: link:../assistant-core
-    devDependencies:
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.2.18
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  packages/assistant-math:
-    dependencies:
-      '@deepseek-ai/dsh-core':
-        specifier: workspace:*
-        version: link:../shim-dsh-core
-    devDependencies:
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.2.18
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  packages/assistant-mcp:
-    dependencies:
-      '@deepseek-ai/dsh-core':
-        specifier: workspace:*
-        version: link:../shim-dsh-core
-      '@personal-assistant/assistant-core':
-        specifier: workspace:*
-        version: link:../assistant-core
-    devDependencies:
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.2.18
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  packages/assistant-memory:
-    dependencies:
-      '@deepseek-ai/dsh-core':
-        specifier: workspace:*
-        version: link:../shim-dsh-core
-    devDependencies:
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.2.18
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  packages/assistant-plan:
-    dependencies:
-      '@deepseek-ai/dsh-core':
-        specifier: workspace:*
-        version: link:../shim-dsh-core
-      '@personal-assistant/assistant-agent':
-        specifier: workspace:*
-        version: link:../assistant-agent
-      '@personal-assistant/assistant-core':
-        specifier: workspace:*
-        version: link:../assistant-core
-    devDependencies:
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.2.18
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  packages/assistant-plugin-manager:
-    dependencies:
-      '@deepseek-ai/dsh-core':
-        specifier: workspace:*
-        version: link:../shim-dsh-core
-      '@personal-assistant/assistant-core':
-        specifier: workspace:*
-        version: link:../assistant-core
-    devDependencies:
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.2.18
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  packages/assistant-preset:
-    dependencies:
-      '@deepseek-ai/dsh-core':
-        specifier: workspace:*
-        version: link:../shim-dsh-core
-      '@personal-assistant/assistant-agent':
-        specifier: workspace:*
-        version: link:../assistant-agent
-      '@personal-assistant/assistant-core':
-        specifier: workspace:*
-        version: link:../assistant-core
-    devDependencies:
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.2.18
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  packages/assistant-sandbox:
-    dependencies:
-      '@deepseek-ai/dsh-core':
-        specifier: workspace:*
-        version: link:../shim-dsh-core
-      '@personal-assistant/assistant-core':
-        specifier: workspace:*
-        version: link:../assistant-core
-    devDependencies:
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.2.18
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  packages/assistant-schedule:
-    dependencies:
-      '@deepseek-ai/dsh-core':
-        specifier: workspace:*
-        version: link:../shim-dsh-core
-      '@personal-assistant/assistant-core':
-        specifier: workspace:*
-        version: link:../assistant-core
-    devDependencies:
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.2.18
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  packages/assistant-scope:
-    dependencies:
-      '@deepseek-ai/dsh-core':
-        specifier: workspace:*
-        version: link:../shim-dsh-core
-      '@personal-assistant/assistant-core':
-        specifier: workspace:*
-        version: link:../assistant-core
-    devDependencies:
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.2.18
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  packages/assistant-sdk:
-    dependencies:
-      '@deepseek-ai/dsh-core':
-        specifier: workspace:*
-        version: link:../shim-dsh-core
-      '@personal-assistant/assistant-agent':
-        specifier: workspace:*
-        version: link:../assistant-agent
-      '@personal-assistant/assistant-core':
-        specifier: workspace:*
-        version: link:../assistant-core
-    devDependencies:
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.2.18
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  packages/assistant-session:
-    dependencies:
-      '@deepseek-ai/dsh-core':
-        specifier: workspace:*
-        version: link:../shim-dsh-core
-      '@personal-assistant/assistant-core':
-        specifier: workspace:*
-        version: link:../assistant-core
-    devDependencies:
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.2.18
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  packages/assistant-settings:
-    dependencies:
-      '@deepseek-ai/dsh-core':
-        specifier: workspace:*
-        version: link:../shim-dsh-core
-      '@personal-assistant/assistant-core':
-        specifier: workspace:*
-        version: link:../assistant-core
-    devDependencies:
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.2.18
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  packages/assistant-shell:
-    dependencies:
-      '@deepseek-ai/dsh-core':
-        specifier: workspace:*
-        version: link:../shim-dsh-core
-      '@personal-assistant/assistant-core':
-        specifier: workspace:*
-        version: link:../assistant-core
-    devDependencies:
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.2.18
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  packages/assistant-skills:
-    dependencies:
-      '@deepseek-ai/dsh-core':
-        specifier: workspace:*
-        version: link:../shim-dsh-core
-    devDependencies:
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.2.18
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  packages/assistant-storage:
-    dependencies:
-      '@deepseek-ai/dsh-core':
-        specifier: workspace:*
-        version: link:../shim-dsh-core
-      '@personal-assistant/assistant-core':
-        specifier: workspace:*
-        version: link:../assistant-core
-    devDependencies:
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.2.18
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  packages/assistant-subagent:
-    dependencies:
-      '@deepseek-ai/dsh-core':
-        specifier: workspace:*
-        version: link:../shim-dsh-core
-      '@personal-assistant/assistant-agent':
-        specifier: workspace:*
-        version: link:../assistant-agent
-      '@personal-assistant/assistant-core':
-        specifier: workspace:*
-        version: link:../assistant-core
-    devDependencies:
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.2.18
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  packages/assistant-telemetry:
-    dependencies:
-      '@deepseek-ai/dsh-core':
-        specifier: workspace:*
-        version: link:../shim-dsh-core
-      '@personal-assistant/assistant-core':
-        specifier: workspace:*
-        version: link:../assistant-core
-    devDependencies:
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.2.18
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  packages/assistant-terminal:
-    dependencies:
-      '@deepseek-ai/dsh-core':
-        specifier: workspace:*
-        version: link:../shim-dsh-core
-      '@personal-assistant/assistant-core':
-        specifier: workspace:*
-        version: link:../assistant-core
-    devDependencies:
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.2.18
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  packages/assistant-todo:
-    dependencies:
-      '@deepseek-ai/dsh-core':
-        specifier: workspace:*
-        version: link:../shim-dsh-core
-      '@personal-assistant/assistant-core':
-        specifier: workspace:*
-        version: link:../assistant-core
-      '@personal-assistant/assistant-plan':
-        specifier: workspace:*
-        version: link:../assistant-plan
-    devDependencies:
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.2.18
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  packages/assistant-tools:
-    dependencies:
-      '@deepseek-ai/dsh-core':
-        specifier: workspace:*
-        version: link:../shim-dsh-core
-      '@personal-assistant/assistant-core':
-        specifier: workspace:*
-        version: link:../assistant-core
-    devDependencies:
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.2.18
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  packages/assistant-webhook:
-    dependencies:
-      '@deepseek-ai/dsh-core':
-        specifier: workspace:*
-        version: link:../shim-dsh-core
-      '@personal-assistant/assistant-core':
-        specifier: workspace:*
-        version: link:../assistant-core
-    devDependencies:
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.2.18
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  packages/assistant-workflow:
-    dependencies:
-      '@deepseek-ai/dsh-core':
-        specifier: workspace:*
-        version: link:../shim-dsh-core
-      '@personal-assistant/assistant-agent':
-        specifier: workspace:*
-        version: link:../assistant-agent
-      '@personal-assistant/assistant-core':
-        specifier: workspace:*
-        version: link:../assistant-core
-    devDependencies:
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.2.18
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  packages/assistant-workspace:
-    dependencies:
-      '@deepseek-ai/dsh-core':
-        specifier: workspace:*
-        version: link:../shim-dsh-core
-      '@personal-assistant/assistant-core':
-        specifier: workspace:*
-        version: link:../assistant-core
-      '@personal-assistant/assistant-fs':
-        specifier: workspace:*
-        version: link:../assistant-fs
-    devDependencies:
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.2.18
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  packages/qeek-auth:
+  packages/auth:
     dependencies:
       '@deepseek-ai/dsh-core':
         specifier: workspace:*
@@ -1111,7 +223,29 @@ importers:
         specifier: 'catalog:'
         version: 1.6.1(@types/node@20.19.43)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
-  packages/qeek-capability:
+  packages/browser:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+      '@zoveli/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.2.18
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/capability:
     dependencies:
       '@deepseek-ai/dsh-core':
         specifier: workspace:*
@@ -1133,7 +267,7 @@ importers:
         specifier: 'catalog:'
         version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
-  packages/qeek-code-analysis:
+  packages/code-analysis:
     dependencies:
       '@deepseek-ai/dsh-core':
         specifier: workspace:*
@@ -1155,15 +289,18 @@ importers:
         specifier: 'catalog:'
         version: 1.6.1(@types/node@20.19.43)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
-  packages/qeek-docgen:
+  packages/compaction:
     dependencies:
       '@deepseek-ai/dsh-core':
         specifier: workspace:*
         version: link:../shim-dsh-core
+      '@zoveli/core':
+        specifier: workspace:*
+        version: link:../core
+      '@zoveli/llm':
+        specifier: workspace:*
+        version: link:../llm
     devDependencies:
-      '@types/node':
-        specifier: ^20.10.0
-        version: 20.19.43
       oxlint:
         specifier: 'catalog:'
         version: 0.2.18
@@ -1175,9 +312,84 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 'catalog:'
-        version: 1.6.1(@types/node@20.19.43)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
-  packages/qeek-event-logger:
+  packages/computer-use:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+      '@zoveli/browser':
+        specifier: workspace:*
+        version: link:../browser
+      '@zoveli/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.2.18
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/context:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+      '@zoveli/core':
+        specifier: workspace:*
+        version: link:../core
+      '@zoveli/session':
+        specifier: workspace:*
+        version: link:../session
+    devDependencies:
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.2.18
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/conversation:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+      '@zoveli/core':
+        specifier: workspace:*
+        version: link:../core
+      '@zoveli/session':
+        specifier: workspace:*
+        version: link:../session
+    devDependencies:
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.2.18
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/core:
     dependencies:
       '@deepseek-ai/dsh-core':
         specifier: workspace:*
@@ -1196,7 +408,29 @@ importers:
         specifier: 'catalog:'
         version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
-  packages/qeek-graph:
+  packages/credentials:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+      '@zoveli/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.2.18
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/docgen:
     dependencies:
       '@deepseek-ai/dsh-core':
         specifier: workspace:*
@@ -1218,7 +452,120 @@ importers:
         specifier: 'catalog:'
         version: 1.6.1(@types/node@20.19.43)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
-  packages/qeek-health:
+  packages/document:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+      '@zoveli/attachment':
+        specifier: workspace:*
+        version: link:../attachment
+      '@zoveli/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.2.18
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/event-logger:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+    devDependencies:
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.2.18
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/feedback:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+      '@zoveli/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.2.18
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/fs:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+      '@zoveli/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.2.18
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/goals:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+      '@zoveli/core':
+        specifier: workspace:*
+        version: link:../core
+      '@zoveli/plan':
+        specifier: workspace:*
+        version: link:../plan
+    devDependencies:
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.2.18
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/graph:
     dependencies:
       '@deepseek-ai/dsh-core':
         specifier: workspace:*
@@ -1240,57 +587,18 @@ importers:
         specifier: 'catalog:'
         version: 1.6.1(@types/node@20.19.43)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
-  packages/qeek-host:
+  packages/guard:
     dependencies:
       '@deepseek-ai/dsh-core':
         specifier: workspace:*
         version: link:../shim-dsh-core
-      '@personal-assistant/assistant-core':
+      '@zoveli/core':
         specifier: workspace:*
-        version: link:../assistant-core
-      '@personal-assistant/assistant-math':
+        version: link:../core
+      '@zoveli/tools':
         specifier: workspace:*
-        version: link:../assistant-math
-      '@personal-assistant/assistant-memory':
-        specifier: workspace:*
-        version: link:../assistant-memory
-      '@personal-assistant/assistant-skills':
-        specifier: workspace:*
-        version: link:../assistant-skills
-      '@qeek/qeek-capability':
-        specifier: workspace:*
-        version: link:../qeek-capability
-      '@qeek/qeek-code-analysis':
-        specifier: workspace:*
-        version: link:../qeek-code-analysis
-      '@qeek/qeek-docgen':
-        specifier: workspace:*
-        version: link:../qeek-docgen
-      '@qeek/qeek-graph':
-        specifier: workspace:*
-        version: link:../qeek-graph
-      '@qeek/qeek-health':
-        specifier: workspace:*
-        version: link:../qeek-health
-      '@qeek/qeek-languages':
-        specifier: workspace:*
-        version: link:../qeek-languages
-      '@qeek/qeek-scheduler':
-        specifier: workspace:*
-        version: link:../qeek-scheduler
-      '@qeek/qeek-search':
-        specifier: workspace:*
-        version: link:../qeek-search
-      '@qeek/qeek-secscan':
-        specifier: workspace:*
-        version: link:../qeek-secscan
-      '@qeek/qeek-sysinfo':
-        specifier: workspace:*
-        version: link:../qeek-sysinfo
+        version: link:../tools
     devDependencies:
-      '@types/node':
-        specifier: ^20.10.0
-        version: 20.19.43
       oxlint:
         specifier: 'catalog:'
         version: 0.2.18
@@ -1302,9 +610,9 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 'catalog:'
-        version: 1.6.1(@types/node@20.19.43)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
-  packages/qeek-languages:
+  packages/health:
     dependencies:
       '@deepseek-ai/dsh-core':
         specifier: workspace:*
@@ -1326,7 +634,115 @@ importers:
         specifier: 'catalog:'
         version: 1.6.1(@types/node@20.19.43)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
-  packages/qeek-scheduler:
+  packages/host:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+      '@zoveli/capability':
+        specifier: workspace:*
+        version: link:../capability
+      '@zoveli/code-analysis':
+        specifier: workspace:*
+        version: link:../code-analysis
+      '@zoveli/core':
+        specifier: workspace:*
+        version: link:../core
+      '@zoveli/docgen':
+        specifier: workspace:*
+        version: link:../docgen
+      '@zoveli/graph':
+        specifier: workspace:*
+        version: link:../graph
+      '@zoveli/health':
+        specifier: workspace:*
+        version: link:../health
+      '@zoveli/languages':
+        specifier: workspace:*
+        version: link:../languages
+      '@zoveli/math':
+        specifier: workspace:*
+        version: link:../math
+      '@zoveli/memory':
+        specifier: workspace:*
+        version: link:../memory
+      '@zoveli/scheduler':
+        specifier: workspace:*
+        version: link:../scheduler
+      '@zoveli/search':
+        specifier: workspace:*
+        version: link:../search
+      '@zoveli/secscan':
+        specifier: workspace:*
+        version: link:../secscan
+      '@zoveli/skills':
+        specifier: workspace:*
+        version: link:../skills
+      '@zoveli/sysinfo':
+        specifier: workspace:*
+        version: link:../sysinfo
+    devDependencies:
+      '@types/node':
+        specifier: ^20.10.0
+        version: 20.19.43
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.2.18
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@20.19.43)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/identity:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+      '@zoveli/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.2.18
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/interaction:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+      '@zoveli/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.2.18
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/languages:
     dependencies:
       '@deepseek-ai/dsh-core':
         specifier: workspace:*
@@ -1348,15 +764,15 @@ importers:
         specifier: 'catalog:'
         version: 1.6.1(@types/node@20.19.43)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
-  packages/qeek-search:
+  packages/llm:
     dependencies:
       '@deepseek-ai/dsh-core':
         specifier: workspace:*
         version: link:../shim-dsh-core
+      '@zoveli/core':
+        specifier: workspace:*
+        version: link:../core
     devDependencies:
-      '@types/node':
-        specifier: ^20.10.0
-        version: 20.19.43
       oxlint:
         specifier: 'catalog:'
         version: 0.2.18
@@ -1368,17 +784,17 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 'catalog:'
-        version: 1.6.1(@types/node@20.19.43)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
-  packages/qeek-secscan:
+  packages/lsp:
     dependencies:
       '@deepseek-ai/dsh-core':
         specifier: workspace:*
         version: link:../shim-dsh-core
+      '@zoveli/core':
+        specifier: workspace:*
+        version: link:../core
     devDependencies:
-      '@types/node':
-        specifier: ^20.10.0
-        version: 20.19.43
       oxlint:
         specifier: 'catalog:'
         version: 0.2.18
@@ -1390,17 +806,14 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 'catalog:'
-        version: 1.6.1(@types/node@20.19.43)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
-  packages/qeek-sysinfo:
+  packages/math:
     dependencies:
       '@deepseek-ai/dsh-core':
         specifier: workspace:*
         version: link:../shim-dsh-core
     devDependencies:
-      '@types/node':
-        specifier: ^20.10.0
-        version: 20.19.43
       oxlint:
         specifier: 'catalog:'
         version: 0.2.18
@@ -1412,9 +825,50 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 'catalog:'
-        version: 1.6.1(@types/node@20.19.43)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
-  packages/qeek-telemetry:
+  packages/mcp:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+      '@zoveli/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.2.18
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/memory:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+    devDependencies:
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.2.18
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/otel:
     dependencies:
       '@deepseek-ai/dsh-core':
         specifier: workspace:*
@@ -1472,6 +926,301 @@ importers:
         specifier: 'catalog:'
         version: 1.6.1(@types/node@20.19.43)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
+  packages/plan:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+      '@zoveli/agent':
+        specifier: workspace:*
+        version: link:../agent
+      '@zoveli/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.2.18
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/plugin-manager:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+      '@zoveli/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.2.18
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/preset:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+      '@zoveli/agent':
+        specifier: workspace:*
+        version: link:../agent
+      '@zoveli/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.2.18
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/sandbox:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+      '@zoveli/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.2.18
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/schedule:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+      '@zoveli/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.2.18
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/scheduler:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+    devDependencies:
+      '@types/node':
+        specifier: ^20.10.0
+        version: 20.19.43
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.2.18
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@20.19.43)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/scope:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+      '@zoveli/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.2.18
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/sdk:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+      '@zoveli/agent':
+        specifier: workspace:*
+        version: link:../agent
+      '@zoveli/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.2.18
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/search:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+    devDependencies:
+      '@types/node':
+        specifier: ^20.10.0
+        version: 20.19.43
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.2.18
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@20.19.43)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/secscan:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+    devDependencies:
+      '@types/node':
+        specifier: ^20.10.0
+        version: 20.19.43
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.2.18
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@20.19.43)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/session:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+      '@zoveli/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.2.18
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/settings:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+      '@zoveli/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.2.18
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/shell:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+      '@zoveli/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.2.18
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
   packages/shim-dsh-core:
     devDependencies:
       '@types/node':
@@ -1489,6 +1238,257 @@ importers:
       vitest:
         specifier: 'catalog:'
         version: 1.6.1(@types/node@20.19.43)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/skills:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+    devDependencies:
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.2.18
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/storage:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+      '@zoveli/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.2.18
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/subagent:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+      '@zoveli/agent':
+        specifier: workspace:*
+        version: link:../agent
+      '@zoveli/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.2.18
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/sysinfo:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+    devDependencies:
+      '@types/node':
+        specifier: ^20.10.0
+        version: 20.19.43
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.2.18
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@20.19.43)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/telemetry:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+      '@zoveli/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.2.18
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/terminal:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+      '@zoveli/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.2.18
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/todo:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+      '@zoveli/core':
+        specifier: workspace:*
+        version: link:../core
+      '@zoveli/plan':
+        specifier: workspace:*
+        version: link:../plan
+    devDependencies:
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.2.18
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/tools:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+      '@zoveli/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.2.18
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/webhook:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+      '@zoveli/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.2.18
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/workflow:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+      '@zoveli/agent':
+        specifier: workspace:*
+        version: link:../agent
+      '@zoveli/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.2.18
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/workspace:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+      '@zoveli/core':
+        specifier: workspace:*
+        version: link:../core
+      '@zoveli/fs':
+        specifier: workspace:*
+        version: link:../fs
+    devDependencies:
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.2.18
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
 packages:
 

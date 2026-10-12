@@ -1,11 +1,11 @@
 /**
- * LOCAL COMPATIBILITY SHIM for `@deepseek-ai/dsh-core` (qeek).
+ * LOCAL COMPATIBILITY SHIM for `@deepseek-ai/dsh-core` (Zoveli).
  *
  * The upstream DeepSeek Harness has NO package called `dsh-core` and NO
  * `definePlugin` helper (real harness plugins are Cordis `{ name, apply }`
  * objects built on `@deepseek-ai/cordis`). This shim exists so that:
  *  - `pnpm install` resolves (workspace has exactly one `dsh-core`),
- *  - `tsc --noEmit` typechecks the qeek plugin authoring convention,
+ *  - `tsc --noEmit` typechecks the Zoveli plugin authoring convention,
  *  - `tsdown` builds and `vitest` runs against mock contexts.
  *
  * It is deliberately loose (`any`-friendly) under `strict: true` so that
@@ -15,8 +15,8 @@
  * tracked as future work. Do not mistake a passing build for runtime parity.
  */
 
-/** Minimal structural type for the qeek plugin context used in tests. */
-export interface QeekContext {
+/** Minimal structural type for the Zoveli plugin context used in tests. */
+export interface ZoveliContext {
   register: (key: string, value?: any, ...rest: any[]) => any;
   provide: (key: string, value?: any, ...rest: any[]) => any;
   on: (event: string, handler: (payload?: any, ...rest: any[]) => any, ...rest: any[]) => any;
@@ -28,16 +28,16 @@ export interface QeekContext {
   [key: string]: any;
 }
 
-/** qeek plugin shape (authoring convention, not upstream Cordis). */
-export interface QeekPlugin {
+/** Zoveli plugin shape (authoring convention, not upstream Cordis). */
+export interface ZoveliPlugin {
   name: string;
   description?: string;
-  setup: (ctx: QeekContext) => unknown;
+  setup: (ctx: ZoveliContext) => unknown;
   [key: string]: unknown;
 }
 
-/** qeek skill shape (authoring convention). */
-export interface QeekSkill {
+/** Zoveli skill shape (authoring convention). */
+export interface ZoveliSkill {
   name: string;
   description?: string;
   parameters?: unknown;
@@ -45,7 +45,7 @@ export interface QeekSkill {
   [key: string]: unknown;
 }
 
-/** qeek tool shape (authoring convention). */
+/** Zoveli tool shape (authoring convention). */
 export interface Tool {
   name: string;
   description?: string;
@@ -57,17 +57,17 @@ export interface Tool {
 }
 
 /** Identity helper: returns the plugin object unchanged. */
-export function definePlugin(p: QeekPlugin): QeekPlugin {
+export function definePlugin(p: ZoveliPlugin): ZoveliPlugin {
   return p;
 }
 
 /** Identity helper: returns the skill object unchanged. */
-export function defineSkill(s: QeekSkill): QeekSkill {
+export function defineSkill(s: ZoveliSkill): ZoveliSkill {
   return s;
 }
 
-/** Minimal host handle (subset used by qeek app entry points). */
-export interface QeekHost {
+/** Minimal host handle (subset used by Zoveli app entry points). */
+export interface ZoveliHost {
   start: () => Promise<void>;
   stop: () => Promise<void>;
   [key: string]: any;
@@ -75,18 +75,21 @@ export interface QeekHost {
 
 function stubHost(name: string): never {
   throw new Error(
-    `[qeek shim] ${name} is a stub: no real Cordis host is wired. ` +
-      `Run inside the DeepSeek Harness launcher (dsh) with a qeek profile, ` +
+    `[zoveli shim] ${name} is a stub: no real Cordis host is wired. ` +
+      `Run inside the DeepSeek Harness launcher (dsh) with a Zoveli profile, ` +
       `or implement host wiring. See docs/adr/001-cordis-plugin-architecture.md.`
   );
 }
 
 /** STUB — throws at runtime. Real host wiring is future work. */
-export function createDsh(..._args: any[]): QeekHost {
+export function createDsh(..._args: any[]): ZoveliHost {
   return stubHost('createDsh');
 }
 
 /** STUB — throws at runtime. Real host wiring is future work. */
-export function createWebServer(..._args: any[]): QeekHost {
+export function createWebServer(..._args: any[]): ZoveliHost {
   return stubHost('createWebServer');
 }
+
+
+

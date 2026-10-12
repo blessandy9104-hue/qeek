@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { CapabilityScanner } from '@qeek/qeek-capability/src/scanner';
-import { CapabilityRegistry } from '@qeek/qeek-capability/src/registry';
-import { CapabilityAdaptation } from '@qeek/qeek-capability/src/adaptation';
+import { CapabilityScanner } from '@zoveli/capability/src/scanner';
+import { CapabilityRegistry } from '@zoveli/capability/src/registry';
+import { CapabilityAdaptation } from '@zoveli/capability/src/adaptation';
 import { createMockContext, createMockCapability } from '../setup';
 
 describe('CapabilityScanner', () => {

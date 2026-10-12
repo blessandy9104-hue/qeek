@@ -36,8 +36,8 @@ COPY --from=builder --chown=qeek:qeek /app/package.json ./
 COPY --from=builder --chown=qeek:qeek /app/pnpm-lock.yaml ./
 COPY --from=builder --chown=qeek:qeek /app/node_modules ./node_modules
 COPY --from=builder --chown=qeek:qeek /app/packages ./packages
-COPY --from=builder --chown=qeek:qeek /app/apps/assistant-web/package.json ./apps/assistant-web/package.json
-COPY --from=builder --chown=qeek:qeek /app/apps/assistant-web/dist ./apps/assistant-web/dist
+COPY --from=builder --chown=qeek:qeek /app/apps/web/package.json ./apps/web/package.json
+COPY --from=builder --chown=qeek:qeek /app/apps/web/dist ./apps/web/dist
 COPY --from=builder --chown=qeek:qeek /app/knowledge-vault ./knowledge-vault
 
 # Create directories
@@ -50,17 +50,19 @@ USER qeek
 # Environment
 ENV NODE_ENV=production
 ENV PORT=3080
-ENV ASSISTANT_VAULT_PATH=/app/data/vault
+ENV ZOVELI_VAULT_PATH=/app/data/vault
 ENV MATHCORE_AUDIT=/app/data/audit/audit.jsonl
-ENV ASSISTANT_SESSION_PATH=/app/data/sessions
+ENV ZOVELI_SESSION_PATH=/app/data/sessions
 
 # Expose port
 EXPOSE 3080
 
-# Health check (served by apps/assistant-web)
+# Health check (served by apps/web)
 HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
   CMD node -e "require('http').get('http://localhost:3080/health', (r) => {if(r.statusCode!==200) process.exit(1)})" || exit 1
 
 # Entry point
 ENTRYPOINT ["dumb-init", "--"]
-CMD ["node", "apps/assistant-web/dist/server.js"]
+CMD ["node", "apps/web/dist/server.js"]
+
+

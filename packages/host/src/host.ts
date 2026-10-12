@@ -1,0 +1,123 @@
+import type { ZoveliContext, ZoveliPlugin, Tool } from '@deepseek-ai/dsh-core';
+
+export interface HostTool extends Tool {
+  plugin: string;
+}
+
+interface AgentLike {
+  inject: (msg: { type: string; content: string }) => void;
+  systemSections: string[];
+}
+
+/**
+ * Minimal real host for Zoveli plugins. It implements just enough of the
+ * plugin context (register/provide/on/emit) to boot the tool-bearing
+ * plugins, collect their tools, and dispatch calls. It is NOT a Cordis
+ * runtime — see docs/adr/001 for the full-host roadmap.
+ */
+export class ZoveliHost {
+  private registrations = new Map<string, any[]>();
+  private provided = new Map<string, any>();
+  private handlers = new Map<string, Function[]>();
+  readonly systemSections: string[] = [];
+
+  readonly ctx: ZoveliContext;
+
+  constructor() {
+    this.ctx = {
+      register: (key: string, value?: any) => {
+        const arr = this.registrations.get(key) ?? [];
+        arr.push(value);
+        this.registrations.set(key, arr);
+        return value;
+      },
+      provide: (key: string, value?: any) => {
+        this.provided.set(key, value);
+        return value;
+      },
+      on: (event: string, handler: (...args: any[]) => any) => {
+        const arr = this.handlers.get(event) ?? [];
+        arr.push(handler);
+        this.handlers.set(event, arr);
+        return handler;
+      },
+      emit: (event: string, ...args: any[]) => {
+        const results: any[] = [];
+        for (const h of this.handlers.get(event) ?? []) {
+          results.push(h(...args));
+        }
+        return results;
+      },
+      get: (key: string) => {
+        const arr = this.registrations.get(key);
+        return arr?.[0];
+      },
+      log: {
+        info: (...a: any[]) => console.error('[zoveli]', ...a),
+        warn: (...a: any[]) => console.error('[zoveli:warn]', ...a),
+        error: (...a: any[]) => console.error('[zoveli:error]', ...a),
+        debug: () => {},
+      },
+      config: {},
+      plugins: [],
+    };
+  }
+
+  /** Mount plugins and fire agent/created so prompt injections apply. */
+  mount(plugins: ZoveliPlugin[]): AgentLike {
+    for (const p of plugins) {
+      p.setup(this.ctx);
+    }
+    const agent: AgentLike = {
+      systemSections: this.systemSections,
+      inject: (msg: { type: string; content: string }) => {
+        this.systemSections.push(msg.content);
+      },
+    };
+    for (const h of this.handlers.get('agent/created') ?? []) {
+      h(agent);
+    }
+    return agent;
+  }
+
+  /** Every executable tool across all mounted plugins. */
+  tools(): HostTool[] {
+    const out: HostTool[] = [];
+    const seen = new Set<string>();
+    const consider = (plugin: string, value: any) => {
+      const items = Array.isArray(value) ? value : [value];
+      for (const t of items) {
+        if (
+          t &&
+          typeof t === 'object' &&
+          typeof t.name === 'string' &&
+          typeof t.execute === 'function' &&
+          !seen.has(t.name)
+        ) {
+          seen.add(t.name);
+          out.push({ ...(t as Tool), plugin });
+        }
+      }
+    };
+    for (const [key, values] of this.registrations) {
+      for (const v of values) consider(key, v);
+    }
+    return out.sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  getTool(name: string): HostTool {
+    const t = this.tools().find((x) => x.name === name);
+    if (!t) throw new Error(`unknown tool: ${name}`);
+    return t;
+  }
+
+  async runTool(name: string, args: any = {}): Promise<unknown> {
+    const t = this.getTool(name);
+    return await t.execute(args);
+  }
+}
+
+
+
+
+

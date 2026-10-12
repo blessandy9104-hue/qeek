@@ -1,0 +1,24 @@
+{
+  "name": "@zoveli/cli",
+  "version": "0.1.0",
+  "description": "Zoveli AI command-line assistant",
+  "bin": {
+    "assistant": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "start": "node dist/cli.js",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@zoveli/host": "workspace:*"
+  },
+  "devDependencies": {
+    "tsdown": "^0.3.0",
+    "typescript": "catalog:",
+    "vitest": "catalog:",
+    "oxlint": "catalog:"
+  }
+}
+

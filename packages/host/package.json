@@ -1,0 +1,47 @@
+{
+  "name": "@zoveli/host",
+  "version": "0.1.0",
+  "description": "Minimal local host for Zoveli plugins: loader, tool registry, REPL, and optional LLM chat",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "test": "vitest run",
+    "lint": "oxlint",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@deepseek-ai/dsh-core": "workspace:*",
+    "@zoveli/core": "workspace:*",
+    "@zoveli/math": "workspace:*",
+    "@zoveli/memory": "workspace:*",
+    "@zoveli/skills": "workspace:*",
+    "@zoveli/languages": "workspace:*",
+    "@zoveli/sysinfo": "workspace:*",
+    "@zoveli/search": "workspace:*",
+    "@zoveli/scheduler": "workspace:*",
+    "@zoveli/secscan": "workspace:*",
+    "@zoveli/health": "workspace:*",
+    "@zoveli/graph": "workspace:*",
+    "@zoveli/docgen": "workspace:*",
+    "@zoveli/code-analysis": "workspace:*",
+    "@zoveli/capability": "workspace:*"
+  },
+  "devDependencies": {
+    "tsdown": "^0.3.0",
+    "typescript": "catalog:",
+    "vitest": "catalog:",
+    "oxlint": "catalog:",
+    "@types/node": "^20.10.0"
+  }
+}
+
+

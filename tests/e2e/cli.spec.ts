@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { spawn, spawnSync } from 'child_process';
 
-const CLI = 'apps/assistant-cli/dist/cli.js';
+const CLI = 'apps/cli/dist/cli.js';
 
 // mathcore-mcp comes from a sibling checkout that CI clones do not have.
 // Math-dependent tests skip cleanly when it is absent (and run for real
@@ -91,7 +91,7 @@ test.describe('CLI Application', () => {
   test('boots and lists tools', async () => {
     const run = await runCliOnce('/tools\n/quit\n');
     expect(run.code).toBe(0);
-    expect(run.stdout).toContain('qeek — local-first assistant');
+    expect(run.stdout).toContain('zoveli — local-first assistant');
     expect(run.stdout).toContain('mathcore_compute');
     expect(run.stdout).toContain('sysinfo_snapshot');
     // vault_graph sorts last: proves the full list printed.
@@ -141,7 +141,7 @@ test.describe('Web Application', () => {
   test('UI sends a message and shows VERIFIED badge', async ({ page }) => {
     test.skip(!HAS_MATHCORE, 'mathcore-mcp not installed');
     await page.goto('/');
-    await expect(page.locator('h1')).toContainText('qeek');
+    await expect(page.locator('h1')).toContainText('Zoveli');
     await page.fill('[data-testid="chat-input"]', '2+2');
     await page.click('[data-testid="send-button"]');
     await expect(page.locator('[data-testid="assistant-message"]').last()).toBeVisible();
@@ -178,7 +178,7 @@ test.describe('Auth (email OTP, proton.me compatible)', () => {
     });
     expect(good.ok()).toBeTruthy();
     const setCookie = good.headers()['set-cookie'] || '';
-    expect(setCookie).toContain('qeek_session=');
+    expect(setCookie).toContain('zoveli_session=');
 
     const me = await request.get('/api/auth/me', {
       headers: { cookie: setCookie.split(';')[0] },
@@ -221,3 +221,4 @@ test.describe('Auth (email OTP, proton.me compatible)', () => {
     expect(res.status()).toBe(400);
   });
 });
+

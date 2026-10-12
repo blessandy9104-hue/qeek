@@ -82,8 +82,8 @@ Content in Markdown...
 - **Binary Files**: Not suitable for images/attachments (separate storage)
 
 ## Implementation
-- `packages/qeek-memory/`: Vault integration plugin
-- `packages/qeek-core/src/memory-tools.ts`: Tool definitions
+- `packages/memory/`: Vault integration plugin
+- `packages/core/src/memory-tools.ts`: Tool definitions
 - `knowledge-vault/`: Default vault with examples
 - `config/*.cordis.yml`: Filesystem provider config
 

@@ -37,7 +37,7 @@ Tools are the agent-facing API. Full JSON schemas live in each plugin's `src/ind
 - `security_scan {path, maxFiles?}` → findings + summary
 - `tasks_schedule {tasks[]}` → scored + time-blocked
 
-## Auth (`@qeek/qeek-auth`, passwordless email OTP)
+## Auth (`@zoveli/auth`, passwordless email OTP)
 - `auth_request_code {email}` → sends 6-digit code (any inbox incl. proton.me)
 - `auth_verify_code {email, code}` → `{ok, email, token}` or `{ok:false, reason}`
 - HTTP: `POST /api/auth/request`, `POST /api/auth/verify` (sets `qeek_session` cookie),
@@ -48,7 +48,7 @@ Tools are the agent-facing API. Full JSON schemas live in each plugin's `src/ind
   the server console (dev mode). `QEEK_AUTH_DEV_ECHO=1` echoes codes in API
   responses — test-only, never production.
 
-## System & hardware (`@qeek/qeek-sysinfo`, local-only)
+## System & hardware (`@zoveli/sysinfo`, local-only)
 - `sysinfo_snapshot {diskPath?, fresh?}` → full host snapshot (30s cache)
 - `sysinfo_cpu {}`, `sysinfo_memory {}`, `sysinfo_disk {path?}`
 - `sysinfo_gpu {}`, `sysinfo_battery {}` (best effort; unavailable = unknown)
@@ -62,3 +62,4 @@ Tools are the agent-facing API. Full JSON schemas live in each plugin's `src/ind
 ## Skills / workflows
 - Skills: `daily-briefing`, `research`, `task-planning`, `code-review` (see `packages/assistant-skills`)
 - `run_workflow {template, inputs?}` — templates: `research-report`, `code-review`, `daily-briefing`
+

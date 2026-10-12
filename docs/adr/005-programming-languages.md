@@ -7,7 +7,7 @@ Accepted
 qeek agents routinely read, write, review, and test code. Ad-hoc handling per language leads to inconsistent results, missing tooling guidance, and unverified claims about code quality.
 
 ## Decision
-Add a dedicated `@qeek/qeek-languages` plugin providing:
+Add a dedicated `@zoveli/languages` plugin providing:
 - **Detection** by extension → filename → shebang → content heuristics (17 languages).
 - **Analysis** with LOC/comments/blanks, cyclomatic + cognitive complexity, maintainability index, function/class/import/export extraction, universal issue checks + LSP diagnostics.
 - **Formatting** via native tools in temp dirs (`prettier`, `black`, `rustfmt`, `gofmt`) with deterministic fallback.
@@ -39,3 +39,4 @@ Expose as 6 agent tools (`language_detect`, `language_analyze`, `language_format
 - `docs/capabilities/languages.md`
 - `docs/WORKAROUNDS.md`
 - ADR 002 (Capability Awareness), ADR 001 (Cordis plugins)
+

@@ -175,7 +175,7 @@ jobs:
           NODE_ENV: test
           # Makes child shutdowns print live-handle diagnostics to
           # stderr on hang (captured by the CLI e2e helper on timeout).
-          QEEK_DEBUG: '1'
+          ZOVELI_DEBUG: '1'
 
       - name: Upload Playwright report
         if: always()
@@ -361,10 +361,10 @@ jobs:
         run: pnpm run build
 
       # NOTE: npm publishing is intentionally disabled. The workspace
-      # publishes nothing today: the @personal-assistant/* and @qeek/*
-      # scopes are unclaimed and @changesets/cli is not installed. When a
-      # scope is claimed, re-add a scoped publish step here
-      # (e.g. `pnpm --filter "@qeek/*" publish --access public`) behind
+      # publishes nothing today: the @zoveli/* scope is unclaimed and
+      # @changesets/cli is not installed. When the scope is claimed,
+      # re-add a scoped publish step here
+      # (e.g. `pnpm --filter "@zoveli/*" publish --access public`) behind
       # an NPM_TOKEN secret check — never `publish -r` unscoped.
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1

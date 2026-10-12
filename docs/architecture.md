@@ -24,7 +24,7 @@ User (CLI / Web / Desktop)
 | Intelligence | `assistant-subagent`, `assistant-workflow`, `assistant-plan`, `assistant-agent-teams`, `assistant-goals`, `assistant-preset`, `assistant-todo`, `assistant-schedule`, `assistant-workspace`, `assistant-mcp` |
 | Memory/context | `assistant-memory`, `assistant-context`, `assistant-compaction`, `assistant-document`, `assistant-attachment`, `assistant-conversation` |
 | System | `assistant-settings`, `assistant-credentials`, `assistant-telemetry`, `assistant-guard`, `assistant-identity`, `assistant-interaction`, `assistant-feedback`, `assistant-storage`, `assistant-webhook`, `assistant-plugin-manager`, `assistant-acp`, `assistant-sdk` |
-| qeek differentiators | `assistant-math` (mathcore), `assistant-skills`, `qeek-capability`, `qeek-languages`, `qeek-search`, `qeek-event-logger`, `qeek-telemetry`, `qeek-code-analysis`, `qeek-docgen`, `qeek-health`, `qeek-graph`, `qeek-scheduler`, `qeek-secscan`, `qeek-sysinfo`, `qeek-auth` |
+| qeek differentiators | `assistant-math` (mathcore), `assistant-skills`, `zoveli-capability`, `qeek-languages`, `qeek-search`, `qeek-event-logger`, `qeek-telemetry`, `qeek-code-analysis`, `qeek-docgen`, `qeek-health`, `qeek-graph`, `qeek-scheduler`, `qeek-secscan`, `qeek-sysinfo`, `qeek-auth` |
 | Host + compat | `qeek-host` (loader, REPL, chat, HTTP wiring), `shim-dsh-core` (local authoring shim, not a runtime) |
 
 ## Data flows
@@ -36,7 +36,7 @@ User (CLI / Web / Desktop)
 
 ## Profiles and runtime
 
-Apps boot through `@qeek/qeek-host` (`QeekHost.mount` + REPL/HTTP), not
+Apps boot through `@zoveli/host` (`QeekHost.mount` + REPL/HTTP), not
 through a Cordis launcher. `config/*.cordis.yml` declares the intended
 full-profile plugin composition for future upstream-Cordis integration;
 today they are documentation, not executed code. The web server mounts
@@ -45,3 +45,4 @@ today they are documentation, not executed code. The web server mounts
 ## Observability
 
 In-memory meters always on (`qeek_turns_total`, `qeek_tools_called`, `qeek_math_verified`, `qeek_memory_operations`); Prometheus + OTLP when `TELEMETRY_ENABLED=true`. Grafana dashboard in `docker/grafana/dashboards/qeek-overview.json`. Event tracing via `qeek-event-logger` at `/debug/events`.
+

@@ -163,20 +163,20 @@ This document provides practical workarounds for all identified negative consequ
 
 | Workaround | Status | Location |
 |------------|--------|----------|
-| Event Logger Plugin | ✅ Implemented | `packages/qeek-event-logger/` |
-| Visual Trace Viewer | ✅ Implemented | `/debug/events` routes in `packages/qeek-event-logger/src/index.ts` |
-| In-Memory Search Index | ✅ Implemented | `packages/qeek-search/` (dependency-free TF index; native engine is future work) |
+| Event Logger Plugin | ✅ Implemented | `packages/event-logger/` |
+| Visual Trace Viewer | ✅ Implemented | `/debug/events` routes in `packages/event-logger/src/index.ts` |
+| In-Memory Search Index | ✅ Implemented | `packages/search/` (dependency-free TF index; native engine is future work) |
 | mathcore Binary Build | 📋 Planned | `scripts/build-mathcore-binary.sh` (not created yet) |
 | Connection Pooling | 📋 Planned | single stdio MCP connection per server today; pool extraction pending |
 | Plugin Generator | 📋 Planned | `scripts/create-plugin.ts` (not created yet) |
-| Capability Health Probes | ✅ Implemented | `packages/qeek-capability/src/scanner.ts` (`verifyCapabilities`) |
+| Capability Health Probes | ✅ Implemented | `packages/capability/src/scanner.ts` (`verifyCapabilities`) |
 | Vault Migration System | 📋 Planned | schema-versioned frontmatter; no migrator yet |
 | Git Auto-Commit Hooks | 📋 Planned | no `.husky/` yet |
 | Config Drift Detection | 📋 Planned | `scripts/config-diff.ts` (not created yet) |
-| Programming Languages Fallbacks | ✅ Implemented | `packages/qeek-languages/` (native → deterministic fallback) |
-| Knowledge Graph Export | ✅ Implemented | `packages/qeek-graph/` (JSON + DOT) |
-| Security Secret Patterns | ✅ Implemented | `packages/qeek-secscan/` (7 pattern families) |
-| Telemetry Fallback Meters | ✅ Implemented | `packages/qeek-telemetry/` (in-memory + lazy OTel) |
+| Programming Languages Fallbacks | ✅ Implemented | `packages/languages/` (native → deterministic fallback) |
+| Knowledge Graph Export | ✅ Implemented | `packages/graph/` (JSON + DOT) |
+| Security Secret Patterns | ✅ Implemented | `packages/secscan/` (7 pattern families) |
+| Telemetry Fallback Meters | ✅ Implemented | `packages/otel/` (in-memory + lazy OTel) |
 
 ---
 

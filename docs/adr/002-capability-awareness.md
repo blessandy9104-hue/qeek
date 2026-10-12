@@ -86,4 +86,4 @@ On `agent/created`, inject capability summary.
 - False Positives: May report available when degraded
 
 ## Implementation
-Located in `packages/qeek-capability/`
+Located in `packages/capability/`

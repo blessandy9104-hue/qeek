@@ -2,11 +2,11 @@ version: '3.8'
 
 services:
   # Main qeek CLI application
-  qeek-cli:
+  zoveli-cli:
     build:
       context: ..
       dockerfile: docker/Dockerfile.cli
-    container_name: qeek-cli
+    container_name: zoveli-cli
     volumes:
       - ./data/vault:/app/data/vault
       - ./data/sessions:/app/data/sessions
@@ -14,7 +14,7 @@ services:
       - ../knowledge-vault:/app/knowledge-vault:ro
     environment:
       - NODE_ENV=development
-      - ASSISTANT_VAULT_PATH=/app/data/vault
+      - ZOVELI_VAULT_PATH=/app/data/vault
       - MATHCORE_AUDIT=/app/data/audit/audit.jsonl
     stdin_open: true
     tty: true
@@ -22,11 +22,11 @@ services:
       - cli
 
   # Web UI application
-  qeek-web:
+  zoveli-web:
     build:
       context: ..
       dockerfile: docker/Dockerfile.web
-    container_name: qeek-web
+    container_name: zoveli-web
     ports:
       - "3080:3080"
     volumes:
@@ -37,7 +37,7 @@ services:
     environment:
       - NODE_ENV=development
       - PORT=3080
-      - ASSISTANT_VAULT_PATH=/app/data/vault
+      - ZOVELI_VAULT_PATH=/app/data/vault
       - MATHCORE_AUDIT=/app/data/audit/audit.jsonl
     healthcheck:
       test: ["CMD", "wget", "-q", "--spider", "http://localhost:3080/health"]
@@ -51,7 +51,7 @@ services:
   # Ollama for local LLM inference
   ollama:
     image: ollama/ollama:latest
-    container_name: qeek-ollama
+    container_name: zoveli-ollama
     ports:
       - "11434:11434"
     volumes:
@@ -71,7 +71,7 @@ services:
   # PostgreSQL for session persistence (optional)
   postgres:
     image: postgres:16-alpine
-    container_name: qeek-postgres
+    container_name: zoveli-postgres
     ports:
       - "5432:5432"
     volumes:
@@ -91,7 +91,7 @@ services:
   # Redis for caching (optional)
   redis:
     image: redis:7-alpine
-    container_name: qeek-redis
+    container_name: zoveli-redis
     ports:
       - "6379:6379"
     volumes:
@@ -107,7 +107,7 @@ services:
   # Prometheus for metrics
   prometheus:
     image: prom/prometheus:latest
-    container_name: qeek-prometheus
+    container_name: zoveli-prometheus
     ports:
       - "9090:9090"
     volumes:
@@ -125,7 +125,7 @@ services:
   # Grafana for dashboards
   grafana:
     image: grafana/grafana:latest
-    container_name: qeek-grafana
+    container_name: zoveli-grafana
     ports:
       - "3000:3000"
     volumes:

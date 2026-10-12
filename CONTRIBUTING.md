@@ -19,8 +19,8 @@ By participating in this project, you agree to abide by our [Code of Conduct](CO
 
 ```bash
 # Fork and clone
-git clone https://github.com/blessandy9104-hue/qeek.git
-cd qeek
+git clone https://github.com/blessandy9104-hue/zoveli-ai.git
+cd zoveli-ai
 
 # Install mathcore (sibling checkout; provides the mathcore-mcp server binary)
 pip install -e ../mathcore

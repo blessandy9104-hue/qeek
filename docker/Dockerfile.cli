@@ -1,6 +1,6 @@
 # Syntax: Dockerfile
 # qeek CLI image: offline-capable assistant console.
-# Run interactively: docker run --rm -i qeek-cli
+# Run interactively: docker run --rm -i zoveli-cli
 # NOTE: node:22 minimum — pnpm 11 requires node:sqlite (Node 22.5+).
 FROM node:22-alpine AS builder
 
@@ -40,8 +40,8 @@ COPY --from=builder --chown=qeek:qeek /app/package.json ./
 COPY --from=builder --chown=qeek:qeek /app/pnpm-lock.yaml ./
 COPY --from=builder --chown=qeek:qeek /app/node_modules ./node_modules
 COPY --from=builder --chown=qeek:qeek /app/packages ./packages
-COPY --from=builder --chown=qeek:qeek /app/apps/assistant-cli/package.json ./apps/assistant-cli/package.json
-COPY --from=builder --chown=qeek:qeek /app/apps/assistant-cli/dist ./apps/assistant-cli/dist
+COPY --from=builder --chown=qeek:qeek /app/apps/cli/package.json ./apps/cli/package.json
+COPY --from=builder --chown=qeek:qeek /app/apps/cli/dist ./apps/cli/dist
 COPY --from=builder --chown=qeek:qeek /app/knowledge-vault ./knowledge-vault
 
 # Create directories
@@ -53,9 +53,9 @@ USER qeek
 
 # Environment
 ENV NODE_ENV=production
-ENV ASSISTANT_VAULT_PATH=/app/data/vault
+ENV ZOVELI_VAULT_PATH=/app/data/vault
 ENV MATHCORE_AUDIT=/app/data/audit/audit.jsonl
-ENV ASSISTANT_SESSION_PATH=/app/data/sessions
+ENV ZOVELI_SESSION_PATH=/app/data/sessions
 
 # NOTE: no HEALTHCHECK — the CLI is interactive, not a service.
 # mathcore verified-math needs the mathcore-mcp binary on PATH;
@@ -63,4 +63,6 @@ ENV ASSISTANT_SESSION_PATH=/app/data/sessions
 
 # Entry point
 ENTRYPOINT ["dumb-init", "--"]
-CMD ["node", "apps/assistant-cli/dist/cli.js"]
+CMD ["node", "apps/cli/dist/cli.js"]
+
+

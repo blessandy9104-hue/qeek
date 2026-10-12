@@ -44,11 +44,11 @@ export default defineConfig({
     }
   },
   resolve: {
-    // NOTE: `@qeek/*` maps to local package sources; the old glob-based
+    // NOTE: `@zoveli/*` maps to local package sources; the old glob-based
     // mapping resolved to a literal `packages/*/src` path and never worked.
     alias: [
       {
-        find: /^@qeek\/([^/]+)\/src(.*)$/,
+        find: /^@zoveli\/([^/]+)\/src(.*)$/,
         replacement: path.resolve(__dirname, 'packages/$1/src$2'),
       },
     ],

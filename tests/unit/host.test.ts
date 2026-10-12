@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { QeekHost } from '../../packages/qeek-host/src/host';
-import { chatConfigFromEnv } from '../../packages/qeek-host/src/chat';
+import { ZoveliHost } from '../../packages/host/src/host';
+import { chatConfigFromEnv } from '../../packages/host/src/chat';
 
 function fakePlugin(name: string, tools: any[] = []) {
   return {
@@ -12,9 +12,9 @@ function fakePlugin(name: string, tools: any[] = []) {
   };
 }
 
-describe('QeekHost', () => {
+describe('ZoveliHost', () => {
   it('mounts plugins and collects their tools', () => {
-    const host = new QeekHost();
+    const host = new ZoveliHost();
     host.mount([
       fakePlugin('a', [
         { name: 'alpha', description: 'a', execute: async () => 'A' },
@@ -29,7 +29,7 @@ describe('QeekHost', () => {
   });
 
   it('dedupes tools by name (first wins)', () => {
-    const host = new QeekHost();
+    const host = new ZoveliHost();
     host.mount([
       fakePlugin('a', [{ name: 'dup', description: 'first', execute: async () => 1 }]),
       fakePlugin('b', [{ name: 'dup', description: 'second', execute: async () => 2 }]),
@@ -38,7 +38,7 @@ describe('QeekHost', () => {
   });
 
   it('dispatches tool calls with args', async () => {
-    const host = new QeekHost();
+    const host = new ZoveliHost();
     host.mount([
       fakePlugin('a', [{ name: 'echo', description: 'e', execute: async (args: any) => args.msg }]),
     ]);
@@ -46,13 +46,13 @@ describe('QeekHost', () => {
   });
 
   it('rejects unknown tools with a clear error', async () => {
-    const host = new QeekHost();
+    const host = new ZoveliHost();
     host.mount([]);
     await expect(host.runTool('nope', {})).rejects.toThrow('unknown tool: nope');
   });
 
   it('fires agent/created handlers with an injectable agent', () => {
-    const host = new QeekHost();
+    const host = new ZoveliHost();
     const seen: string[] = [];
     host.mount([
       {
@@ -82,3 +82,4 @@ describe('chatConfigFromEnv', () => {
     else process.env.DEEPSEEK_API_KEY = prev;
   });
 });
+

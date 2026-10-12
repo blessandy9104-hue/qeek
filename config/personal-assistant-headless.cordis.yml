@@ -9,114 +9,114 @@
 
 # Personal Assistant custom plugins - CLI Core
 - insert:
-    - id: personal-assistant-core
-      name: '@personal-assistant/assistant-core'
-    - id: personal-assistant-agent
-      name: '@personal-assistant/assistant-agent'
-    - id: personal-assistant-session
-      name: '@personal-assistant/assistant-session'
-    - id: personal-assistant-tools
-      name: '@personal-assistant/assistant-tools'
-    - id: personal-assistant-llm
-      name: '@personal-assistant/assistant-llm'
-    - id: personal-assistant-mcp
-      name: '@personal-assistant/assistant-mcp'
-    - id: personal-assistant-fs
-      name: '@personal-assistant/assistant-fs'
-    - id: personal-assistant-shell
-      name: '@personal-assistant/assistant-shell'
-    - id: personal-assistant-browser
-      name: '@personal-assistant/assistant-browser'
-    - id: personal-assistant-sandbox
-      name: '@personal-assistant/assistant-sandbox'
-    - id: personal-assistant-subagent
-      name: '@personal-assistant/assistant-subagent'
-    - id: personal-assistant-workflow
-      name: '@personal-assistant/assistant-workflow'
-    - id: personal-assistant-webhook
-      name: '@personal-assistant/assistant-webhook'
-    - id: personal-assistant-settings
-      name: '@personal-assistant/assistant-settings'
-    - id: personal-assistant-credentials
-      name: '@personal-assistant/assistant-credentials'
-    - id: personal-assistant-telemetry
-      name: '@personal-assistant/assistant-telemetry'
-    - id: personal-assistant-computer-use
-      name: '@personal-assistant/assistant-computer-use'
-    - id: personal-assistant-terminal
-      name: '@personal-assistant/assistant-terminal'
-    - id: personal-assistant-lsp
-      name: '@personal-assistant/assistant-lsp'
-    - id: personal-assistant-attachment
-      name: '@personal-assistant/assistant-attachment'
-    - id: personal-assistant-compaction
-      name: '@personal-assistant/assistant-compaction'
-    - id: personal-assistant-context
-      name: '@personal-assistant/assistant-context'
-    - id: personal-assistant-document
-      name: '@personal-assistant/assistant-document'
-    - id: personal-assistant-feedback
-      name: '@personal-assistant/assistant-feedback'
-    - id: personal-assistant-guard
-      name: '@personal-assistant/assistant-guard'
-    - id: personal-assistant-identity
-      name: '@personal-assistant/assistant-identity'
-    - id: personal-assistant-interaction
-      name: '@personal-assistant/assistant-interaction'
-    - id: personal-assistant-plan
-      name: '@personal-assistant/assistant-plan'
-    - id: personal-assistant-preset
-      name: '@personal-assistant/assistant-preset'
-    - id: personal-assistant-schedule
-      name: '@personal-assistant/assistant-schedule'
-    - id: personal-assistant-storage
-      name: '@personal-assistant/assistant-storage'
-    - id: personal-assistant-todo
-      name: '@personal-assistant/assistant-todo'
-    - id: personal-assistant-workspace
-      name: '@personal-assistant/assistant-workspace'
-    - id: personal-assistant-scope
-      name: '@personal-assistant/assistant-scope'
-    - id: personal-assistant-goals
-      name: '@personal-assistant/assistant-goals'
-    - id: personal-assistant-agent-teams
-      name: '@personal-assistant/assistant-agent-teams'
-    - id: personal-assistant-plugin-manager
-      name: '@personal-assistant/assistant-plugin-manager'
-    - id: personal-assistant-acp
-      name: '@personal-assistant/assistant-acp'
-    - id: personal-assistant-sdk
-      name: '@personal-assistant/assistant-sdk'
-    - id: personal-assistant-math
-      name: '@personal-assistant/assistant-math'
-    - id: personal-assistant-memory
-      name: '@personal-assistant/assistant-memory'
-    - id: personal-assistant-skills
-      name: '@personal-assistant/assistant-skills'
-    - id: qeek-languages
-      name: '@qeek/qeek-languages'
-    - id: qeek-capability
-      name: '@qeek/qeek-capability'
-    - id: qeek-event-logger
-      name: '@qeek/qeek-event-logger'
-    - id: qeek-search
-      name: '@qeek/qeek-search'
-    - id: qeek-telemetry
-      name: '@qeek/qeek-telemetry'
-    - id: qeek-code-analysis
-      name: '@qeek/qeek-code-analysis'
-    - id: qeek-docgen
-      name: '@qeek/qeek-docgen'
-    - id: qeek-health
-      name: '@qeek/qeek-health'
-    - id: qeek-graph
-      name: '@qeek/qeek-graph'
-    - id: qeek-scheduler
-      name: '@qeek/qeek-scheduler'
-    - id: qeek-secscan
-      name: '@qeek/qeek-secscan'
-    - id: qeek-sysinfo
-      name: '@qeek/qeek-sysinfo'
+    - id: zoveli-core
+      name: '@zoveli/core'
+    - id: zoveli-agent
+      name: '@zoveli/agent'
+    - id: zoveli-session
+      name: '@zoveli/session'
+    - id: zoveli-tools
+      name: '@zoveli/tools'
+    - id: zoveli-llm
+      name: '@zoveli/llm'
+    - id: zoveli-mcp
+      name: '@zoveli/mcp'
+    - id: zoveli-fs
+      name: '@zoveli/fs'
+    - id: zoveli-shell
+      name: '@zoveli/shell'
+    - id: zoveli-browser
+      name: '@zoveli/browser'
+    - id: zoveli-sandbox
+      name: '@zoveli/sandbox'
+    - id: zoveli-subagent
+      name: '@zoveli/subagent'
+    - id: zoveli-workflow
+      name: '@zoveli/workflow'
+    - id: zoveli-webhook
+      name: '@zoveli/webhook'
+    - id: zoveli-settings
+      name: '@zoveli/settings'
+    - id: zoveli-credentials
+      name: '@zoveli/credentials'
+    - id: zoveli-telemetry
+      name: '@zoveli/telemetry'
+    - id: zoveli-computer-use
+      name: '@zoveli/computer-use'
+    - id: zoveli-terminal
+      name: '@zoveli/terminal'
+    - id: zoveli-lsp
+      name: '@zoveli/lsp'
+    - id: zoveli-attachment
+      name: '@zoveli/attachment'
+    - id: zoveli-compaction
+      name: '@zoveli/compaction'
+    - id: zoveli-context
+      name: '@zoveli/context'
+    - id: zoveli-document
+      name: '@zoveli/document'
+    - id: zoveli-feedback
+      name: '@zoveli/feedback'
+    - id: zoveli-guard
+      name: '@zoveli/guard'
+    - id: zoveli-identity
+      name: '@zoveli/identity'
+    - id: zoveli-interaction
+      name: '@zoveli/interaction'
+    - id: zoveli-plan
+      name: '@zoveli/plan'
+    - id: zoveli-preset
+      name: '@zoveli/preset'
+    - id: zoveli-schedule
+      name: '@zoveli/schedule'
+    - id: zoveli-storage
+      name: '@zoveli/storage'
+    - id: zoveli-todo
+      name: '@zoveli/todo'
+    - id: zoveli-workspace
+      name: '@zoveli/workspace'
+    - id: zoveli-scope
+      name: '@zoveli/scope'
+    - id: zoveli-goals
+      name: '@zoveli/goals'
+    - id: zoveli-agent-teams
+      name: '@zoveli/agent-teams'
+    - id: zoveli-plugin-manager
+      name: '@zoveli/plugin-manager'
+    - id: zoveli-acp
+      name: '@zoveli/acp'
+    - id: zoveli-sdk
+      name: '@zoveli/sdk'
+    - id: zoveli-math
+      name: '@zoveli/math'
+    - id: zoveli-memory
+      name: '@zoveli/memory'
+    - id: zoveli-skills
+      name: '@zoveli/skills'
+    - id: zoveli-languages
+      name: '@zoveli/languages'
+    - id: zoveli-capability
+      name: '@zoveli/capability'
+    - id: zoveli-event-logger
+      name: '@zoveli/event-logger'
+    - id: zoveli-search
+      name: '@zoveli/search'
+    - id: zoveli-otel
+      name: '@zoveli/otel'
+    - id: zoveli-code-analysis
+      name: '@zoveli/code-analysis'
+    - id: zoveli-docgen
+      name: '@zoveli/docgen'
+    - id: zoveli-health
+      name: '@zoveli/health'
+    - id: zoveli-graph
+      name: '@zoveli/graph'
+    - id: zoveli-scheduler
+      name: '@zoveli/scheduler'
+    - id: zoveli-secscan
+      name: '@zoveli/secscan'
+    - id: zoveli-sysinfo
+      name: '@zoveli/sysinfo'
 
 # mathcore MCP integration
 - insert:
@@ -142,7 +142,7 @@
       name: '@deepseek-ai/dsh-fs-local'
       config:
         root: !!js >-
-          process.env.ASSISTANT_VAULT_PATH || 
+          process.env.ZOVELI_VAULT_PATH || 
           process.getBuiltinModule('node:path').join(process.cwd(), 'knowledge-vault')
 
 # Session persistence (real package: packages/session/session-persistence-jsonl)
@@ -156,3 +156,4 @@
             '.personal-assistant', 
             'sessions'
           )
+

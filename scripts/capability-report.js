@@ -6,9 +6,9 @@
  *   pnpm run build
  *   node scripts/capability-report.js > capability-report.md
  */
-const { CapabilityScanner } = require('../packages/qeek-capability/dist/scanner.js');
-const { CapabilityRegistry } = require('../packages/qeek-capability/dist/registry.js');
-const { CapabilityAdaptation } = require('../packages/qeek-capability/dist/adaptation.js');
+const { CapabilityScanner } = require('../packages/capability/dist/scanner.js');
+const { CapabilityRegistry } = require('../packages/capability/dist/registry.js');
+const { CapabilityAdaptation } = require('../packages/capability/dist/adaptation.js');
 
 async function main() {
   const ctx = { config: {}, plugins: [] };
@@ -27,3 +27,4 @@ main().catch((e) => {
   console.error('report failed:', e.message);
   process.exit(1);
 });
+

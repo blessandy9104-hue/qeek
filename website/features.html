@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Zoveli AI features — what you can use today</title>
+<meta name="description" content="Every Zoveli AI feature that runs today: verified math, memory vault, 39 tools, 17 languages, system awareness, auth." />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header>
+  <nav><a href="index.html">Zoveli AI</a> · <a href="install.html">Install</a> · <a href="features.html">Features</a> · <a href="https://github.com/blessandy9104-hue/zoveli-ai">GitHub</a></nav>
+  <h1>Features you can use today</h1>
+  <p class="tagline">Everything below runs from a local install — no cloud account required.</p>
+</header>
+
+<section>
+  <h2>🔬 Verified mathematics</h2>
+  <p>Solve, differentiate, integrate, linear algebra, number theory, logic, statistics, units — each result confirmed by independent methods with a sealed certificate. Access: CLI <code>/math</code>, or <code>mathcore_compute</code> tool.</p>
+</section>
+
+<section>
+  <h2>🧠 Local-first memory</h2>
+  <p>An Obsidian-compatible Markdown vault with wiki-links, tags, full-text search, and a knowledge graph. Access: <code>memory_create_note</code>, <code>memory_search</code>, <code>vault_search</code>, <code>vault_graph</code>.</p>
+</section>
+
+<section>
+  <h2>💻 17 programming languages</h2>
+  <p>Detection, complexity analysis, formatting, linting, test running, and tooling guides. Access: <code>language_detect</code>, <code>language_analyze</code>, <code>language_format</code>, <code>language_lint</code>, <code>language_run_tests</code>.</p>
+</section>
+
+<section>
+  <h2>🖥️ System &amp; hardware awareness</h2>
+  <p>OS, CPU, memory, disk, GPU, battery, and network insight with budget checks before heavy jobs — all local, zero network calls. Access: <code>sysinfo_snapshot</code>, <code>sysinfo_check</code>.</p>
+</section>
+
+<section>
+  <h2>⚡ Capability awareness</h2>
+  <p>The assistant inventories its own 28 capabilities, adapts plans to what's available, and reports gaps. Access: <code>capability_scan</code>, <code>capability_adapt</code>, <code>capability_report</code>.</p>
+</section>
+
+<section>
+  <h2>🛠️ Everyday tools</h2>
+  <p>Code review, doc generation, project health scoring, smart scheduling, security scanning, workflows, subagents, and skills. Run <code>/tools</code> in the CLI or <code>GET /api/tools</code> for the live list (~39 tools).</p>
+</section>
+
+<section>
+  <h2>🔑 Passwordless login</h2>
+  <p>Email one-time codes for any inbox including <code>@proton.me</code> — no passwords, no OAuth middleman. Open <code>/login</code> in the web UI.</p>
+</section>
+
+<section>
+  <h2>🖥️ Three ways to run</h2>
+  <ul>
+    <li><strong>CLI</strong> — <code>pnpm start</code>, works fully offline.</li>
+    <li><strong>Web UI + HTTP API</strong> — <code>pnpm run web</code>, chat, tools, login.</li>
+    <li><strong>Desktop</strong> — <code>pnpm run desktop</code>, Electron shell around the local server.</li>
+  </ul>
+  <p><a href="install.html">Install Zoveli AI on your hardware →</a></p>
+</section>
+
+<footer>
+  <p><a href="index.html">← Back to Zoveli AI home</a></p>
+</footer>
+</body>
+</html>

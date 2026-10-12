@@ -1,6 +1,6 @@
 # System & Hardware Awareness (`system.hardware`)
 
-**Plugin:** `@qeek/qeek-sysinfo` · **Status:** beta · **Priority:** high
+**Plugin:** `@zoveli/sysinfo` · **Status:** beta · **Priority:** high
 
 ## What it does
 Local-only host insight: OS, CPU, memory, disk, GPU, battery, network
@@ -34,3 +34,4 @@ interfaces only (`externalProbe: false` by construction).
 ```bash
 pnpm vitest run tests/unit/sysinfo.test.ts
 ```
+

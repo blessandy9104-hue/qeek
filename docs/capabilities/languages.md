@@ -1,6 +1,6 @@
 # Programming Languages Capability (`languages.polyglot`)
 
-**Plugin:** `@qeek/qeek-languages` · **Status:** beta · **Priority:** high
+**Plugin:** `@zoveli/languages` · **Status:** beta · **Priority:** high
 
 ## What it does
 Detect, analyze, format, lint, test, and recommend tooling for 17+ programming languages — offline-first, with graceful fallbacks when native tools are missing.
@@ -40,10 +40,11 @@ TypeScript, JavaScript, Python, Rust, Go, Java, C++, C#, Ruby, PHP, HTML, CSS, J
 4. **Tooling:** `which`/`where` probes; `npx`-runnable tools treated as available via fallback.
 
 ## Capability registration
-Registered as `languages.polyglot` in `qeek-capability` scanner (`category: tools`, `provides: [language-detect, code-analyze, code-format, code-lint, run-tests, tooling-guide]`).
+Registered as `languages.polyglot` in `zoveli-capability` scanner (`category: tools`, `provides: [language-detect, code-analyze, code-format, code-lint, run-tests, tooling-guide]`).
 
 ## Verification
 ```bash
 # unit tests (requires pnpm install first; run from repo root)
 pnpm vitest run tests/unit/languages.test.ts
 ```
+

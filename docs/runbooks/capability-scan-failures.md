@@ -10,7 +10,7 @@
 ### 1. Check Scanner Health
 ```bash
 # Run capability scan manually
-pnpm exec tsx packages/qeek-capability/src/scanner.ts scan --deep
+pnpm exec tsx packages/capability/src/scanner.ts scan --deep
 
 # Check logs
 grep "CapabilityScanner" logs/qeek.log

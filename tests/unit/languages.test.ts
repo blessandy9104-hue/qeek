@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { LanguageDetector } from '../../packages/qeek-languages/src/detector';
-import { CodeAnalyzer } from '../../packages/qeek-languages/src/analyzer';
-import { CodeFormatter } from '../../packages/qeek-languages/src/formatter';
-import { LanguageTooling } from '../../packages/qeek-languages/src/tooling';
+import { LanguageDetector } from '../../packages/languages/src/detector';
+import { CodeAnalyzer } from '../../packages/languages/src/analyzer';
+import { CodeFormatter } from '../../packages/languages/src/formatter';
+import { LanguageTooling } from '../../packages/languages/src/tooling';
 import { createMockContext } from '../setup';
 
 describe('LanguageDetector', () => {
