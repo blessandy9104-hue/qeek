@@ -384,6 +384,15 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           generate_release_notes: true
+          # Explicit file list (NOT docker/**/*): two files share the
+          # basename prometheus.yml (docker/prometheus.yml and
+          # docker/grafana/datasources/prometheus.yml) and the action
+          # uploads by basename, so the glob collides and 404s the job.
+          # dist/**/* is omitted: the workspace publishes nothing
+          # (see NOTE above), so the pattern matches no files.
           files: |
-            dist/**/*
-            docker/**/*
+            docker/Dockerfile.cli
+            docker/Dockerfile.web
+            docker/docker-compose.yml
+            docker/prometheus.yml
+            docker/grafana/dashboards/zoveli-overview.json
