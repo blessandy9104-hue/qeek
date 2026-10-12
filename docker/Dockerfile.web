@@ -27,7 +27,7 @@ WORKDIR /app
 RUN apk add --no-cache dumb-init python3 py3-pip
 
 # Create non-root user (no fixed UID/GID: recent Alpine images already
-# occupy 1000, so `addgroup -g 1000` fails with "gid in use").
+# occupy 1000, so `addgroup -g 1000` fails with "gid in use`).
 RUN addgroup -S zoveli && \
     adduser -S zoveli -G zoveli
 
@@ -41,7 +41,6 @@ COPY --from=builder --chown=zoveli:zoveli /app/apps/web/dist ./apps/web/dist
 COPY --from=builder --chown=zoveli:zoveli /app/knowledge-vault ./knowledge-vault
 COPY --from=builder --chown=zoveli:zoveli /app/mathcore ./mathcore
 
-# Install vendored mathcore (provides the mathcore-mcp server binary)
 # Install minimal build dependencies to allow z3-solver and other
 # pyproject-based packages to build, install mathcore, then remove build deps.
 RUN apk add --no-cache --virtual .build-deps build-base cmake && \

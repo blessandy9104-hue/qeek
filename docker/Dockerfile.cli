@@ -45,8 +45,6 @@ COPY --from=builder --chown=zoveli:zoveli /app/apps/cli/dist ./apps/cli/dist
 COPY --from=builder --chown=zoveli:zoveli /app/knowledge-vault ./knowledge-vault
 COPY --from=builder --chown=zoveli:zoveli /app/mathcore ./mathcore
 
-# Install vendored mathcore (provides the mathcore-mcp server binary,
-# so verified math works inside the image with no sibling checkout)
 # Install minimal build dependencies to allow z3-solver and other
 # pyproject-based packages to build, install mathcore, then remove build deps.
 RUN apk add --no-cache --virtual .build-deps build-base cmake && \
