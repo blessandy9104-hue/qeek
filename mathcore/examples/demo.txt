@@ -1,0 +1,79 @@
+$ mathcore "solve x^2 - 5x + 6 = 0"
+VERIFIED  solve x^2 - 5x + 6 = 0 for x
+    x = 2; x = 3
+    confirmed by: sympy-solve, numeric-polynomial-roots, check:exact-substitution, check:distinct-root-count
+    certificate 9c8739cbf1e5ad80
+
+$ mathcore "integrate sin(x)^2 from 0 to pi"
+VERIFIED  integrate sin(x)^2 dx from 0 to pi
+    pi/2  (≈ 1.570796326794896619231322)
+    confirmed by: sympy-integrate, mpmath-quadrature, check:antiderivative-exact, check:antiderivative-numeric
+    certificate 5523dfeb94befbab
+
+$ mathcore "limit of (1+1/x)^x as x -> oo"
+VERIFIED  limit of (1+1/x)^x as x -> oo
+    E
+    confirmed by: sympy-limit, mpmath-extrapolation, check:approach-values
+    certificate 2cb0ea672b7b27a8
+
+$ mathcore "eigenvalues of [[2,1],[1,2]]"
+VERIFIED  eigenvalues of [[2,1],[1,2]]
+    [1, 3]
+    confirmed by: sympy-eigenvals, numpy-eig, check:characteristic-polynomial, check:trace
+    certificate aae9035ad46d788f
+
+$ mathcore "factor integer 600851475143"
+VERIFIED  factor integer 600851475143
+    71 * 839 * 1471 * 6857
+    confirmed by: trial+pollard-rho, sympy-factorint, check:product-equals-n, check:factors-are-prime
+    certificate b8a65a3f150befbd
+
+$ mathcore "prove integer: x*x >= x"
+VERIFIED (with caveats)  prove [int] x*x >= x
+    valid: true for all values
+    confirmed by: z3-default, z3-alternate-tactics, check:counterexample-witness
+    caveat: validity rests on Z3 (two solver configurations) and a failed counterexample search; arithmetic proofs have no independent engine here
+    certificate c4e47137a1cd6aa1
+
+$ mathcore "sat integer: x > 2 and x < 3"
+VERIFIED (with caveats)  sat [int] x > 2 and x < 3
+    unsatisfiable (no model exists)
+    confirmed by: z3-default, z3-alternate-tactics, check:model-witness
+    caveat: unsatisfiability rests on Z3 (two solver configurations); arithmetic proofs have no independent engine here
+    certificate b14e1bba5fa4da56
+
+$ mathcore "convert 72 F to C"
+VERIFIED  convert 72 F to C
+    200/9  (≈ 22.2222222222222)
+    confirmed by: exact-nist-table, pint, check:exact-round-trip
+    certificate 493e19a2772c6b3a
+
+$ mathcore "evaluate 10!; evaluate $1 / 4"
+VERIFIED  evaluate 10!
+    3628800
+    confirmed by: sympy-exact, rational-arithmetic, mpmath-60-digits
+    certificate 01166862ed70965d
+
+VERIFIED  evaluate (3628800) / 4
+    907200
+    confirmed by: sympy-exact, rational-arithmetic, mpmath-60-digits
+    certificate becd879a14855686
+
+$ mathcore "solve x + y = 3"
+WITHHELD  solve x + y = 3
+    I could not understand this as a mathematical request: which variable? the equation has x, y; say 'for <variable>'
+
+$ mathcore "evaluate 9^9^9"
+WITHHELD  evaluate 9^9^9
+    I could not understand this as a mathematical request: exponentiation result would be too large
+
+$ mathcore "evaluate __import__('os').system('id')"
+WITHHELD  evaluate __import__('os').system('id')
+    I could not understand this as a mathematical request: only plain function calls are allowed
+
+$ mathcore check "integrate x^2 from 0 to 3" "the answer is 8"
+MISMATCH: the claim differs from the verified result
+    verified answer: 9
+
+$ mathcore verify-log
+OK: 11 entries intact

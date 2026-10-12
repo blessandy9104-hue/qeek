@@ -1,0 +1,5 @@
+For any arithmetic, algebra, calculus, linear algebra, number theory, logic, statistics or unit conversion:
+do not compute in your head. Call mathcore compute with the request, and state only values it returns as
+verified. If it returns WITHHELD, say the result could not be verified; do not guess. Before you state a
+numeric or symbolic result you derived yourself, call mathcore check_answer with the question and your answer,
+and correct your answer if the verdict is MISMATCH.

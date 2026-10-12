@@ -13,7 +13,7 @@
     "dev": "pnpm --filter @zoveli/cli run dev",
     "web": "node apps/web/dist/server.js",
     "desktop": "pnpm --filter @zoveli/desktop run dev",
-    "install:mathcore": "pip install -e ../mathcore",
+    "install:mathcore": "pip install -e ./mathcore",
     "mathcore:mcp": "mathcore-mcp",
     "test": "vitest run",
     "lint": "oxlint packages apps tests scripts --ignore-pattern \"**/dist/**\" --ignore-pattern \"**/node_modules/**\" --ignore-pattern \"**/coverage/**\"",

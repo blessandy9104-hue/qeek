@@ -83,6 +83,6 @@ Certificates are append-only in `audit.jsonl` with hash-chaining for tamper dete
 - System prompt enforcement in `packages/core/src/system-prompt.ts`
 
 ## References
-- [mathcore Repository](https://github.com/.../mathcore)
+- [mathcore directory](./../../mathcore/README.md) (vendored in-repo; see `mathcore/NOTICE.md` for provenance)
 - [MCP Specification](https://modelcontextprotocol.io/)
 - [ADR 002: Capability Awareness](./002-capability-awareness.md)

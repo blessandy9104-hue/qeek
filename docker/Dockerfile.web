@@ -23,29 +23,33 @@ FROM node:22-alpine AS runtime
 
 WORKDIR /app
 
-# Install dumb-init
-RUN apk add --no-cache dumb-init
+# Install dumb-init for proper signal handling, plus Python for mathcore
+RUN apk add --no-cache dumb-init python3 py3-pip
 
 # Create non-root user (no fixed UID/GID: recent Alpine images already
 # occupy 1000, so `addgroup -g 1000` fails with "gid in use").
-RUN addgroup -S qeek && \
-    adduser -S qeek -G qeek
+RUN addgroup -S zoveli && \
+    adduser -S zoveli -G zoveli
 
 # Copy built artifacts (workspace symlinks in node_modules resolve into packages/)
-COPY --from=builder --chown=qeek:qeek /app/package.json ./
-COPY --from=builder --chown=qeek:qeek /app/pnpm-lock.yaml ./
-COPY --from=builder --chown=qeek:qeek /app/node_modules ./node_modules
-COPY --from=builder --chown=qeek:qeek /app/packages ./packages
-COPY --from=builder --chown=qeek:qeek /app/apps/web/package.json ./apps/web/package.json
-COPY --from=builder --chown=qeek:qeek /app/apps/web/dist ./apps/web/dist
-COPY --from=builder --chown=qeek:qeek /app/knowledge-vault ./knowledge-vault
+COPY --from=builder --chown=zoveli:zoveli /app/package.json ./
+COPY --from=builder --chown=zoveli:zoveli /app/pnpm-lock.yaml ./
+COPY --from=builder --chown=zoveli:zoveli /app/node_modules ./node_modules
+COPY --from=builder --chown=zoveli:zoveli /app/packages ./packages
+COPY --from=builder --chown=zoveli:zoveli /app/apps/web/package.json ./apps/web/package.json
+COPY --from=builder --chown=zoveli:zoveli /app/apps/web/dist ./apps/web/dist
+COPY --from=builder --chown=zoveli:zoveli /app/knowledge-vault ./knowledge-vault
+COPY --from=builder --chown=zoveli:zoveli /app/mathcore ./mathcore
+
+# Install vendored mathcore (provides the mathcore-mcp server binary)
+RUN pip install --break-system-packages ./mathcore
 
 # Create directories
 RUN mkdir -p /app/data/vault /app/data/sessions /app/data/audit && \
-    chown -R qeek:qeek /app/data
+    chown -R zoveli:zoveli /app/data
 
 # Switch to non-root user
-USER qeek
+USER zoveli
 
 # Environment
 ENV NODE_ENV=production

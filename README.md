@@ -24,9 +24,8 @@ npm install -g pnpm@11.7.0
 git clone https://github.com/blessandy9104-hue/zoveli-ai.git
 cd zoveli-ai
 
-# 3. Verified-math backend (sibling checkout, optional but recommended)
-#    Place the mathcore repo next to this one, then:
-pip install -e ..\mathcore
+# 3. Verified-math backend (vendored in ./mathcore, optional but recommended)
+pip install -e .\mathcore
 
 # 4. Install + build + verify
 pnpm install
@@ -45,8 +44,8 @@ npm install -g pnpm@11.7.0
 git clone https://github.com/blessandy9104-hue/zoveli-ai.git
 cd zoveli-ai
 
-# 3. Verified-math backend (sibling checkout, optional but recommended)
-pip install -e ../mathcore
+# 3. Verified-math backend (vendored in ./mathcore, optional but recommended)
+pip install -e ./mathcore
 
 # 4. Install + build + verify
 pnpm install

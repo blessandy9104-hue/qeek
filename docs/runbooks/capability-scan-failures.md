@@ -50,8 +50,8 @@ console.log(dsh.plugins.map(p => p.name));
 
 ### MCP Server Not Starting
 ```bash
-# Reinstall mathcore
-pip install -e ../mathcore --force-reinstall
+# Reinstall mathcore (vendored in ./mathcore)
+pip install -e ./mathcore --force-reinstall
 
 # Check audit log path
 ls -la ~/.mathcore/audit.jsonl

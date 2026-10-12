@@ -22,8 +22,8 @@ By participating in this project, you agree to abide by our [Code of Conduct](CO
 git clone https://github.com/blessandy9104-hue/zoveli-ai.git
 cd zoveli-ai
 
-# Install mathcore (sibling checkout; provides the mathcore-mcp server binary)
-pip install -e ../mathcore
+# Install mathcore (vendored in ./mathcore; provides the mathcore-mcp server binary)
+pip install -e ./mathcore
 
 # Install dependencies
 pnpm install

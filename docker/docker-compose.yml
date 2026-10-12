@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  # Main qeek CLI application
+  # Main Zoveli CLI application
   zoveli-cli:
     build:
       context: ..
@@ -77,11 +77,11 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=qeek
-      - POSTGRES_USER=qeek
-      - POSTGRES_PASSWORD=qeek
+      - POSTGRES_DB=zoveli
+      - POSTGRES_USER=zoveli
+      - POSTGRES_PASSWORD=zoveli
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U qeek -d qeek"]
+      test: ["CMD-SHELL", "pg_isready -U zoveli -d zoveli"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -145,3 +145,4 @@ volumes:
   redis-data:
   prometheus-data:
   grafana-data:
+

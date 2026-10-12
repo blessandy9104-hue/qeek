@@ -12,10 +12,10 @@
 
 ## Resolution
 ```bash
-pip install -e ../mathcore --force-reinstall
+pip install -e ./mathcore --force-reinstall
 mkdir -p ~/.mathcore && touch ~/.mathcore/audit.jsonl
 MATHCORE_AUDIT=~/.mathcore/audit.jsonl mathcore "2+2"
-# restart qeek afterwards
+# restart Zoveli afterwards
 ```
 Fallback: agent uses LLM reasoning with explicit `UNVERIFIED` prefix until MCP recovers (see `capability_adapt`).
 
