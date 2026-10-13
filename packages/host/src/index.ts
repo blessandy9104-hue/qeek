@@ -17,6 +17,7 @@ import { zoveliGraph } from '@zoveli/graph';
 import { zoveliDocgen } from '@zoveli/docgen';
 import { zoveliCodeAnalysis } from '@zoveli/code-analysis';
 import { zoveliCapability } from '@zoveli/capability';
+import { zoveliGuard } from '@zoveli/guard';
 
 /**
  * The default tool-bearing plugin set. Config-only plugins (agent loop,
@@ -43,6 +44,7 @@ export const defaultPlugins = [
   zoveliDocgen,
   zoveliCodeAnalysis,
   zoveliCapability,
+  zoveliGuard,
 ];
 
 /** Boot the host, mount the default plugins, and start the REPL. */

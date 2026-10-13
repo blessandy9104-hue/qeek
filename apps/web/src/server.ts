@@ -5,16 +5,32 @@ import {
   sessionEmailFromCookie, sessionCookie, clearSessionCookie,
   deliverCode,
 } from '@zoveli/auth';
+import { redactSecrets } from '@zoveli/secscan';
+import {
+  withSecurityHeaders,
+  isHostAllowed,
+  RateLimiter,
+  bearerAuthorized,
+} from './security.js';
 
 const PORT = parseInt(process.env.PORT || '3080', 10);
 const HOST = '127.0.0.1';
 
+// Per-IP sliding windows: auth endpoints are OTP-sensitive (tight),
+// tool-running routes are LLM-costly (generous but bounded).
+const authLimiter = new RateLimiter(30, 60_000);
+const apiLimiter = new RateLimiter(120, 60_000);
+
+function clientIp(req: http.IncomingMessage): string {
+  return req.socket?.remoteAddress || 'unknown';
+}
+
 function json(res: http.ServerResponse, status: number, body: unknown): void {
   const text = JSON.stringify(body);
-  res.writeHead(status, {
+  res.writeHead(status, withSecurityHeaders({
     'Content-Type': 'application/json; charset=utf-8',
-    'Content-Length': Buffer.byteLength(text),
-  });
+    'Content-Length': String(Buffer.byteLength(text)),
+  }));
   res.end(text);
 }
 
@@ -135,12 +151,17 @@ async function main(): Promise<void> {
   const server = http.createServer(async (req, res) => {
     try {
       const url = new URL(req.url || '/', `http://${HOST}:${PORT}`);
+      // DNS-rebinding guard: only loopback (or explicitly allowed) Hosts.
+      if (!isHostAllowed(req.headers.host)) {
+        json(res, 403, { ok: false, error: 'forbidden host' });
+        return;
+      }
       if (req.method === 'GET' && url.pathname === '/') {
         const text = PAGE;
-        res.writeHead(200, {
+        res.writeHead(200, withSecurityHeaders({
           'Content-Type': 'text/html; charset=utf-8',
-          'Content-Length': Buffer.byteLength(text),
-        });
+          'Content-Length': String(Buffer.byteLength(text)),
+        }));
         res.end(text);
         return;
       }
@@ -217,13 +238,25 @@ document.getElementById('code-form').addEventListener('submit', async (e) => {
           json(res, 400, { ok: false, error: 'missing tool' });
           return;
         }
+        if (!bearerAuthorized(req)) {
+          json(res, 401, { ok: false, error: 'unauthorized' });
+          return;
+        }
+        if (!apiLimiter.allow(`run:${clientIp(req)}`)) {
+          res.writeHead(429, withSecurityHeaders({
+            'Content-Type': 'application/json; charset=utf-8',
+            'Retry-After': '60',
+          }));
+          res.end(JSON.stringify({ ok: false, error: 'rate limited' }));
+          return;
+        }
         try {
           const result = await host.runTool(body.tool, body.args ?? {});
           json(res, 200, { ok: true, result });
         } catch (e) {
           json(res, 200, {
             ok: false,
-            error: e instanceof Error ? e.message : String(e),
+            error: redactSecrets(e instanceof Error ? e.message : String(e)),
           });
         }
         return;
@@ -233,6 +266,18 @@ document.getElementById('code-form').addEventListener('submit', async (e) => {
         const message = String(body.message ?? '').trim();
         if (!message) {
           json(res, 400, { ok: false, error: 'missing message' });
+          return;
+        }
+        if (!bearerAuthorized(req)) {
+          json(res, 401, { ok: false, error: 'unauthorized' });
+          return;
+        }
+        if (!apiLimiter.allow(`chat:${clientIp(req)}`)) {
+          res.writeHead(429, withSecurityHeaders({
+            'Content-Type': 'application/json; charset=utf-8',
+            'Retry-After': '60',
+          }));
+          res.end(JSON.stringify({ ok: false, error: 'rate limited' }));
           return;
         }
         // Offline fast path: verified math without any model.
@@ -271,14 +316,22 @@ document.getElementById('code-form').addEventListener('submit', async (e) => {
         return;
       }
       if (req.method === 'GET' && url.pathname === '/login') {
-        res.writeHead(200, {
+        res.writeHead(200, withSecurityHeaders({
           'Content-Type': 'text/html; charset=utf-8',
-          'Content-Length': Buffer.byteLength(LOGIN_PAGE),
-        });
+          'Content-Length': String(Buffer.byteLength(LOGIN_PAGE)),
+        }));
         res.end(LOGIN_PAGE);
         return;
       }
       if (req.method === 'POST' && url.pathname === '/api/auth/request') {
+        if (!authLimiter.allow(`auth:${clientIp(req)}`)) {
+          res.writeHead(429, withSecurityHeaders({
+            'Content-Type': 'application/json; charset=utf-8',
+            'Retry-After': '60',
+          }));
+          res.end(JSON.stringify({ ok: false, error: 'rate limited' }));
+          return;
+        }
         const body = await readBody(req);
         try {
           const { code, email } = issueCode(String(body.email ?? ''));
@@ -296,6 +349,14 @@ document.getElementById('code-form').addEventListener('submit', async (e) => {
         return;
       }
       if (req.method === 'POST' && url.pathname === '/api/auth/verify') {
+        if (!authLimiter.allow(`auth:${clientIp(req)}`)) {
+          res.writeHead(429, withSecurityHeaders({
+            'Content-Type': 'application/json; charset=utf-8',
+            'Retry-After': '60',
+          }));
+          res.end(JSON.stringify({ ok: false, error: 'rate limited' }));
+          return;
+        }
         const body = await readBody(req);
         const verdict = verifyCode(String(body.email ?? ''), String(body.code ?? ''));
         if (!verdict.ok) {
@@ -303,10 +364,10 @@ document.getElementById('code-form').addEventListener('submit', async (e) => {
           return;
         }
         const token = mintSession(verdict.email);
-        res.writeHead(200, {
+        res.writeHead(200, withSecurityHeaders({
           'Content-Type': 'application/json; charset=utf-8',
           'Set-Cookie': sessionCookie(token),
-        });
+        }));
         res.end(JSON.stringify({ ok: true, email: verdict.email }));
         return;
       }
@@ -315,16 +376,16 @@ document.getElementById('code-form').addEventListener('submit', async (e) => {
         return;
       }
       if (req.method === 'POST' && url.pathname === '/api/auth/logout') {
-        res.writeHead(200, {
+        res.writeHead(200, withSecurityHeaders({
           'Content-Type': 'application/json; charset=utf-8',
           'Set-Cookie': clearSessionCookie(),
-        });
+        }));
         res.end(JSON.stringify({ ok: true }));
         return;
       }
       json(res, 404, { ok: false, error: 'not found' });
     } catch (e) {
-      json(res, 500, { ok: false, error: e instanceof Error ? e.message : String(e) });
+      json(res, 500, { ok: false, error: redactSecrets(e instanceof Error ? e.message : String(e)) });
     }
   });
 

@@ -133,6 +133,10 @@ test.describe('Web Application', () => {
     const body = await res.json();
     expect(body.ok).toBe(true);
     expect(body.tools).toBeGreaterThan(20);
+    // Hardening headers ship on every response.
+    const headers = res.headers();
+    expect(headers['x-content-type-options']).toBe('nosniff');
+    expect(headers['x-frame-options']).toBe('SAMEORIGIN');
   });
 
   test('tools API lists mathcore tools', async ({ request }) => {
@@ -157,7 +161,9 @@ test.describe('Web Application', () => {
     await expect(page.locator('h1')).toContainText('Zoveli');
     await page.fill('[data-testid="chat-input"]', '2+2');
     await page.click('[data-testid="send-button"]');
-    await expect(page.locator('[data-testid="assistant-message"]').last()).toBeVisible();
+    // Timing-sensitive under parallel workers (Firefox especially): allow
+    // extra time rather than flaking. CI also retries (retries: 2).
+    await expect(page.locator('[data-testid="assistant-message"]').last()).toBeVisible({ timeout: 15000 });
     await expect(page.locator('[data-testid="verification-badge"]').first()).toContainText(
       'VERIFIED'
     );

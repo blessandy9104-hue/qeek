@@ -81,6 +81,9 @@ importers:
       '@zoveli/host':
         specifier: workspace:*
         version: link:../../packages/host
+      '@zoveli/secscan':
+        specifier: workspace:*
+        version: link:../../packages/secscan
     devDependencies:
       oxlint:
         specifier: 'catalog:'
@@ -666,6 +669,9 @@ importers:
       '@zoveli/graph':
         specifier: workspace:*
         version: link:../graph
+      '@zoveli/guard':
+        specifier: workspace:*
+        version: link:../guard
       '@zoveli/health':
         specifier: workspace:*
         version: link:../health
