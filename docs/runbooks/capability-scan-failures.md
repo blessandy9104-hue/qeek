@@ -13,7 +13,7 @@
 pnpm exec tsx packages/capability/src/scanner.ts scan --deep
 
 # Check logs
-grep "CapabilityScanner" logs/qeek.log
+grep "CapabilityScanner" logs/zoveli.log
 ```
 
 ### 2. Verify MCP Connections

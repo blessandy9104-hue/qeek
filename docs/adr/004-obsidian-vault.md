@@ -1,10 +1,15 @@
-# ADR 004: Local-First Obsidian Vault for Persistent Memory
+# ADR 004: Local-First Memory (SQLite store; vault as export mirror)
 
 ## Status
-Accepted
+Superseded in substance by [docs/memory-store.md](../memory-store.md) —
+kept as the historical record of the original vault decision.
+
+> The Markdown vault is no longer the source of truth. `@zoveli/memory-store`
+> (SQLite + FTS5, `~/.zoveli/memory.db`) owns notes/tags/links; `knowledge-vault/`
+> is a human-readable export mirror (Obsidian-compatible) with one-time import.
 
 ## Context
-qeek needs persistent, user-owned memory that:
+Zoveli needs persistent, user-owned memory that:
 - Survives restarts and updates
 - Is portable and human-readable
 - Supports linking and organization
@@ -61,10 +66,10 @@ Content in Markdown...
 - `memory_list_tags` - List all tags
 
 ## Integration
-- **Filesystem Plugin**: `qeek-fs` provides vault access
+- **Filesystem Plugin**: `fs` provides vault-mirror access
 - **Capability**: `memory.vault` registered in capability system
-- **Auto-indexing**: Background indexing for search
-- **Sync**: Git-based backup (optional)
+- **Auto-indexing**: FTS5 index maintained transactionally (was: background indexing for search)
+- **Sync**: Git-based backup of the Markdown mirror (optional)
 
 ## Consequences
 
@@ -82,9 +87,9 @@ Content in Markdown...
 - **Binary Files**: Not suitable for images/attachments (separate storage)
 
 ## Implementation
-- `packages/memory/`: Vault integration plugin
-- `packages/core/src/memory-tools.ts`: Tool definitions
-- `knowledge-vault/`: Default vault with examples
+- `packages/memory-store/`: SQLite source of truth (`MemoryStore`, FTS5)
+- `packages/memory/` + `packages/core/src/memory-tools.ts`: tool definitions (delegating to the store)
+- `knowledge-vault/`: export mirror with examples (plus one-time legacy import)
 - `config/*.cordis.yml`: Filesystem provider config
 
 ## References

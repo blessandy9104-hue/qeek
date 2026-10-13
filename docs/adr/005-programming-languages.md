@@ -4,7 +4,7 @@
 Accepted
 
 ## Context
-qeek agents routinely read, write, review, and test code. Ad-hoc handling per language leads to inconsistent results, missing tooling guidance, and unverified claims about code quality.
+Zoveli agents routinely read, write, review, and test code. Ad-hoc handling per language leads to inconsistent results, missing tooling guidance, and unverified claims about code quality.
 
 ## Decision
 Add a dedicated `@zoveli/languages` plugin providing:

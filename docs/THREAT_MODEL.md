@@ -1,8 +1,8 @@
-# Threat Model - qeek Personal Assistant AI
+# Threat Model - Zoveli Personal Assistant AI
 
 ## Overview
 
-This document describes the threat model for qeek using the STRIDE methodology.
+This document describes the threat model for Zoveli using the STRIDE methodology.
 
 ## System Diagram
 
@@ -17,7 +17,7 @@ This document describes the threat model for qeek using the STRIDE methodology.
 │         └────────────────┼────────────────┘                     │
 │                          ▼                                      │
 │  ┌─────────────────────────────────────────────────────────┐   │
-│  │              qeek Core (Node.js Process)                 │   │
+ │  │              Zoveli Core (Node.js Process)               │   │
 │  │  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐        │   │
 │  │  │ Agent   │ │ Session │ │ Tools   │ │  LLM    │        │   │
 │  │  │ Loop    │ │ Manager │ │ Registry│ │ Adapters│        │   │
@@ -30,10 +30,11 @@ This document describes the threat model for qeek using the STRIDE methodology.
 │                          │                                      │
 │         ┌────────────────┼────────────────┐                     │
 │         ▼                ▼                ▼                     │
-│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐             │
-│  │ mathcore    │ │ Obsidian    │ │ External    │             │
-│  │ MCP Server  │ │ Vault (FS)  │ │ Services    │             │
-│  └─────────────┘ └─────────────┘ └─────────────┘             │
+ │  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐             │
+ │  │ mathcore    │ │ SQLite      │ │ External    │             │
+ │  │ MCP Server  │ │ Store +     │ │ Services    │             │
+ │  │             │ │ Vault Mirror│ │             │             │
+ │  └─────────────┘ └─────────────┘ └─────────────┘             │
 └─────────────────────────────────────────────────────────────────┘
 ```
 

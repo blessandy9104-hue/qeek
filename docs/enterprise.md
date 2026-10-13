@@ -1,4 +1,4 @@
-# qeek Enterprise Notes
+# Zoveli Enterprise Notes
 
 ## Air-gapped deployment
 1. Build images: `docker build -f docker/Dockerfile.web .`
@@ -7,7 +7,7 @@
 4. Verify: `math-showcase.mjs` passes fully offline; `capability_report` shows `mcp.mathcore: available`.
 
 ## SSO / RBAC (roadmap)
-- Identity plugin supports OAuth (GitHub/Google/Microsoft); OIDC/SAML via `assistant-identity` extension point.
+- Identity plugin supports OAuth (GitHub/Google/Microsoft); OIDC/SAML via `@zoveli/identity` extension point.
 - Capability-gated RBAC: map roles → allowed capabilities (`code.push`, `shell.exec`, `computer-use.*`).
 - All decisions logged to session + audit logs.
 
