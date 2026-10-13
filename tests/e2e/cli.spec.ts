@@ -1,7 +1,17 @@
 import { test, expect } from '@playwright/test';
 import { spawn, spawnSync } from 'child_process';
+import { tmpdir } from 'os';
+import { join } from 'path';
 
 const CLI = 'apps/cli/dist/cli.js';
+
+// CLI e2e isolation: the math intelligence layer auto-memorizes VERIFIED
+// proofs to $ZOVELI_MEMORY_DB (+ Markdown export). Point both at throwaway
+// locations so runs never pollute the developer's home DB or the repo vault.
+const CLI_TEST_ENV = {
+  ZOVELI_MEMORY_DB: join(tmpdir(), 'zoveli-e2e-cli-memory.db'),
+  ZOVELI_MEMORY_EXPORT: '0',
+};
 
 // mathcore-mcp comes from the vendored ./mathcore (pip install -e ./mathcore).
 // Math-dependent tests skip cleanly when it is absent (and run for real
@@ -23,7 +33,10 @@ function runCliOnce(
   timeout = 60000
 ): Promise<{ stdout: string; stderr: string; code: number | null }> {
   return new Promise((resolve, reject) => {
-    const cli = spawn('node', [CLI], { stdio: ['pipe', 'pipe', 'pipe'] });
+    const cli = spawn('node', [CLI], {
+      stdio: ['pipe', 'pipe', 'pipe'],
+      env: { ...process.env, ...CLI_TEST_ENV },
+    });
     let stdout = '';
     let stderr = '';
     const timer = setTimeout(() => {

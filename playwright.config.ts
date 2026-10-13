@@ -1,4 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
+import { tmpdir } from 'os';
+import { join } from 'path';
 
 export default defineConfig({
   testDir: './tests/e2e',
@@ -50,6 +52,11 @@ export default defineConfig({
     env: {
       NODE_ENV: 'test',
       ZOVELI_VAULT_PATH: './test-vault',
+      // Isolate the math proof memory: verified e2e computations
+      // auto-memorize, which must not touch the developer's home DB
+      // or export Markdown into the repo vault.
+      ZOVELI_MEMORY_DB: join(tmpdir(), 'zoveli-e2e-web-memory.db'),
+      ZOVELI_MEMORY_EXPORT: '0',
       MATHCORE_AUDIT: './test-audit.jsonl',
       // Test-only: echo OTP codes in /api/auth/request responses so e2e
       // can complete login without an SMTP server. Never set in production.
