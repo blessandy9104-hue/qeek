@@ -31,19 +31,33 @@ We aim to respond within 48 hours and provide a fix timeline within 7 days.
 ### Runtime
 - Sandboxed execution environments
 - Capability-based permissions
-- No eval/exec in user-facing code
+- Guard enforcement: destructive shell patterns are denied in the host
+  (`guard_set_policy` switches strict/balanced/permissive live)
+- Injection-safe system prompt: tool outputs and web content are treated as
+  untrusted data, never as instructions
+- No eval/exec in user-facing code (verified: only the secscan pattern
+  table mentions `eval`)
 - Input validation on all tool parameters
-- Rate limiting on webhooks and APIs
+- Per-IP rate limiting on web APIs (auth 30/min, chat/run 120/min)
 
 ### Data Protection
-- Local-first architecture (no cloud required)
-- E2E encryption for optional cloud sync
+- Local-first architecture (no cloud required; no cloud sync exists —
+  backups are user-managed encrypted copies)
 - Credential storage via OS keychain
+- OTP codes hashed at rest, 5/hour issuance cap, 5 verify attempts,
+  constant-time comparison; HMAC-signed sessions, HttpOnly + SameSite cookies
+- Secret redaction in server errors and logs (key material masked;
+  math certificates pass through)
 - Audit logging for all operations
 - mathcore verification prevents hallucinated outputs
 
 ### Network
-- Localhost-only by default
+- Localhost-only by default (binds 127.0.0.1)
+- DNS-rebinding guard: non-loopback `Host` headers rejected
+  (`ZOVELI_ALLOWED_HOSTS` for explicit extras)
+- Hardening headers on every response (nosniff, SAMEORIGIN framing,
+  same-origin referrer/COOP)
+- Optional bearer token for tool-running routes (`ZOVELI_API_TOKEN`, off by default)
 - Optional TLS for web UI
 - MCP servers run in isolated processes
 - No telemetry without explicit consent

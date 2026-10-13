@@ -24,7 +24,7 @@ to algebra/calculus/statistics/logic specialists.
   → `MATCH` (wrong answers get `MISMATCH`, never a silent guess)
 - **Host facts:** `/sys` → OS/CPU/RAM/disk/GPU snapshot
 - **Capabilities:** `/caps` → available/total count
-- **Tool list:** `/tools` → all ~48 local tools
+- **Tool list:** `/tools` → all ~49 local tools
 - **Chat:** any other text, once a chat model is available (see below —
   any API key or free local Ollama)
 
