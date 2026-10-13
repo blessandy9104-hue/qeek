@@ -23,6 +23,7 @@
     "@zoveli/core": "workspace:*",
     "@zoveli/math": "workspace:*",
     "@zoveli/math-intelligence": "workspace:*",
+    "@zoveli/math-domains": "workspace:*",
     "@zoveli/memory-store": "workspace:*",
     "@zoveli/memory": "workspace:*",
     "@zoveli/skills": "workspace:*",

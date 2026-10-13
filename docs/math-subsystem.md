@@ -44,11 +44,31 @@ All in `packages/math-intelligence/src/`:
   (`mathcore`), `defaultMathcoreAuditPath()` (`MATHCORE_AUDIT` overrides),
   `MATH_RULES` (verbatim 5-rule text), `MATH_INTELLIGENCE_RULES` (recall-first
   guidance), `mathcoreServerConfig()` (the one stdio spawn config).
+- `domains.ts`: `DOMAIN_OPERATIONS` (algebra 18 ops, calculus 4 ops),
+  `routeDomain()` (explicit operation wins, else keyword hints, else `general`),
+  `domainMemoryTag()` / `domainTitlePrefix()` (proof-memory namespacing).
 - `transport.ts`: `MathcoreClient` + `mathcore` singleton.
-- `tools.ts`: `mathcoreTools` (3, names frozen) + `mathIntelligenceTools` (3).
-- `intelligence.ts`: `memorizeVerified` (upsert `math/<slug>`, tags
-  `math,verified`), `recallSimilar` (keyword over math-tagged notes),
+- `tools.ts`: `mathcoreTools` (3, names frozen) + `mathIntelligenceTools`
+  (`math_recall` with `domain` filter, `math_route`, `math_memorize`,
+  `math_stats`).
+- `intelligence.ts`: `memorizeVerified` (upsert `math/<slug>` or
+  `math/<domain>/<slug>`, tags `math,verified[, math/<domain>]`),
+  `recallSimilar` (keyword over math-tagged notes, optional domain filter),
   `getMathStats`, `recordMismatch`, `recordWithheld`.
+
+## Governed specialists (`packages/math-domains/`)
+
+`zoveli-math-algebra` + `zoveli-math-calculus` under the governor:
+
+- Specialists never spawn mathcore: they call the governor's shared transport
+  and memorize into their own namespace. Out-of-domain operations are rejected
+  before any spawn (`math_algebra_solve` + `math_calculus_solve`).
+- Each declares `capabilities: [math.<domain>]` for Cordis-class hosts and
+  injects a one-line domain hint. The local host mounts both after the
+  governor (17 default plugins).
+- `sat/prove/stat/convert/shortest_path` stay with the governor (`general`)
+  until they earn their own specialists — add the op to `DOMAIN_OPERATIONS`
+  plus a plugin, nothing else changes.
 
 ## Environment
 
@@ -72,7 +92,9 @@ All in `packages/math-intelligence/src/`:
 - Python: `python -m pytest mathcore/tests/test_known_answers.py mathcore/tests/test_cli.py -q`
 - TS unity: `tests/unit/math-intelligence.test.ts` → "one AI math intelligence
   subsystem" (constants, shim drift, transport default, tool names, memorize/
-  recall, withheld opt-out, plugin contract); `tests/unit/core.test.ts` →
+  recall, withheld opt-out, plugin contract); `tests/unit/math-domains.test.ts`
+  → routing table (explicit + keyword, single ownership), namespaced memory,
+  specialist contracts, out-of-domain rejection; `tests/unit/core.test.ts` →
   "one math subsystem" (legacy contract still green via shims).
 - E2E: `/math 2+2` → `VERIFIED`; web `2+2` → verification badge.
 - Smoke: `math_memorize` → `math_recall` → `math_stats` over host tools.

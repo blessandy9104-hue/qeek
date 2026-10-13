@@ -22,6 +22,8 @@ export {
 export { mathcore, MathcoreClient };
 export { mathcoreTools, mathIntelligenceTools };
 export { memorizeVerified, recallSimilar, getMathStats, resetMathStatsForTests } from './intelligence.js';
+export { routeDomain, DOMAIN_OPERATIONS, domainMemoryTag, domainTitlePrefix } from './domains.js';
+export type { MathDomain } from './domains.js';
 
 export const zoveliMathIntelligence = definePlugin({
   name: 'zoveli-math-intelligence',

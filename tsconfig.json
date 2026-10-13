@@ -19,6 +19,7 @@
     { "path": "./packages/core" },
     { "path": "./packages/math" },
     { "path": "./packages/math-intelligence" },
+    { "path": "./packages/math-domains" },
     { "path": "./packages/memory" },
     { "path": "./packages/memory-store" },
     { "path": "./packages/skills" },
