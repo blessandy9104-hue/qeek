@@ -44,13 +44,14 @@ All in `packages/math-intelligence/src/`:
   (`mathcore`), `defaultMathcoreAuditPath()` (`MATHCORE_AUDIT` overrides),
   `MATH_RULES` (verbatim 5-rule text), `MATH_INTELLIGENCE_RULES` (recall-first
   guidance), `mathcoreServerConfig()` (the one stdio spawn config).
-- `domains.ts`: `DOMAIN_OPERATIONS` (algebra 18 ops, calculus 4 ops),
-  `routeDomain()` (explicit operation wins, else keyword hints, else `general`),
+- `domains.ts`: `DOMAIN_OPERATIONS` (algebra 18 ops, calculus 4, statistics
+  1, logic 2), `routeDomain()` (explicit operation wins, else keyword hints
+  calculus → statistics → logic → algebra, else `general`),
   `domainMemoryTag()` / `domainTitlePrefix()` (proof-memory namespacing).
 - `transport.ts`: `MathcoreClient` + `mathcore` singleton.
 - `tools.ts`: `mathcoreTools` (3, names frozen) + `mathIntelligenceTools`
   (`math_recall` with `domain` filter, `math_route`, `math_memorize`,
-  `math_stats`).
+  `math_stats`, `math_recall_semantic`).
 - `intelligence.ts`: `memorizeVerified` (upsert `math/<slug>` or
   `math/<domain>/<slug>`, tags `math,verified[, math/<domain>]`),
   `recallSimilar` (keyword over math-tagged notes, optional domain filter),
@@ -58,7 +59,8 @@ All in `packages/math-intelligence/src/`:
 
 ## Governed specialists (`packages/math-domains/`)
 
-`zoveli-math-algebra` + `zoveli-math-calculus` under the governor:
+`zoveli-math-algebra`, `zoveli-math-calculus`, `zoveli-math-statistics`
+(`stat`), `zoveli-math-logic` (`sat`, `prove`) under the governor:
 
 - Specialists never spawn mathcore: they call the governor's shared transport
   and memorize into their own namespace. Out-of-domain operations are rejected
@@ -66,9 +68,17 @@ All in `packages/math-intelligence/src/`:
 - Each declares `capabilities: [math.<domain>]` for Cordis-class hosts and
   injects a one-line domain hint. The local host mounts both after the
   governor (17 default plugins).
-- `sat/prove/stat/convert/shortest_path` stay with the governor (`general`)
-  until they earn their own specialists — add the op to `DOMAIN_OPERATIONS`
-  plus a plugin, nothing else changes.
+- `convert`/`shortest_path` stay with the governor (`general`) until they
+  earn their own specialists — add the op to `DOMAIN_OPERATIONS` plus a
+  plugin entry, nothing else changes.
+
+## Semantic recall (`semantic.ts`)
+
+`math_recall_semantic`: keyword prefilter over the domain namespace, then
+cosine ranking when an embedding model answers
+(`ollama pull nomic-embed-text`, `ZOVELI_EMBED_MODEL` overrides), else
+deterministic keyword overlap (`mode: 'keyword'`). Never throws, never hangs
+(15s embed timeout; chat models stall it — embedding models only).
 
 ## Environment
 
@@ -93,8 +103,10 @@ All in `packages/math-intelligence/src/`:
 - TS unity: `tests/unit/math-intelligence.test.ts` → "one AI math intelligence
   subsystem" (constants, shim drift, transport default, tool names, memorize/
   recall, withheld opt-out, plugin contract); `tests/unit/math-domains.test.ts`
-  → routing table (explicit + keyword, single ownership), namespaced memory,
-  specialist contracts, out-of-domain rejection; `tests/unit/core.test.ts` →
+  → routing table (explicit + keyword incl. statistics/logic, single
+  ownership), namespaced memory, specialist contracts, out-of-domain
+  rejection; `tests/unit/math-semantic.test.ts` → cosine/keywordScore,
+  keyword degradation, stubbed vector ranking, empty-memory safety; `tests/unit/core.test.ts` →
   "one math subsystem" (legacy contract still green via shims).
 - E2E: `/math 2+2` → `VERIFIED`; web `2+2` → verification badge.
 - Smoke: `math_memorize` → `math_recall` → `math_stats` over host tools.

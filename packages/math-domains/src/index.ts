@@ -10,11 +10,33 @@ import {
 
 export type SpecialistDomain = Exclude<MathDomain, 'general'>;
 
-const DOMAIN_HINTS: Record<SpecialistDomain, string> = {
-  algebra:
-    'ALGEBRA SPECIALIST: you own evaluate/simplify/expand/factor/solve and linear-algebra/number-theory ops. CALL math_algebra_solve; STATE ONLY VERIFIED values.',
-  calculus:
-    'CALCULUS SPECIALIST: you own derivative/integrate/limit/dsolve. CALL math_calculus_solve; STATE ONLY VERIFIED values.',
+interface SpecialistConfig {
+  tool: string;
+  defaultOp: string;
+  hint: string;
+}
+
+const SPECIALISTS: Record<SpecialistDomain, SpecialistConfig> = {
+  algebra: {
+    tool: 'math_algebra_solve',
+    defaultOp: 'solve',
+    hint: 'ALGEBRA SPECIALIST: you own evaluate/simplify/expand/factor/solve and linear-algebra/number-theory ops. CALL math_algebra_solve; STATE ONLY VERIFIED values.',
+  },
+  calculus: {
+    tool: 'math_calculus_solve',
+    defaultOp: 'integrate',
+    hint: 'CALCULUS SPECIALIST: you own derivative/integrate/limit/dsolve. CALL math_calculus_solve; STATE ONLY VERIFIED values.',
+  },
+  statistics: {
+    tool: 'math_stats_solve',
+    defaultOp: 'stat',
+    hint: 'STATISTICS SPECIALIST: you own the stat operation (descriptive stats over data). CALL math_stats_solve; STATE ONLY VERIFIED values.',
+  },
+  logic: {
+    tool: 'math_logic_solve',
+    defaultOp: 'sat',
+    hint: 'LOGIC SPECIALIST: you own sat/prove (satisfiability and logical proof). CALL math_logic_solve; STATE ONLY VERIFIED values.',
+  },
 };
 
 /**
@@ -25,7 +47,7 @@ const DOMAIN_HINTS: Record<SpecialistDomain, string> = {
  */
 function defineDomainSpecialist(domain: SpecialistDomain) {
   const operations = DOMAIN_OPERATIONS[domain];
-  const solveTool = domain === 'algebra' ? 'math_algebra_solve' : 'math_calculus_solve';
+  const { tool: solveTool, defaultOp, hint } = SPECIALISTS[domain];
   const plugin = definePlugin({
     name: `zoveli-math-${domain}`,
     description: `${domain} specialist under the math-intelligence governor (ops: ${operations.join(', ')})`,
@@ -40,7 +62,7 @@ function defineDomainSpecialist(domain: SpecialistDomain) {
         domain,
         operations,
         async solve(request: string, operation?: string) {
-          const op = operation || (domain === 'algebra' ? 'solve' : 'integrate');
+          const op = operation || defaultOp;
           const out = await mathcore.compute(`${op} ${request}`);
           try {
             await memorizeVerified(`${op} ${request}`, out, domain);
@@ -70,7 +92,7 @@ function defineDomainSpecialist(domain: SpecialistDomain) {
             required: ['request'],
           },
           async execute({ request, operation }: { request: string; operation?: string }) {
-            const op = operation || (domain === 'algebra' ? 'solve' : 'integrate');
+            const op = operation || defaultOp;
             if (!operations.includes(op)) {
               throw new Error(`${op} is not a ${domain} operation (governor: math_route to classify)`);
             }
@@ -85,7 +107,7 @@ function defineDomainSpecialist(domain: SpecialistDomain) {
         },
       ]);
       ctx.on('agent/created', (agent) => {
-        agent.inject({ type: 'system', content: DOMAIN_HINTS[domain] });
+        agent.inject({ type: 'system', content: hint });
       });
     },
   });
@@ -121,5 +143,7 @@ function defineDomainSpecialist(domain: SpecialistDomain) {
 
 export const zoveliMathAlgebra = defineDomainSpecialist('algebra');
 export const zoveliMathCalculus = defineDomainSpecialist('calculus');
+export const zoveliMathStatistics = defineDomainSpecialist('statistics');
+export const zoveliMathLogic = defineDomainSpecialist('logic');
 
 export default zoveliMathAlgebra;

@@ -70,6 +70,10 @@ export function recordMismatch(): void {
   counters.mismatches += 1;
 }
 
+export function recordRecall(): void {
+  counters.recalls += 1;
+}
+
 export function recordWithheld(): void {
   counters.withheld += 1;
 }

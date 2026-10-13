@@ -2,6 +2,7 @@ import type { Tool } from '@deepseek-ai/dsh-core';
 import { mathcore } from './transport.js';
 import { memorizeVerified, recallSimilar, getMathStats, recordMismatch } from './intelligence.js';
 import { routeDomain } from './domains.js';
+import { recallSemantic } from './semantic.js';
 
 export const mathcoreTools: Tool[] = [
   {
@@ -66,11 +67,11 @@ export const mathIntelligenceTools: Tool[] = [
       properties: {
         query: { type: 'string', description: 'Question to find similar verified proofs for' },
         limit: { type: 'number', default: 5 },
-        domain: { type: 'string', enum: ['algebra', 'calculus', 'general'], description: 'Restrict recall to a specialist domain' },
+        domain: { type: 'string', enum: ['algebra', 'calculus', 'statistics', 'logic', 'general'], description: 'Restrict recall to a specialist domain' },
       },
       required: ['query'],
     },
-    async execute({ query, limit = 5, domain = 'general' }: { query: string; limit?: number; domain?: 'algebra' | 'calculus' | 'general' }) {
+    async execute({ query, limit = 5, domain = 'general' }: { query: string; limit?: number; domain?: 'algebra' | 'calculus' | 'statistics' | 'logic' | 'general' }) {
       return { results: await recallSimilar(query, limit, domain) };
     },
   },
@@ -110,6 +111,22 @@ export const mathIntelligenceTools: Tool[] = [
     parameters: { type: 'object', properties: {} },
     async execute() {
       return getMathStats();
+    },
+  },
+  {
+    name: 'math_recall_semantic',
+    description: 'Semantic recall over proof memory (vector cosine when an embedding model is available, else keyword overlap)',
+    parameters: {
+      type: 'object',
+      properties: {
+        query: { type: 'string', description: 'Question to find similar verified proofs for' },
+        domain: { type: 'string', enum: ['algebra', 'calculus', 'statistics', 'logic', 'general'], description: 'Restrict recall to a specialist domain' },
+        limit: { type: 'number', default: 5 },
+      },
+      required: ['query'],
+    },
+    async execute({ query, domain = 'general', limit = 5 }: { query: string; domain?: 'algebra' | 'calculus' | 'statistics' | 'logic' | 'general'; limit?: number }) {
+      return recallSemantic(query, { domain, limit });
     },
   },
 ];

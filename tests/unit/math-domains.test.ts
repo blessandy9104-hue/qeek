@@ -7,7 +7,7 @@ import {
   recallSimilar,
   resetMathStatsForTests,
 } from '../../packages/math-intelligence/src/index';
-import { zoveliMathAlgebra, zoveliMathCalculus } from '../../packages/math-domains/src/index';
+import { zoveliMathAlgebra, zoveliMathCalculus, zoveliMathStatistics, zoveliMathLogic } from '../../packages/math-domains/src/index';
 import { resetStoreForTests } from '../../packages/memory-store/src/store';
 import { createMockContext } from '../setup';
 
@@ -33,8 +33,10 @@ describe('governed math domains', () => {
     expect(routeDomain({ operation: 'eigenvalues', request: '' })).toBe('algebra');
     expect(routeDomain({ operation: 'derivative', request: '' })).toBe('calculus');
     expect(routeDomain({ operation: 'integrate', request: '' })).toBe('calculus');
-    expect(routeDomain({ operation: 'sat', request: '' })).toBe('general');
-    expect(routeDomain({ operation: 'prove', request: '' })).toBe('general');
+    expect(routeDomain({ operation: 'stat', request: '' })).toBe('statistics');
+    expect(routeDomain({ operation: 'sat', request: '' })).toBe('logic');
+    expect(routeDomain({ operation: 'prove', request: '' })).toBe('logic');
+    expect(routeDomain({ operation: 'convert', request: '' })).toBe('general');
   });
 
   it('routes keyword requests without an operation', () => {
@@ -42,7 +44,10 @@ describe('governed math domains', () => {
     expect(routeDomain({ request: 'integrate sin(x) dx' })).toBe('calculus');
     expect(routeDomain({ request: 'solve x^2 - 5x + 6 = 0' })).toBe('algebra');
     expect(routeDomain({ request: '2+2' })).toBe('algebra');
-    expect(routeDomain({ request: 'prove this tautology' })).toBe('general');
+    expect(routeDomain({ request: 'mean and standard deviation of the sample' })).toBe('statistics');
+    expect(routeDomain({ request: 'is this formula satisfiable' })).toBe('logic');
+    expect(routeDomain({ request: 'prove this tautology' })).toBe('logic');
+    expect(routeDomain({ request: 'convert 72 F to C' })).toBe('general');
   });
 
   it('every routed operation is owned by exactly one specialist', () => {
@@ -74,18 +79,29 @@ describe('governed math domains', () => {
     zoveliMathAlgebra.setup(ctxA);
     const ctxC = createMockContext();
     zoveliMathCalculus.setup(ctxC);
+    const ctxS = createMockContext();
+    zoveliMathStatistics.setup(ctxS);
+    const ctxL = createMockContext();
+    zoveliMathLogic.setup(ctxL);
 
     const toolsA = ctxA.register.mock.calls.find((c) => c[0] === 'math-algebra-tools')?.[1] as any[];
     const toolsC = ctxC.register.mock.calls.find((c) => c[0] === 'math-calculus-tools')?.[1] as any[];
+    const toolsS = ctxS.register.mock.calls.find((c) => c[0] === 'math-statistics-tools')?.[1] as any[];
+    const toolsL = ctxL.register.mock.calls.find((c) => c[0] === 'math-logic-tools')?.[1] as any[];
     expect(toolsA.some((t) => t.name === 'math_algebra_solve')).toBe(true);
     expect(toolsC.some((t) => t.name === 'math_calculus_solve')).toBe(true);
+    expect(toolsS.some((t) => t.name === 'math_stats_solve')).toBe(true);
+    expect(toolsL.some((t) => t.name === 'math_logic_solve')).toBe(true);
 
-    expect(ctxA.register.mock.calls.some((c) => c[0] === 'math-domain-algebra')).toBe(true);
-    expect(ctxC.register.mock.calls.some((c) => c[0] === 'math-domain-calculus')).toBe(true);
+    expect(ctxS.register.mock.calls.some((c) => c[0] === 'math-domain-statistics')).toBe(true);
+    expect(ctxL.register.mock.calls.some((c) => c[0] === 'math-domain-logic')).toBe(true);
 
-    const capsA = (zoveliMathAlgebra as any).capabilities as any[];
-    expect(capsA[0].name).toBe('math.algebra');
-    expect(capsA[0].metadata.governor).toBe('zoveli-math-intelligence');
+    const capsS = (zoveliMathStatistics as any).capabilities as any[];
+    expect(capsS[0].name).toBe('math.statistics');
+    expect(capsS[0].provides).toContain('stat');
+    const capsL = (zoveliMathLogic as any).capabilities as any[];
+    expect(capsL[0].name).toBe('math.logic');
+    expect(capsL[0].provides).toEqual(expect.arrayContaining(['sat', 'prove']));
   });
 
   it('specialist solve rejects out-of-domain operations without spawning', async () => {

@@ -21,7 +21,9 @@ export {
 };
 export { mathcore, MathcoreClient };
 export { mathcoreTools, mathIntelligenceTools };
-export { memorizeVerified, recallSimilar, getMathStats, resetMathStatsForTests } from './intelligence.js';
+export { memorizeVerified, recallSimilar, getMathStats, resetMathStatsForTests, recordRecall, recordMismatch, recordWithheld } from './intelligence.js';
+export { recallSemantic, cosine, keywordScore } from './semantic.js';
+export type { SemanticMode, SemanticHit, SemanticResult } from './semantic.js';
 export { routeDomain, DOMAIN_OPERATIONS, domainMemoryTag, domainTitlePrefix } from './domains.js';
 export type { MathDomain } from './domains.js';
 
