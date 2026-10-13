@@ -1,18 +1,22 @@
-# qeek API Reference (agent tools)
+# Zoveli API Reference (agent tools)
 
 Tools are the agent-facing API. Full JSON schemas live in each plugin's `src/index.ts`.
 
-## Math (verified)
-- `mathcore_compute {expression, operation?}` → verified result + certificate
+## Math (verified, one governed subsystem — see `docs/math-subsystem.md`)
+- `mathcore_compute {expression, operation?}` → verified result + certificate (auto-memorized)
 - `mathcore_check_answer {question, answer}` → MATCH | MISMATCH | UNCOMPARABLE | UNVERIFIABLE
 - `mathcore_list_operations {}` → operation catalog
+- Specialists (governed, namespaced proof memory): `math_algebra_solve`, `math_calculus_solve`, `math_stats_solve`, `math_logic_solve` (`{request, operation?}`)
+- Intelligence: `math_recall {query, limit?, domain?}`, `math_recall_semantic {query, domain?, limit?}` (vector cosine when an embedding model is available, else keyword overlap), `math_route {request, operation?}`, `math_memorize {request, result}`, `math_stats {}`
 
-## Memory / vault
+## Memory / store (SQLite + FTS5 — see `docs/memory-store.md`)
 - `memory_create_note {title, content, tags?, links?}`
 - `memory_search {query, tags?}`
 - `memory_read_note {title}`
 - `memory_list_tags {}`
-- `vault_search {query, tags?, limit?, offset?}` (Tantivy)
+- `memory_update_note {title, newTitle?, content?, tags?, links?}`
+- `memory_delete_note {title}`
+- `vault_search {query, tags?, limit?, offset?}` (SQLite FTS5, ranked)
 - `vault_graph {vaultPath?, format?}` → nodes/edges/orphans/hubs or DOT
 
 ## Languages
@@ -40,12 +44,12 @@ Tools are the agent-facing API. Full JSON schemas live in each plugin's `src/ind
 ## Auth (`@zoveli/auth`, passwordless email OTP)
 - `auth_request_code {email}` → sends 6-digit code (any inbox incl. proton.me)
 - `auth_verify_code {email, code}` → `{ok, email, token}` or `{ok:false, reason}`
-- HTTP: `POST /api/auth/request`, `POST /api/auth/verify` (sets `qeek_session` cookie),
+- HTTP: `POST /api/auth/request`, `POST /api/auth/verify` (sets `zoveli_session` cookie),
   `GET /api/auth/me`, `POST /api/auth/logout`, page `GET /login`
 - No Proton OAuth exists for third-party sites, so there is no "Login with
   Proton" button by design — email codes work with every provider instead.
-  Set `QEEK_SMTP_URL` (+`QEEK_SMTP_FROM`) for real delivery, else codes go to
-  the server console (dev mode). `QEEK_AUTH_DEV_ECHO=1` echoes codes in API
+  Set `ZOVELI_SMTP_URL` (+`ZOVELI_SMTP_FROM`) for real delivery, else codes go to
+  the server console (dev mode). `ZOVELI_AUTH_DEV_ECHO=1` echoes codes in API
   responses — test-only, never production.
 
 ## System & hardware (`@zoveli/sysinfo`, local-only)
@@ -60,6 +64,6 @@ Tools are the agent-facing API. Full JSON schemas live in each plugin's `src/ind
 - `GET /debug/events`, `/debug/events/stats`, `/debug/events/trace/:id`, `/debug/events/export`
 
 ## Skills / workflows
-- Skills: `daily-briefing`, `research`, `task-planning`, `code-review` (see `packages/assistant-skills`)
+- Skills: `daily-briefing`, `research`, `task-planning`, `code-review` (see `packages/skills`)
 - `run_workflow {template, inputs?}` — templates: `research-report`, `code-review`, `daily-briefing`
 

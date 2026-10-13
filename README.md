@@ -15,7 +15,7 @@ Website: **https://blessandy9104-hue.github.io/zoveli-ai/**
 |---|---|---|
 | Price | **Free forever**, MIT | $8–$20+/mo subscriptions |
 | Your data | **Stays on your machine**, never trained on | Processed in their cloud |
-| Offline | **Yes** — ~39 tools, no network needed | Internet required |
+| Offline | **Yes** — ~48 tools, no network needed | Internet required |
 | Math | **Verified or withheld** (+ audit certificate) | Confident best-effort guesses |
 | Lock-in | None — BYO key or local Ollama | One vendor's models |
 
@@ -42,7 +42,7 @@ No account, no API key needed — local tools (math, memory, sysinfo, …) work 
 > Windows PowerShell: `irm https://raw.githubusercontent.com/blessandy9104-hue/zoveli-ai/main/install/install-zoveli.ps1 | iex`
 > See [`install/install-zoveli.sh`](install/install-zoveli.sh) (idempotent, `--yes/--dir/--branch` flags, no telemetry).
 
-Prerequisites: Node.js 22+, Python 3.11+, pnpm 11.7.0+.
+Prerequisites: Node.js 22.16+, Python 3.11+, pnpm 11.7.0+.
 
 **Windows (PowerShell):**
 
@@ -103,13 +103,13 @@ Try: `/math solve x^2 - 5x + 6 = 0` · `/sys` · `/tools`.
 
 ## Features (all runnable today)
 
-- **🔬 Verified Mathematics** — mathcore MCP gives zero-hallucination math with hash-chained audit certificates
-- **🧠 Local-First Memory** — Obsidian-compatible vault with wiki-links and tags
-- **🤖 Full Agent Framework** — 57 plugins: agent loop, tools, LLM, MCP, sandbox, subagents, workflows (`/tools` or `GET /api/tools` lists all ~39 live tools)
+- **🔬 Verified Mathematics** — one AI math intelligence subsystem: mathcore MCP gives zero-hallucination math with hash-chained audit certificates, governed with 4 specialists (algebra, calculus, statistics, logic) that memorize verified proofs and recall them (keyword + semantic)
+- **🧠 Local-First Memory** — SQLite store with FTS5 ranked search, wiki-links and tags (Markdown vault kept as human-readable export mirror)
+- **🤖 Full Agent Framework** — 61 packages: agent loop, tools, LLM, MCP, sandbox, subagents, workflows (`/tools` or `GET /api/tools` lists all ~48 live tools)
 - **🖥️ System & Hardware Awareness** — local OS/CPU/memory/disk/GPU/battery/network insight with budget checks (`@zoveli/sysinfo`)
 - **💻 Programming Languages** — detection, analysis, formatting, linting, testing, tooling for 17+ languages (`@zoveli/languages`)
 - **⚡ Capability Awareness** — runtime discovery, introspection, adaptation, and gap reports
-- **🔍 Vault Search** — dependency-free full-text search with live indexing
+- **🔍 Vault Search** — SQLite FTS5 ranked full-text search over the knowledge store
 - **🕸️ Knowledge Graph** — wiki-link graph with orphans, hubs, DOT export
 - **🧪 Code Review** — complexity hotspots, duplication, dead code, secret detection
 - **📄 Doc Generator** — offline Markdown API docs from source exports
@@ -123,6 +123,7 @@ Try: `/math solve x^2 - 5x + 6 = 0` · `/sys` · `/tools`.
 ## Documentation
 
 - [Architecture](docs/architecture.md)
+- [Math intelligence subsystem](docs/math-subsystem.md) · [Memory store](docs/memory-store.md)
 - [API Reference](docs/api/)
 - [Runbooks](docs/runbooks/)
 - [ADRs](docs/adr/)
