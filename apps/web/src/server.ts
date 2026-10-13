@@ -257,7 +257,7 @@ document.getElementById('code-form').addEventListener('submit', async (e) => {
             ok: true,
             verified: false,
             reply:
-              'Chat needs a model (set any API key: OPENAI_API_KEY, DEEPSEEK_API_KEY, OPENROUTER_API_KEY, GROQ_API_KEY, TOGETHER_API_KEY or ZOVELI_API_KEY — or run local Ollama for free: ollama pull llama3.1). Meanwhile I can run tools: try /api/run, e.g. {"tool":"sysinfo_snapshot"}.',
+              'Chat needs a model (set any API key: OPENAI_API_KEY, DEEPSEEK_API_KEY, OPENROUTER_API_KEY, GROQ_API_KEY, TOGETHER_API_KEY or ZOVELI_API_KEY — or run local Ollama for free: ollama pull qwen3:4b). Meanwhile I can run tools: try /api/run, e.g. {"tool":"sysinfo_snapshot"}.',
           });
           return;
         }
