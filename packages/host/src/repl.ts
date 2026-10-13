@@ -46,7 +46,7 @@ export async function runRepl(host: ZoveliHost, agent: { systemSections: string[
         '(math, memory, sysinfo, languages, search, scheduler, ...). ' +
         'For free offline chat set any API key (OPENAI_API_KEY, DEEPSEEK_API_KEY, ' +
         'OPENROUTER_API_KEY, GROQ_API_KEY, TOGETHER_API_KEY or ZOVELI_API_KEY), or ' +
-        'install Ollama (https://ollama.com) and run: ollama pull llama3.1'
+        'install Ollama (https://ollama.com) and run: ollama pull qwen3:4b'
     );
   } else if (chatCfg.provider === 'ollama') {
     console.log(
@@ -144,7 +144,7 @@ export async function runRepl(host: ZoveliHost, agent: { systemSections: string[
           'That looks like a chat request, but no chat model is configured.\n' +
             'Set any API key (OPENAI_API_KEY, DEEPSEEK_API_KEY, OPENROUTER_API_KEY, ' +
             'GROQ_API_KEY, TOGETHER_API_KEY or ZOVELI_API_KEY with ZOVELI_API_BASE), ' +
-            'or run local Ollama for free: ollama pull llama3.1\n' +
+            'or run local Ollama for free: ollama pull qwen3:4b\n' +
             'Meanwhile try: /math 2+2 · /sys · /tools · /help'
         );
       }

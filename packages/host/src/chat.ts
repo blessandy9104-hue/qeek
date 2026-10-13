@@ -21,6 +21,9 @@ export interface ChatConfig {
   provider?: string;
 }
 
+/** Default local chat model: pulled with `ollama pull qwen3:4b`. */
+export const DEFAULT_OLLAMA_MODEL = 'qwen3:4b';
+
 interface ProviderDef {
   id: string;
   envKey: string;
@@ -99,7 +102,7 @@ export async function probeOllama(timeoutMs = 1500): Promise<ChatConfig | null> 
       apiKey: 'ollama',
       baseUrl: `${base}/v1`,
       model:
-        process.env.ZOVELI_MODEL || process.env.ZOVELI_OLLAMA_MODEL || 'llama3.1',
+        process.env.ZOVELI_MODEL || process.env.ZOVELI_OLLAMA_MODEL || DEFAULT_OLLAMA_MODEL,
       provider: 'ollama',
       maxSteps: 10,
     };
@@ -112,7 +115,7 @@ export async function probeOllama(timeoutMs = 1500): Promise<ChatConfig | null> 
  * Full resolution order for chat: any configured API key first, otherwise a
  * free local Ollama server when one is running, otherwise null (tools-only
  * offline mode). Install Ollama from https://ollama.com then
- * `ollama pull llama3.1` for zero-cost local chat with no keys.
+ * `ollama pull qwen3:4b` for zero-cost local chat with no keys.
  */
 export async function resolveChatConfig(): Promise<ChatConfig | null> {
   return chatConfigFromEnv() ?? (await probeOllama());

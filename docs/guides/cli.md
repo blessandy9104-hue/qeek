@@ -34,7 +34,7 @@ Resolution order: any API key → free local Ollama → tools-only offline.
 ```bash
 # Option A — free and local, no keys, no cost:
 # 1. Install from https://ollama.com, then:
-ollama pull llama3.1
+ollama pull qwen3:4b
 pnpm start   # auto-detects Ollama, chat just works
 
 # Option B — any API key (OpenAI-compatible providers):
@@ -45,7 +45,7 @@ ZOVELI_API_BASE=https://my-proxy/v1 ZOVELI_API_KEY=... pnpm start  # custom endp
 
 # Docker: ollama runs as a sibling service, already wired:
 docker compose --profile local-llm up ollama
-docker exec zoveli-ollama ollama pull llama3.1
+docker exec zoveli-ollama ollama pull qwen3:4b
 docker compose --profile cli up --build
 ```
 

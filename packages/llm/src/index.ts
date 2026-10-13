@@ -52,8 +52,8 @@ export const zoveliLLM = definePlugin({
         },
         {
           id: 'local-llama',
-          name: 'Local Llama (Ollama)',
-          model: 'llama3.1',
+          name: 'Local Qwen3 (Ollama)',
+          model: 'qwen3:4b',
           apiBase: 'http://localhost:11434/v1',
           capabilities: ['chat', 'streaming', 'tools']
         }

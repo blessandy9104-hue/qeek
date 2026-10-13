@@ -18,7 +18,7 @@ services:
       - MATHCORE_AUDIT=/app/data/audit/audit.jsonl
       # Free local chat: points the app at the `ollama` service below.
       # Bring it up with: docker compose --profile local-llm up ollama
-      # then: docker exec zoveli-ollama ollama pull llama3.1
+      # then: docker exec zoveli-ollama ollama pull qwen3:4b
       - ZOVELI_OLLAMA_URL=http://ollama:11434
     stdin_open: true
     tty: true

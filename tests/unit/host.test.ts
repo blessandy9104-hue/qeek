@@ -172,7 +172,7 @@ function startTagsStub(statusCode = 200): Promise<{ server: http.Server; port: n
     if (req.url === '/api/tags') {
       hits++;
       res.writeHead(statusCode, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ models: [{ name: 'llama3.1' }] }));
+      res.end(JSON.stringify({ models: [{ name: 'qwen3:4b' }] }));
     } else {
       res.writeHead(404);
       res.end('{}');
@@ -196,7 +196,7 @@ describe('probeOllama / resolveChatConfig', () => {
       expect(cfg?.provider).toBe('ollama');
       expect(cfg?.apiKey).toBe('ollama');
       expect(cfg?.baseUrl).toBe(`http://127.0.0.1:${stub.port}/v1`);
-      expect(cfg?.model).toBe('llama3.1');
+      expect(cfg?.model).toBe('qwen3:4b');
     } finally {
       restoreChatEnv(snap);
       stub.server.close();
