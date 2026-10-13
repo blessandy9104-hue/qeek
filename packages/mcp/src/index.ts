@@ -1,18 +1,19 @@
 import { definePlugin } from '@deepseek-ai/dsh-core';
+import { MATHCORE_MCP_COMMAND, MATHCORE_MCP_SERVER_ID, defaultMathcoreAuditPath } from '@zoveli/math';
 
 export const zoveliMCP = definePlugin({
   name: 'zoveli-mcp',
   description: 'MCP client and server integration',
 
   setup(ctx) {
-    // mathcore MCP server (already configured in assistant-math)
+    // mathcore entry: same one subsystem — command/env single-sourced from
+    // @zoveli/math so the server address can never drift between plugins.
     ctx.register('mcp-servers', {
-      mathcore: {
-        command: 'mathcore-mcp',
+      [MATHCORE_MCP_SERVER_ID]: {
+        command: MATHCORE_MCP_COMMAND,
         transport: 'stdio',
         env: {
-          MATHCORE_AUDIT: process.env.MATHCORE_AUDIT ||
-            require('path').join(require('os').homedir(), '.mathcore', 'audit.jsonl')
+          MATHCORE_AUDIT: defaultMathcoreAuditPath(),
         }
       },
       filesystem: {

@@ -6,6 +6,7 @@ import {
   chatConfigFromEnv,
   resolveChatConfig,
   probeOllama,
+  chat,
 } from '../../packages/host/src/chat';
 
 function fakePlugin(name: string, tools: any[] = []) {
@@ -243,6 +244,37 @@ describe('probeOllama / resolveChatConfig', () => {
     } finally {
       restoreChatEnv(snap);
       stub.server.close();
+    }
+  });
+});
+
+describe('chat transport', () => {
+  it('retries once on a transport-level failure, then delivers the reply', async () => {
+    const origFetch = globalThis.fetch;
+    let calls = 0;
+    (globalThis as any).fetch = async () => {
+      calls++;
+      if (calls === 1) throw new TypeError('fetch failed');
+      return new Response(
+        JSON.stringify({ choices: [{ message: { role: 'assistant', content: 'mango' } }] }),
+        { status: 200, headers: { 'Content-Type': 'application/json' } }
+      );
+    };
+    try {
+      const host = new ZoveliHost();
+      host.mount([]);
+      const history = await chat(
+        host,
+        { apiKey: 'ollama', baseUrl: 'http://127.0.0.1:1/v1', model: 'qwen3:4b' },
+        'system',
+        [],
+        'say mango',
+        () => {}
+      );
+      expect(calls).toBe(2);
+      expect(history.some((m: any) => m.role === 'assistant' && m.content === 'mango')).toBe(true);
+    } finally {
+      globalThis.fetch = origFetch;
     }
   });
 });

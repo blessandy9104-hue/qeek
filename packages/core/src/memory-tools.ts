@@ -1,13 +1,10 @@
 import type { Tool } from '@deepseek-ai/dsh-core';
-import * as fs from 'fs/promises';
-import * as path from 'path';
-
-const VAULT_PATH = process.env.ZOVELI_VAULT_PATH || path.join(process.cwd(), 'knowledge-vault');
+import { getStore } from '@zoveli/memory-store';
 
 export const memoryTools: Tool[] = [
   {
     name: 'memory_create_note',
-    description: 'Create a note in the knowledge vault (Obsidian-compatible)',
+    description: 'Create a note in the knowledge store (SQLite; mirrored to Markdown vault)',
     parameters: {
       type: 'object',
       properties: {
@@ -19,30 +16,12 @@ export const memoryTools: Tool[] = [
       required: ['title', 'content']
     },
     async execute({ title, content, tags = [], links = [] }: { title: string; content: string; tags?: string[]; links?: string[] }) {
-      const filename = sanitizeFilename(title) + '.md';
-      const filepath = path.join(VAULT_PATH, filename);
-      
-      const frontmatter = [
-        '---',
-        `title: "${title}"`,
-        `created: ${new Date().toISOString()}`,
-        `tags: [${tags.map(t => `"${t}"`).join(', ')}]`,
-        '---',
-        ''
-      ].join('\n');
-
-      const linkSection = links.length > 0 
-        ? '\n## Links\n' + links.map(l => `- [[${l}]]`).join('\n') 
-        : '';
-
-      const fullContent = frontmatter + content + linkSection;
-      await fs.writeFile(filepath, fullContent, 'utf-8');
-      return { success: true, path: filepath, title };
+      return getStore().createNote({ title, content, tags, links });
     }
   },
   {
     name: 'memory_search',
-    description: 'Search the knowledge vault for notes',
+    description: 'Search the knowledge store (FTS5 ranked + tag filtering)',
     parameters: {
       type: 'object',
       properties: {
@@ -52,26 +31,13 @@ export const memoryTools: Tool[] = [
       required: ['query']
     },
     async execute({ query, tags = [] }: { query: string; tags?: string[] }) {
-      const files = await fs.readdir(VAULT_PATH);
-      const results = [];
-
-      for (const file of files) {
-        if (!file.endsWith('.md')) continue;
-        const filepath = path.join(VAULT_PATH, file);
-        const content = await fs.readFile(filepath, 'utf-8');
-        
-        if (content.toLowerCase().includes(query.toLowerCase())) {
-          if (tags.length === 0 || tags.some(t => content.includes(`"${t}"`))) {
-            results.push({ file, content: content.substring(0, 500) });
-          }
-        }
-      }
-      return { results: results.slice(0, 10) };
+      const { results } = getStore().searchNotes({ query, tags, limit: 10 });
+      return { results: results.map((r) => ({ file: r.title, content: r.content })) };
     }
   },
   {
     name: 'memory_read_note',
-    description: 'Read a specific note from the knowledge vault',
+    description: 'Read a specific note from the knowledge store',
     parameters: {
       type: 'object',
       properties: {
@@ -80,33 +46,47 @@ export const memoryTools: Tool[] = [
       required: ['title']
     },
     async execute({ title }: { title: string }) {
-      const filename = title.endsWith('.md') ? title : sanitizeFilename(title) + '.md';
-      const filepath = path.join(VAULT_PATH, filename);
-      const content = await fs.readFile(filepath, 'utf-8');
-      return { content };
+      const n = getStore().readNote(title);
+      return { content: `# ${n.title}\n\n${n.body}` };
     }
   },
   {
     name: 'memory_list_tags',
-    description: 'List all tags used in the knowledge vault',
+    description: 'List all tags used in the knowledge store',
     parameters: { type: 'object', properties: {} },
     async execute() {
-      const files = await fs.readdir(VAULT_PATH);
-      const tagSet = new Set<string>();
-
-      for (const file of files) {
-        if (!file.endsWith('.md')) continue;
-        const content = await fs.readFile(path.join(VAULT_PATH, file), 'utf-8');
-        const matches = content.match(/tags:\s*\[([^\]]+)\]/);
-        if (matches) {
-          matches[1].split(',').forEach(t => tagSet.add(t.trim().replace(/"/g, '')));
-        }
-      }
-      return { tags: Array.from(tagSet).sort() };
+      return getStore().listTags();
+    }
+  },
+  {
+    name: 'memory_update_note',
+    description: 'Update a note (content/tags/links, optional rename via newTitle)',
+    parameters: {
+      type: 'object',
+      properties: {
+        title: { type: 'string' },
+        newTitle: { type: 'string' },
+        content: { type: 'string' },
+        tags: { type: 'array', items: { type: 'string' } },
+        links: { type: 'array', items: { type: 'string' } }
+      },
+      required: ['title']
+    },
+    async execute(args: { title: string; newTitle?: string; content?: string; tags?: string[]; links?: string[] }) {
+      return getStore().updateNote(args);
+    }
+  },
+  {
+    name: 'memory_delete_note',
+    description: 'Delete a note from the knowledge store',
+    parameters: {
+      type: 'object',
+      properties: { title: { type: 'string' } },
+      required: ['title']
+    },
+    async execute({ title }: { title: string }) {
+      return getStore().deleteNote(title);
     }
   }
 ];
 
-function sanitizeFilename(str: string): string {
-  return str.replace(/[<>:"/\\|?*]/g, '_').trim();
-}

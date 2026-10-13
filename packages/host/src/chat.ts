@@ -90,25 +90,30 @@ export function ollamaBaseUrl(): string {
 
 /**
  * Probe for a free local Ollama server. Returns a keyless config when one
- * answers, else null. Never throws and never waits longer than timeoutMs —
- * safe to call at startup (a missing server refuses instantly on localhost).
+ * answers, else null. Never throws. Retries once: on loaded machines the
+ * server occasionally accepts but answers slowly, and a single retry rides
+ * through the hiccup. Worst case ~2x timeoutMs, only when no API key is set
+ * (keyed setups never reach the network here).
  */
-export async function probeOllama(timeoutMs = 1500): Promise<ChatConfig | null> {
+export async function probeOllama(timeoutMs = 2000, retries = 1): Promise<ChatConfig | null> {
   const base = ollamaBaseUrl();
-  try {
-    const res = await fetch(`${base}/api/tags`, { signal: AbortSignal.timeout(timeoutMs) });
-    if (!res.ok) return null;
-    return {
-      apiKey: 'ollama',
-      baseUrl: `${base}/v1`,
-      model:
-        process.env.ZOVELI_MODEL || process.env.ZOVELI_OLLAMA_MODEL || DEFAULT_OLLAMA_MODEL,
-      provider: 'ollama',
-      maxSteps: 10,
-    };
-  } catch {
-    return null;
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      const res = await fetch(`${base}/api/tags`, { signal: AbortSignal.timeout(timeoutMs) });
+      if (!res.ok) return null;
+      return {
+        apiKey: 'ollama',
+        baseUrl: `${base}/v1`,
+        model:
+          process.env.ZOVELI_MODEL || process.env.ZOVELI_OLLAMA_MODEL || DEFAULT_OLLAMA_MODEL,
+        provider: 'ollama',
+        maxSteps: 10,
+      };
+    } catch {
+      if (attempt === retries) return null;
+    }
   }
+  return null;
 }
 
 /**
@@ -161,19 +166,28 @@ export async function chat(
   const steps = cfg.maxSteps ?? 10;
 
   for (let step = 0; step < steps; step++) {
-    const res = await fetch(`${cfg.baseUrl}/chat/completions`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${cfg.apiKey}`,
-      },
-      body: JSON.stringify({
-        model: cfg.model,
-        messages,
-        tools: tools.length > 0 ? tools : undefined,
-        temperature: 0.7,
-      }),
-    });
+    const postChat = () =>
+      fetch(`${cfg.baseUrl}/chat/completions`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${cfg.apiKey}`,
+        },
+        body: JSON.stringify({
+          model: cfg.model,
+          messages,
+          tools: tools.length > 0 ? tools : undefined,
+          temperature: 0.7,
+        }),
+      });
+    let res: Response;
+    try {
+      res = await postChat();
+    } catch {
+      // Transport-level flake (e.g. local server dropping a connection while
+      // paging a model in): exactly one retry. HTTP errors are NOT retried.
+      res = await postChat();
+    }
     if (!res.ok) {
       const body = await res.text().catch(() => '');
       if (res.status === 404 && /localhost:11434|127\.0\.0\.1:11434|ollama/i.test(cfg.baseUrl)) {

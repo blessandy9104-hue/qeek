@@ -18,7 +18,9 @@
   "references": [
     { "path": "./packages/core" },
     { "path": "./packages/math" },
+    { "path": "./packages/math-intelligence" },
     { "path": "./packages/memory" },
+    { "path": "./packages/memory-store" },
     { "path": "./packages/skills" },
     { "path": "./apps/cli" },
     { "path": "./apps/web" },

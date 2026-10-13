@@ -3,9 +3,9 @@ import { spawn, spawnSync } from 'child_process';
 
 const CLI = 'apps/cli/dist/cli.js';
 
-// mathcore-mcp comes from a sibling checkout that CI clones do not have.
+// mathcore-mcp comes from the vendored ./mathcore (pip install -e ./mathcore).
 // Math-dependent tests skip cleanly when it is absent (and run for real
-// where it is installed, e.g. local dev).
+// where it is installed, e.g. local dev and CI's e2e job).
 function hasMathcore(): boolean {
   const r = spawnSync('mathcore-mcp', ['--help'], { timeout: 15000 });
   return !r.error;
