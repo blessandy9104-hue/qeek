@@ -15,9 +15,41 @@ import {
   parseRunCall,
   hstsForRequest,
 } from './security.js';
+import {
+  themeCSS,
+  themeSwitcherHTML,
+  themeHeadScript,
+  themeBootScript,
+  unicornProjectId,
+} from './themes.js';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 
 const PORT = parseInt(process.env.PORT || '3080', 10);
 const HOST = '127.0.0.1';
+
+// Vendored Lenis smooth-scroll runtime (same origin, pinned version).
+// Resolves from dist/../vendor in production and apps/web/vendor in dev.
+function loadVendorLenis(): Buffer | null {
+  // Works in CJS (tsc) and ESM (tsdown) outputs alike.
+  const here =
+    typeof __dirname === 'string' && __dirname
+      ? __dirname
+      : path.dirname(process.argv[1] || process.cwd());
+  const candidates = [
+    path.join(here, '..', 'vendor', 'lenis.min.js'),
+    path.join(process.cwd(), 'apps', 'web', 'vendor', 'lenis.min.js'),
+  ];
+  for (const file of candidates) {
+    try {
+      return fs.readFileSync(file);
+    } catch {
+      // try next
+    }
+  }
+  return null;
+}
+const LENIS_BUNDLE = loadVendorLenis();
 
 // Per-IP sliding windows: auth endpoints are OTP-sensitive (tight),
 // tool-running routes are LLM-costly (generous but bounded).
@@ -60,24 +92,28 @@ function readBody(req: http.IncomingMessage): Promise<any> {
 }
 
 const PAGE = `<!doctype html>
-<html lang="en">
+<html lang="en" data-theme="daylight" data-testid="app-root">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Zoveli AI — local-first assistant</title>
+${themeHeadScript()}
 <style>
-  body { font-family: system-ui, sans-serif; max-width: 760px; margin: 2rem auto; padding: 0 1rem; }
-  #log { border: 1px solid #ccc; border-radius: 8px; min-height: 240px; padding: 1rem; margin-bottom: 1rem; white-space: pre-wrap; }
-  .badge { display: inline-block; font-size: 0.75rem; background: #e6f4ea; color: #137333; border-radius: 4px; padding: 0 6px; margin-left: 8px; }
+  ${themeCSS()}
+  body { font-family: system-ui, sans-serif; max-width: 760px; margin: 2rem auto; padding: 0 1rem; background: var(--bg); color: var(--fg); position: relative; z-index: 1; }
+  #log { border: 1px solid var(--border); border-radius: 8px; min-height: 240px; padding: 1rem; margin-bottom: 1rem; white-space: pre-wrap; background: var(--panel); }
+  .badge { display: inline-block; font-size: 0.75rem; background: var(--badge-bg); color: var(--badge-fg); border-radius: 4px; padding: 0 6px; margin-left: 8px; }
   form { display: flex; gap: 8px; }
-  input { flex: 1; padding: 8px; }
+  input { flex: 1; padding: 8px; background: var(--panel); color: var(--fg); border: 1px solid var(--border); border-radius: 4px; }
   button { padding: 8px 16px; }
   #starters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1rem; }
-  #starters button { font-size: 0.85rem; border: 1px solid #ccc; border-radius: 16px; background: #f6f8fa; cursor: pointer; }
-  #tools { font-size: 0.85rem; color: #444; }
+  #starters button { font-size: 0.85rem; border: 1px solid var(--border); border-radius: 16px; background: var(--panel); color: var(--fg); cursor: pointer; }
+  #tools { font-size: 0.85rem; color: var(--muted); }
+  a { color: var(--accent); }
 </style>
 </head>
 <body>
+<div id="us-bg" aria-hidden="true"></div>
 <h1>Zoveli AI</h1>
 <p>Local-first assistant. Math is verified by mathcore; everything runs on your machine. <a href="/login" data-testid="login-link">Log in / sign up</a> with any email address, including your @proton.me address — we send a login code, no password needed.</p>
 <p>No account needed for local tools. Math answers carry a <span class="badge">VERIFIED</span> badge — anything unverified is withheld, never guessed.</p>
@@ -93,6 +129,9 @@ const PAGE = `<!doctype html>
 </form>
 <h2>Tools</h2>
 <div id="tools" data-testid="tools-list">loading…</div>
+${themeSwitcherHTML()}
+<script src="/vendor/lenis.min.js" defer></script>
+${themeBootScript(unicornProjectId())}
 <script>
 const log = document.getElementById('log');
 const form = document.getElementById('composer');
@@ -178,18 +217,23 @@ async function main(): Promise<void> {
         return;
       }
 const LOGIN_PAGE = `<!doctype html>
-<html lang="en">
+<html lang="en" data-theme="daylight" data-testid="app-root">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Zoveli AI — log in</title>
+${themeHeadScript()}
 <style>
-  body { font-family: system-ui, sans-serif; max-width: 480px; margin: 2rem auto; padding: 0 1rem; }
+  ${themeCSS()}
+  body { font-family: system-ui, sans-serif; max-width: 480px; margin: 2rem auto; padding: 0 1rem; background: var(--bg); color: var(--fg); position: relative; z-index: 1; }
   input, button { padding: 8px; margin: 4px 0; width: 100%; box-sizing: border-box; }
-  #status { min-height: 1.5em; color: #444; }
+  input { background: var(--panel); color: var(--fg); border: 1px solid var(--border); border-radius: 4px; }
+  #status { min-height: 1.5em; color: var(--muted); }
+  a { color: var(--accent); }
 </style>
 </head>
 <body>
+<div id="us-bg" aria-hidden="true"></div>
 <h1>Log in / sign up</h1>
 <p>Enter any email address — including <code>@proton.me</code> — and we will send a 6-digit code. No password, no OAuth middleman.</p>
 <div id="status" data-testid="login-status"></div>
@@ -229,6 +273,9 @@ document.getElementById('code-form').addEventListener('submit', async (e) => {
   status.textContent = data.ok ? ('Signed in as ' + data.email) : ('Failed: ' + (data.reason || data.error));
 });
 </script>
+${themeSwitcherHTML()}
+<script src="/vendor/lenis.min.js" defer></script>
+${themeBootScript(unicornProjectId())}
 </body>
 </html>`;
 
@@ -244,8 +291,22 @@ document.getElementById('code-form').addEventListener('submit', async (e) => {
         );
         return;
       }
-      if (req.method === 'POST' && url.pathname === '/api/run') {
-        let tool: string;
+      // Vendored Lenis runtime (same origin, pinned; missing file → 404 and
+      // pages fall back to native scroll via the window.Lenis guard).
+      if (req.method === 'GET' && url.pathname === '/vendor/lenis.min.js') {
+        if (!LENIS_BUNDLE) {
+          json(res, 404, { ok: false, error: 'not found' });
+          return;
+        }
+        res.writeHead(200, withSecurityHeaders({
+          'Content-Type': 'text/javascript; charset=utf-8',
+          'Content-Length': String(LENIS_BUNDLE.length),
+          'Cache-Control': 'public, max-age=86400',
+        }));
+        res.end(LENIS_BUNDLE);
+        return;
+      }
+      if (req.method === 'POST' && url.pathname === '/api/run') {        let tool: string;
         let args: Record<string, unknown>;
         try {
           ({ tool, args } = parseRunCall(await readBody(req)));

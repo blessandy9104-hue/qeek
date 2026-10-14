@@ -40,6 +40,26 @@ zoveli.example.com {
 Never expose the port directly without a token: set `ZOVELI_API_TOKEN`
 (min 16 chars) to require bearer auth on `/api/run` and `/api/chat`.
 
+## Interface themes (your choice of look)
+
+The chat and login pages ship 5 looks, switchable from the theme bar
+(choice persists in the browser — no account, no network):
+
+- **Daylight** (default), **Midnight**, **Forest**, **Sunset** — pure CSS,
+  fully offline.
+- **Unicorn** — animated Unicorn Studio WebGL backdrop over a light
+  glass UI. The runtime loads from its CDN **only** when you pick this
+  theme; every other theme makes zero external requests.
+
+Smooth scrolling throughout is Lenis, served vendored from
+`/vendor/lenis.min.js` (pinned 1.3.26, same origin); if it ever fails to
+load, pages fall back to native scroll.
+
+Point Unicorn at your own scene: publish a scene in
+[Unicorn Studio](https://www.unicorn.studio), then set
+`ZOVELI_UNICORN_PROJECT=<your-project-id>` before `pnpm run web`.
+The default is their public Fluted Gradient example.
+
 ## Docker
 ```bash
 docker compose -f docker/docker-compose.yml --profile web up --build

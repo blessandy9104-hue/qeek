@@ -78,5 +78,11 @@ pnpm run desktop      # Electron shell (dev mode)</code></pre>
 <footer>
   <p><a href="index.html">← Back to Zoveli AI home</a></p>
 </footer>
+<script src="https://unpkg.com/lenis@1.3.26/dist/lenis.min.js" defer></script>
+<script>
+window.addEventListener('DOMContentLoaded', function () {
+  if (window.Lenis) { try { new window.Lenis({ autoRaf: true }); } catch (e) {} }
+});
+</script>
 </body>
 </html>

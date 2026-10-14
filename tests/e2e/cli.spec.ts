@@ -180,6 +180,22 @@ test.describe('Web Application', () => {
       'mathcore_compute'
     );
   });
+
+  test('theme switcher persists the chosen look, unicorn stays lazy', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('[data-testid="app-root"]')).toHaveAttribute('data-theme', 'daylight');
+    await expect(page.locator('[data-testid="theme-switcher"]')).toBeVisible();
+    // No Unicorn runtime by default (zero external requests).
+    expect(await page.evaluate(() => document.getElementById('us-sdk'))).toBeNull();
+    await page.click('[data-testid="theme-option-midnight"]');
+    await expect(page.locator('[data-testid="app-root"]')).toHaveAttribute('data-theme', 'midnight');
+    await expect(page.locator('[data-testid="theme-option-midnight"]')).toHaveAttribute('aria-pressed', 'true');
+    await page.reload();
+    await expect(page.locator('[data-testid="app-root"]')).toHaveAttribute('data-theme', 'midnight');
+    // Vendored Lenis is same-origin served.
+    const lenis = await page.request.get('/vendor/lenis.min.js');
+    expect(lenis.ok()).toBeTruthy();
+  });
 });
 
 test.describe('Auth (email OTP, proton.me compatible)', () => {
