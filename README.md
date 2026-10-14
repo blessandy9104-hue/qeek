@@ -9,17 +9,18 @@ Website: **https://blessandy9104-hue.github.io/zoveli-ai/**
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue.svg)](https://www.typescriptlang.org/)
 [![Node](https://img.shields.io/badge/Node-22%2B-green.svg)](https://nodejs.org/)
 
-## Why Zoveli instead of ChatGPT / Claude?
+## Why local-first?
 
-| | Zoveli AI | ChatGPT / Claude |
-|---|---|---|
-| Price | **Free forever**, MIT | $8–$20+/mo subscriptions |
-| Your data | **Stays on your machine**, never trained on | Processed in their cloud |
-| Offline | **Yes** — ~51 tools, no network needed | Internet required |
-| Math | **Verified or withheld** (+ audit certificate) | Confident best-effort guesses |
-| Lock-in | None — BYO key or local Ollama | One vendor's models |
+| | Zoveli AI |
+|---|---|
+| Price | **Free forever**, MIT |
+| Your data | **Stays on your machine**, never trained on |
+| Offline | **Yes** — ~51 tools, no network needed |
+| Math | **Verified or withheld** (+ audit certificate) |
+| Lock-in | None — BYO key or local Ollama |
+| Login | Passwordless email code — the only password you'll ever need is your email account's |
 
-Details + honest "when not to pick us": [docs/why-zoveli.md](docs/why-zoveli.md).
+Details: [docs/why-zoveli.md](docs/why-zoveli.md).
 
 ## Try it in 30 seconds
 

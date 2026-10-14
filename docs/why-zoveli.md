@@ -1,25 +1,21 @@
-# Why Zoveli? (vs ChatGPT and Claude)
+# Why Zoveli?
 
-> One paragraph: ChatGPT and Claude are excellent cloud assistants. Zoveli is the
-> assistant for work that must stay yours — it runs on your hardware, proves its
-> math instead of guessing, and costs nothing to run.
+> One paragraph: Zoveli is the assistant for work that must stay yours —
+> it runs on your hardware, proves its math instead of guessing, and costs
+> nothing to run.
 
-## The 10-second comparison (October 2026)
+## The 10-second summary (October 2026)
 
-| | Zoveli AI | ChatGPT (Free–$20+/mo) | Claude (Free–$20+/mo) |
-|---|---|---|---|
-| Price | Free forever, MIT licensed | Free tier + Go $8 / Plus $20 / Pro $100+ | Free tier + Pro $20 / Max $100–$200 |
-| Where it runs | **Your machine** (CLI, web UI, desktop, Docker) | OpenAI's cloud | Anthropic's cloud |
-| Offline | **Yes** — ~48 local tools work with no network | No | No |
-| Your data | **Never leaves home**; SQLite store you own (+ Markdown mirror); **never trained on** | Cloud processing; training opt-out in settings | Cloud processing; configurable retention |
-| Math answers | **Verified or withheld** (mathcore: independent methods must agree + sealed certificate; governed specialists memorize proofs) | Best-effort, confidently stated | Best-effort, confidently stated |
-| Model lock-in | None — `DEEPSEEK_API_KEY`, any OpenAI-compatible base (incl. local Ollama), or tools-only | OpenAI models only | Anthropic models only |
-| Memory | SQLite store you own (+ Markdown mirror), wiki-links, knowledge graph | Projects + memory (cloud) | Projects + memory (cloud) |
-| Login | Passwordless email OTP, any inbox incl. @proton.me | OAuth / passwords | OAuth / passwords |
-
-Pricing sources: [OpenAI pricing](https://openai.com/chatgpt/pricing),
-[Claude pricing](https://claude.com/pricing). Plans change often; Zoveli's row
-doesn't — free and local is structural, not promotional.
+| | Zoveli AI |
+|---|---|
+| Price | Free forever, MIT licensed |
+| Where it runs | **Your machine** (CLI, web UI, desktop, Docker) |
+| Offline | **Yes** — ~51 local tools work with no network |
+| Your data | **Never leaves home**; SQLite store you own (+ Markdown mirror); **never trained on** |
+| Math answers | **Verified or withheld** (mathcore: independent methods must agree + sealed certificate; governed specialists memorize proofs) |
+| Model lock-in | None — any API key, any compatible base (incl. local Ollama), or tools-only |
+| Memory | SQLite store you own (+ Markdown mirror), wiki-links, knowledge graph |
+| Login | Passwordless email OTP, any inbox incl. @proton.me — the only password you'll ever need is your email account's |
 
 ## When to pick Zoveli
 
@@ -29,21 +25,19 @@ doesn't — free and local is structural, not promotional.
 - Planes, labs, and locked-down networks — the CLI works fully offline.
 - Tinkerers: 61 packages, MCP servers, and an HTTP API you can extend in an afternoon.
 
-## When to pick ChatGPT or Claude instead (honest version)
+## Honest limits
 
-- You need frontier reasoning, vision, voice, or image generation — Zoveli has
-  none of those built in (it can call outside models via API, but the models
-  themselves aren't ours).
-- You want zero setup — they run in a browser; Zoveli needs a 10-minute install.
+- Frontier reasoning, vision, voice, or image generation aren't built in
+  (Zoveli can call outside models via API, but the models themselves aren't ours).
+- It needs a 10-minute install instead of opening a browser tab.
 - Team collaboration with shared workspaces, SSO/SAML, audit logs, HIPAA —
   Zoveli is single-user local-first today (see `docs/enterprise.md` for status).
 
 ## FAQ
 
-**Is Zoveli a ChatGPT wrapper?**
-No. Chat is an optional adapter (`DEEPSEEK_API_KEY` / `ZOVELI_API_BASE`); the
-core — verified math, SQLite memory, sysinfo, scheduler, search, 61 packages —
-runs with no model and no network.
+**Does Zoveli need a chat model to work?**
+No. Chat is an optional adapter; the core — verified math, SQLite memory,
+sysinfo, scheduler, search, 61 packages — runs with no model and no network.
 
 **What does "verified math" mean?**
 Every computation runs through independent methods (e.g. symbolic solve +
@@ -53,6 +47,10 @@ with a MISMATCH notice — plus a hash-chained audit certificate (`MATHCORE_AUDI
 **What does it cost to run?**
 Electricity. No subscription, no credits, no seat fees. Optional model API
 usage is billed by whoever provides your key, not by us.
+
+**What password do I need?**
+None for Zoveli — login is a 6-digit code emailed to you. The only password
+you'll ever need is your email account's.
 
 **Can I use it at work?**
 It's MIT licensed with a threat model (`docs/THREAT_MODEL.md`) and security
