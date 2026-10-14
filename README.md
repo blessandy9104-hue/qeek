@@ -15,7 +15,7 @@ Website: **https://blessandy9104-hue.github.io/zoveli-ai/**
 |---|---|---|
 | Price | **Free forever**, MIT | $8–$20+/mo subscriptions |
 | Your data | **Stays on your machine**, never trained on | Processed in their cloud |
-| Offline | **Yes** — ~49 tools, no network needed | Internet required |
+| Offline | **Yes** — ~51 tools, no network needed | Internet required |
 | Math | **Verified or withheld** (+ audit certificate) | Confident best-effort guesses |
 | Lock-in | None — BYO key or local Ollama | One vendor's models |
 
@@ -103,9 +103,9 @@ Try: `/math solve x^2 - 5x + 6 = 0` · `/sys` · `/tools`.
 
 ## Features (all runnable today)
 
-- **🔬 Verified Mathematics** — one AI math intelligence subsystem: mathcore MCP gives zero-hallucination math with hash-chained audit certificates, governed with 4 specialists (algebra, calculus, statistics, logic) that memorize verified proofs and recall them (keyword + semantic)
+- **🔬 Verified Mathematics** — one AI math intelligence subsystem: mathcore MCP gives zero-hallucination math with hash-chained audit certificates, governed with 6 specialists (algebra, calculus, statistics, logic, units, discrete) that memorize verified proofs and recall them (keyword + semantic)
 - **🧠 Local-First Memory** — SQLite store with FTS5 ranked search, wiki-links and tags (Markdown vault kept as human-readable export mirror)
-- **🤖 Full Agent Framework** — 61 packages: agent loop, tools, LLM, MCP, sandbox, subagents, workflows (`/tools` or `GET /api/tools` lists all ~49 live tools)
+- **🤖 Full Agent Framework** — 61 packages: agent loop, tools, LLM, MCP, sandbox, subagents, workflows (`/tools` or `GET /api/tools` lists all ~51 live tools)
 - **🖥️ System & Hardware Awareness** — local OS/CPU/memory/disk/GPU/battery/network insight with budget checks (`@zoveli/sysinfo`)
 - **💻 Programming Languages** — detection, analysis, formatting, linting, testing, tooling for 17+ languages (`@zoveli/languages`)
 - **⚡ Capability Awareness** — runtime discovery, introspection, adaptation, and gap reports

@@ -2,6 +2,7 @@ import { definePlugin } from '@deepseek-ai/dsh-core';
 import {
   DOMAIN_OPERATIONS,
   domainMemoryTag,
+  buildCommand,
   mathcore,
   memorizeVerified,
   recallSimilar,
@@ -37,6 +38,16 @@ const SPECIALISTS: Record<SpecialistDomain, SpecialistConfig> = {
     defaultOp: 'sat',
     hint: 'LOGIC SPECIALIST: you own sat/prove (satisfiability and logical proof). CALL math_logic_solve; STATE ONLY VERIFIED values.',
   },
+  units: {
+    tool: 'math_units_solve',
+    defaultOp: 'convert',
+    hint: 'UNITS SPECIALIST: you own convert (unit conversion across length, mass, time, volume, energy, temperature). CALL math_units_solve; STATE ONLY VERIFIED values.',
+  },
+  discrete: {
+    tool: 'math_discrete_solve',
+    defaultOp: 'shortest_path',
+    hint: 'DISCRETE SPECIALIST: you own shortest_path (cheapest path in weighted graphs). CALL math_discrete_solve; STATE ONLY VERIFIED values.',
+  },
 };
 
 /**
@@ -63,9 +74,10 @@ function defineDomainSpecialist(domain: SpecialistDomain) {
         operations,
         async solve(request: string, operation?: string) {
           const op = operation || defaultOp;
-          const out = await mathcore.compute(`${op} ${request}`);
+          const cmd = buildCommand(op, request);
+          const out = await mathcore.compute(cmd);
           try {
-            await memorizeVerified(`${op} ${request}`, out, domain);
+            await memorizeVerified(cmd, out, domain);
           } catch {
             // memorization never breaks solving
           }
@@ -82,7 +94,7 @@ function defineDomainSpecialist(domain: SpecialistDomain) {
           parameters: {
             type: 'object',
             properties: {
-              request: { type: 'string', description: `${domain} problem to solve` },
+              request: { type: 'string', description: `${domain} problem excluding the operation head ("x^2-1" for solve; full phrase for stat, e.g. "mean of 1,2,3")` },
               operation: {
                 type: 'string',
                 description: `Operation (must be one of: ${operations.join(', ')})`,
@@ -96,9 +108,10 @@ function defineDomainSpecialist(domain: SpecialistDomain) {
             if (!operations.includes(op)) {
               throw new Error(`${op} is not a ${domain} operation (governor: math_route to classify)`);
             }
-            const out = await mathcore.compute(`${op} ${request}`);
+            const cmd = buildCommand(op, request);
+            const out = await mathcore.compute(cmd);
             try {
-              await memorizeVerified(`${op} ${request}`, out, domain);
+              await memorizeVerified(cmd, out, domain);
             } catch {
               // ignore
             }
@@ -145,5 +158,7 @@ export const zoveliMathAlgebra = defineDomainSpecialist('algebra');
 export const zoveliMathCalculus = defineDomainSpecialist('calculus');
 export const zoveliMathStatistics = defineDomainSpecialist('statistics');
 export const zoveliMathLogic = defineDomainSpecialist('logic');
+export const zoveliMathUnits = defineDomainSpecialist('units');
+export const zoveliMathDiscrete = defineDomainSpecialist('discrete');
 
 export default zoveliMathAlgebra;

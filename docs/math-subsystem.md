@@ -44,10 +44,13 @@ All in `packages/math-intelligence/src/`:
   (`mathcore`), `defaultMathcoreAuditPath()` (`MATHCORE_AUDIT` overrides),
   `MATH_RULES` (verbatim 5-rule text), `MATH_INTELLIGENCE_RULES` (recall-first
   guidance), `mathcoreServerConfig()` (the one stdio spawn config).
-- `domains.ts`: `DOMAIN_OPERATIONS` (algebra 18 ops, calculus 4, statistics
-  1, logic 2), `routeDomain()` (explicit operation wins, else keyword hints
-  calculus → statistics → logic → algebra, else `general`),
-  `domainMemoryTag()` / `domainTitlePrefix()` (proof-memory namespacing).
+- `domains.ts`: `DOMAIN_OPERATIONS` (algebra 18, calculus 4, statistics 1,
+  logic 2, units 1, discrete 1 — all 27 ops owned), `routeDomain()` (explicit
+  operation wins, else keyword hints calculus → statistics → logic → units →
+  discrete → algebra, else `general`), `OP_INVOCATION` / `invocationHead()` /
+  `buildCommand()` (op id → parser-compatible surface head; `stat` passes
+  through), `domainMemoryTag()` / `domainTitlePrefix()` (proof-memory
+  namespacing).
 - `transport.ts`: `MathcoreClient` + `mathcore` singleton.
 - `tools.ts`: `mathcoreTools` (3, names frozen) + `mathIntelligenceTools`
   (`math_recall` with `domain` filter, `math_route`, `math_memorize`,
@@ -60,7 +63,8 @@ All in `packages/math-intelligence/src/`:
 ## Governed specialists (`packages/math-domains/`)
 
 `zoveli-math-algebra`, `zoveli-math-calculus`, `zoveli-math-statistics`
-(`stat`), `zoveli-math-logic` (`sat`, `prove`) under the governor:
+(`stat`), `zoveli-math-logic` (`sat`, `prove`), `zoveli-math-units`
+(`convert`), `zoveli-math-discrete` (`shortest_path`) under the governor:
 
 - Specialists never spawn mathcore: they call the governor's shared transport
   and memorize into their own namespace. Out-of-domain operations are rejected
@@ -68,8 +72,8 @@ All in `packages/math-intelligence/src/`:
 - Each declares `capabilities: [math.<domain>]` for Cordis-class hosts and
   injects a one-line domain hint. The local host mounts both after the
   governor (17 default plugins).
-- `convert`/`shortest_path` stay with the governor (`general`) until they
-  earn their own specialists — add the op to `DOMAIN_OPERATIONS` plus a
+- Every mathcore op is owned by exactly one specialist; `general` takes only
+  unrecognized input. To add a future op: extend `DOMAIN_OPERATIONS` plus a
   plugin entry, nothing else changes.
 
 ## Semantic recall (`semantic.ts`)

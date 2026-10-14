@@ -14,6 +14,13 @@ DEFAULT_AUDIT = Path(os.environ.get("MATHCORE_AUDIT", Path.home() / ".mathcore" 
 
 
 def main(argv=None) -> int:
+    # Verified output contains Unicode (e.g. ≈ in conversion results).
+    # Windows consoles default to cp1252, where print() would crash —
+    # force UTF-8 stdout (harmless everywhere else).
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
     p = argparse.ArgumentParser(
         prog="mathcore",
         description="Verified local mathematics. Nothing is released unless independent checks agree.",

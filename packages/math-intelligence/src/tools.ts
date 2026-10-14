@@ -1,13 +1,13 @@
 import type { Tool } from '@deepseek-ai/dsh-core';
 import { mathcore } from './transport.js';
 import { memorizeVerified, recallSimilar, getMathStats, recordMismatch } from './intelligence.js';
-import { routeDomain } from './domains.js';
+import { routeDomain, buildCommand } from './domains.js';
 import { recallSemantic } from './semantic.js';
 
 export const mathcoreTools: Tool[] = [
   {
     name: 'mathcore_compute',
-    description: 'Compute a mathematical expression with verified results using mathcore (auto-memorized)',
+    description: 'Compute a mathematical expression with verified results using mathcore (auto-memorized). Expression excludes the operation head ("x^2-1" + solve), except stat ("mean of 1,2,3" full phrase).',
     parameters: {
       type: 'object',
       properties: {
@@ -17,7 +17,7 @@ export const mathcoreTools: Tool[] = [
       required: ['expression']
     },
     async execute({ expression, operation }: { expression: string; operation?: string }) {
-      const cmd = operation ? `${operation} ${expression}` : expression;
+      const cmd = buildCommand(operation, expression);
       const out = await mathcore.compute(cmd);
       // AI layer: memorize verified proofs, best-effort (never breaks compute).
       try {
@@ -67,11 +67,11 @@ export const mathIntelligenceTools: Tool[] = [
       properties: {
         query: { type: 'string', description: 'Question to find similar verified proofs for' },
         limit: { type: 'number', default: 5 },
-        domain: { type: 'string', enum: ['algebra', 'calculus', 'statistics', 'logic', 'general'], description: 'Restrict recall to a specialist domain' },
+        domain: { type: 'string', enum: ['algebra', 'calculus', 'statistics', 'logic', 'units', 'discrete', 'general'], description: 'Restrict recall to a specialist domain' },
       },
       required: ['query'],
     },
-    async execute({ query, limit = 5, domain = 'general' }: { query: string; limit?: number; domain?: 'algebra' | 'calculus' | 'statistics' | 'logic' | 'general' }) {
+    async execute({ query, limit = 5, domain = 'general' }: { query: string; limit?: number; domain?: 'algebra' | 'calculus' | 'statistics' | 'logic' | 'units' | 'discrete' | 'general' }) {
       return { results: await recallSimilar(query, limit, domain) };
     },
   },
@@ -120,12 +120,12 @@ export const mathIntelligenceTools: Tool[] = [
       type: 'object',
       properties: {
         query: { type: 'string', description: 'Question to find similar verified proofs for' },
-        domain: { type: 'string', enum: ['algebra', 'calculus', 'statistics', 'logic', 'general'], description: 'Restrict recall to a specialist domain' },
+        domain: { type: 'string', enum: ['algebra', 'calculus', 'statistics', 'logic', 'units', 'discrete', 'general'], description: 'Restrict recall to a specialist domain' },
         limit: { type: 'number', default: 5 },
       },
       required: ['query'],
     },
-    async execute({ query, domain = 'general', limit = 5 }: { query: string; domain?: 'algebra' | 'calculus' | 'statistics' | 'logic' | 'general'; limit?: number }) {
+    async execute({ query, domain = 'general', limit = 5 }: { query: string; domain?: 'algebra' | 'calculus' | 'statistics' | 'logic' | 'units' | 'discrete' | 'general'; limit?: number }) {
       return recallSemantic(query, { domain, limit });
     },
   },

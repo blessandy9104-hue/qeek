@@ -26,7 +26,7 @@ User (CLI / Web / Desktop)
 | Intelligence | `subagent`, `workflow`, `plan`, `agent-teams`, `goals`, `preset`, `todo`, `schedule`, `workspace`, `mcp` |
 | Memory/context | `memory`, `memory-store`, `context`, `compaction`, `document`, `attachment`, `conversation` |
 | System | `settings`, `credentials`, `telemetry`, `guard`, `identity`, `interaction`, `feedback`, `storage`, `webhook`, `plugin-manager`, `acp`, `sdk` |
-| Zoveli differentiators | `math-intelligence` (governor: verified compute + proof memory + rules), `math-domains` (algebra/calculus/statistics/logic specialists), `math` (back-compat shim), `skills`, `capability`, `languages`, `search`, `event-logger`, `otel`, `code-analysis`, `docgen`, `health`, `graph`, `scheduler`, `secscan`, `sysinfo`, `auth` |
+| Zoveli differentiators | `math-intelligence` (governor: verified compute + proof memory + rules), `math-domains` (algebra/calculus/statistics/logic/units/discrete specialists), `math` (back-compat shim), `skills`, `capability`, `languages`, `search`, `event-logger`, `otel`, `code-analysis`, `docgen`, `health`, `graph`, `scheduler`, `secscan`, `sysinfo`, `auth` |
 | Host + compat | `host` (loader, REPL, chat, HTTP wiring), `shim-dsh-core` (local authoring shim, not a runtime) |
 
 The host's `defaultPlugins` (19) are the tool-bearing set: core,

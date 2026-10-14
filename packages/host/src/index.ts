@@ -3,7 +3,7 @@ import { runRepl } from './repl.js';
 import { chatConfigFromEnv } from './chat.js';
 import { zoveliCore } from '@zoveli/core';
 import { zoveliMathIntelligence } from '@zoveli/math-intelligence';
-import { zoveliMathAlgebra, zoveliMathCalculus, zoveliMathStatistics, zoveliMathLogic } from '@zoveli/math-domains';
+import { zoveliMathAlgebra, zoveliMathCalculus, zoveliMathStatistics, zoveliMathLogic, zoveliMathUnits, zoveliMathDiscrete } from '@zoveli/math-domains';
 import { zoveliMemoryStore } from '@zoveli/memory-store';
 import { zoveliMemory } from '@zoveli/memory';
 import { zoveliSkills } from '@zoveli/skills';
@@ -31,6 +31,8 @@ export const defaultPlugins = [
   zoveliMathCalculus,
   zoveliMathStatistics,
   zoveliMathLogic,
+  zoveliMathUnits,
+  zoveliMathDiscrete,
   zoveliMemoryStore,
   zoveliMemory,
   zoveliSkills,
