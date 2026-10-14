@@ -54,7 +54,7 @@ foreach ($cmd in @('git')) {
   }
 }
 if (-not (Get-Command python -ErrorAction SilentlyContinue)) { Fail 'Missing Python 3.11+. Install via: winget install Python.Python.3.11 (then re-run).' }
-if (-not (Get-Command node -ErrorAction SilentlyContinue)) { Fail 'Missing Node 22+. Install via: winget install OpenJS.NodeJS.LTS (then re-run).' }
+if (-not (Get-Command node -ErrorAction SilentlyContinue)) { Fail 'Missing Node 22.16+. Install via: winget install OpenJS.NodeJS.LTS (then re-run).' }
 
 if (Test-Path (Join-Path $Dir '.git')) {
   Info "Reusing existing checkout at $Dir"
@@ -83,7 +83,9 @@ if (-not (Get-Command pnpm -ErrorAction SilentlyContinue)) {
   else { npm install -g "pnpm@$PnpmVersion" }
 }
 $nodeMajor = (node -p "process.versions.node.split('.')[0]")
-if ([int]$nodeMajor -lt 22) { Fail "Node 22+ required. Upgrade Node, then re-run." }
+$nodeMinor = (node -p "process.versions.node.split('.')[1]")
+# node:sqlite FTS5 (memory store) needs 22.16+; newer majors are fine.
+if (([int]$nodeMajor -lt 22) -or (([int]$nodeMajor -eq 22) -and ([int]$nodeMinor -lt 16))) { Fail "Node 22.16+ required (found $(node -v)). Upgrade Node, then re-run." }
 
 Info 'Installing JS dependencies (pnpm install)...'
 pnpm install --frozen-lockfile --prod=false

@@ -129,7 +129,7 @@ missing=""
 for cmd in git curl python3; do
   have "$cmd" || missing="$missing $cmd"
 done
-if ! have node; then missing="$missing node(>=22)"; fi
+if ! have node; then missing="$missing node(>=22.16)"; fi
 if ! have pnpm; then missing="$missing pnpm(@$PNPM_VERSION)"; fi
 
 install_prereqs() {
@@ -215,8 +215,10 @@ if ! have pnpm; then
 fi
 if have node; then
   node_major=$(node -p "process.versions.node.split('.')[0]")
-  if [ "$node_major" -lt 22 ]; then
-    print_message error "Node 22+ required (found $(node -v)). Upgrade Node, then re-run."
+  node_minor=$(node -p "process.versions.node.split('.')[1]")
+  # node:sqlite FTS5 (memory store) needs 22.16+; newer majors are fine.
+  if [ "$node_major" -lt 22 ] || { [ "$node_major" -eq 22 ] && [ "$node_minor" -lt 16 ]; }; then
+    print_message error "Node 22.16+ required (found $(node -v)). Upgrade Node, then re-run."
     exit 1
   fi
 fi
