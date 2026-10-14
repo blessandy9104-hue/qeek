@@ -95,3 +95,46 @@ We follow coordinated vulnerability disclosure:
 ## Bug Bounty
 
 Currently no formal bug bounty program. Significant vulnerabilities may receive recognition in release notes and swag.
+
+## Pre-launch checklist (verified)
+
+No API key, account, or network is required for any local capability —
+these controls add safety without gating effectiveness:
+
+- **API keys hidden**: keys live only in env vars and the `Authorization`
+  header; provider/model names (never values) appear in logs.
+- **Git secrets purged**: history scanned — only synthetic test fixtures
+  (`sk-abcd…`, documented example keys); no `.env` or key files tracked.
+- **DB access**: SQLite has no credentials by design; `memory.db` is
+  chmod-0600 (owner-only, best-effort on Windows), sessions are HMAC-signed.
+- **Sensitive data encrypted/hashed**: OTP codes SHA-256 at rest, 5/hour
+  issuance, 5 verify attempts, constant-time compare; session secret 0600.
+- **Server-side auth enforced**: OTP + HMAC sessions verified server-side;
+  optional bearer token gates tool-running routes (off by default to
+  preserve no-account local UX).
+- **Record access locked**: single-user model — OS file ownership is the
+  boundary; no cross-user record access exists.
+- **Field tampering blocked**: hash-chained math certificates + audit log
+  (`verify-log` detects edits); HMAC session tokens; hashed OTP codes.
+- **Session cookies secured**: HttpOnly, SameSite=Lax, host-only, 30-day TTL.
+- **Passwords hashed**: passwordless by design — no passwords exist; OTP
+  codes are hashed, never stored or logged.
+- **Login rate-limited**: 5 codes/hour per email, 5 verify attempts per code,
+  30 auth req/min per IP (plus code expiry + lockout).
+- **Bot protection**: layered caps above make brute force infeasible
+  (10⁶-code space vs ~300 guesses/hour); no third-party CAPTCHA by design
+  (local-first, no external calls).
+- **Queries parameterized**: every SQLite statement uses `?` bindings,
+  including FTS5 `MATCH` — no string-interpolated SQL.
+- **Input validated**: email format, chat message presence + 50k cap,
+  `/api/run` tool-name + object-args checks, 1MB body cap, operation enums.
+- **User content escaped**: web UI renders via `textContent` (no innerHTML);
+  note titles sanitized for filenames and frontmatter.
+- **File uploads restricted**: no executable upload surface exists
+  (`attachment_upload` declares limits but has no implementation).
+- **API uploads trimmed**: 1MB bodies, 50k chat messages, bounded histories.
+- **Security headers**: nosniff, SAMEORIGIN framing, same-origin
+  referrer/COOP on every response; HSTS behind TLS.
+- **HTTPS**: localhost serves plain http by design; terminate TLS at a
+  reverse proxy for any network exposure (see web guide).
+- **Dependencies scanned**: `pnpm audit` (CI gate) + Snyk + Trivy + SBOM.

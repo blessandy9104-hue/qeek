@@ -22,6 +22,23 @@ pnpm run web
   (min 16 chars) to require `Authorization: Bearer` on `POST /api/run`
   and `POST /api/chat`. Off by default to preserve no-account local UX.
 - Server errors are secret-redacted; math certificates pass through.
+- Upload trims: 1MB bodies, 50k-char chat messages.
+
+## TLS termination (for any network exposure)
+
+The server binds plain `http://127.0.0.1` by design. To expose it beyond
+localhost, terminate TLS at a reverse proxy so the app sees
+`X-Forwarded-Proto: https` (which enables HSTS responses):
+
+```caddy
+# Caddyfile: automatic HTTPS + reverse proxy
+zoveli.example.com {
+    reverse_proxy 127.0.0.1:3080
+}
+```
+
+Never expose the port directly without a token: set `ZOVELI_API_TOKEN`
+(min 16 chars) to require bearer auth on `/api/run` and `/api/chat`.
 
 ## Docker
 ```bash
