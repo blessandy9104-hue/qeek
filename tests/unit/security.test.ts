@@ -13,6 +13,10 @@ import {
   RateLimiter,
   bearerAuthorized,
   SECURITY_HEADERS,
+  parseChatMessage,
+  parseRunCall,
+  hstsForRequest,
+  MAX_MESSAGE_LEN,
 } from '../../apps/web/src/security';
 
 function shellPlugin() {
@@ -146,5 +150,28 @@ describe('web hardening helpers', () => {
       if (prev === undefined) delete process.env.ZOVELI_API_TOKEN;
       else process.env.ZOVELI_API_TOKEN = prev;
     }
+  });
+
+  it('validates chat/run bodies (missing, oversized, misshaped)', () => {
+    expect(parseChatMessage({ message: '  hi ' })).toBe('hi');
+    expect(() => parseChatMessage({})).toThrow('missing message');
+    expect(() => parseChatMessage({ message: 'x'.repeat(MAX_MESSAGE_LEN + 1) })).toThrow('too long');
+    expect(parseRunCall({ tool: 'sysinfo_snapshot', args: { fresh: true } })).toEqual({
+      tool: 'sysinfo_snapshot',
+      args: { fresh: true },
+    });
+    expect(parseRunCall({ tool: 'x' })).toEqual({ tool: 'x', args: {} });
+    expect(() => parseRunCall({})).toThrow('missing tool');
+    expect(() => parseRunCall({ tool: 42 })).toThrow('missing tool');
+    expect(() => parseRunCall({ tool: 'x', args: [1] })).toThrow('must be an object');
+    expect(() => parseRunCall({ tool: 'x', args: 'nope' })).toThrow('must be an object');
+  });
+
+  it('emits HSTS only behind TLS', () => {
+    expect(hstsForRequest({ headers: {}, socket: {} } as any)).toEqual({});
+    expect(hstsForRequest({ headers: { 'x-forwarded-proto': 'https' }, socket: {} } as any)).toEqual({
+      'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
+    });
+    expect(hstsForRequest({ headers: {}, socket: { encrypted: true } } as any)).not.toEqual({});
   });
 });

@@ -11,6 +11,9 @@ import {
   isHostAllowed,
   RateLimiter,
   bearerAuthorized,
+  parseChatMessage,
+  parseRunCall,
+  hstsForRequest,
 } from './security.js';
 
 const PORT = parseInt(process.env.PORT || '3080', 10);
@@ -156,6 +159,15 @@ async function main(): Promise<void> {
         json(res, 403, { ok: false, error: 'forbidden host' });
         return;
       }
+      // HSTS behind TLS (direct or proxied); localhost stays plain http.
+      const hsts = hstsForRequest(req);
+      if (Object.keys(hsts).length > 0) {
+        const origWriteHead = res.writeHead.bind(res);
+        (res as unknown as { writeHead: (...args: never[]) => unknown }).writeHead = ((
+          status: number,
+          headers?: Record<string, string>
+        ) => origWriteHead(status, { ...hsts, ...headers })) as never;
+      }
       if (req.method === 'GET' && url.pathname === '/') {
         const text = PAGE;
         res.writeHead(200, withSecurityHeaders({
@@ -233,9 +245,12 @@ document.getElementById('code-form').addEventListener('submit', async (e) => {
         return;
       }
       if (req.method === 'POST' && url.pathname === '/api/run') {
-        const body = await readBody(req);
-        if (!body.tool) {
-          json(res, 400, { ok: false, error: 'missing tool' });
+        let tool: string;
+        let args: Record<string, unknown>;
+        try {
+          ({ tool, args } = parseRunCall(await readBody(req)));
+        } catch (e) {
+          json(res, 400, { ok: false, error: e instanceof Error ? e.message : String(e) });
           return;
         }
         if (!bearerAuthorized(req)) {
@@ -251,7 +266,7 @@ document.getElementById('code-form').addEventListener('submit', async (e) => {
           return;
         }
         try {
-          const result = await host.runTool(body.tool, body.args ?? {});
+          const result = await host.runTool(tool, args);
           json(res, 200, { ok: true, result });
         } catch (e) {
           json(res, 200, {
@@ -262,10 +277,11 @@ document.getElementById('code-form').addEventListener('submit', async (e) => {
         return;
       }
       if (req.method === 'POST' && url.pathname === '/api/chat') {
-        const body = await readBody(req);
-        const message = String(body.message ?? '').trim();
-        if (!message) {
-          json(res, 400, { ok: false, error: 'missing message' });
+        let message: string;
+        try {
+          message = parseChatMessage(await readBody(req));
+        } catch (e) {
+          json(res, 400, { ok: false, error: e instanceof Error ? e.message : String(e) });
           return;
         }
         if (!bearerAuthorized(req)) {

@@ -155,6 +155,11 @@ test.describe('Web Application', () => {
     expect(JSON.stringify(body.reply)).toContain('4');
   });
 
+  test('chat API rejects oversized messages', async ({ request }) => {
+    const res = await request.post('/api/chat', { data: { message: 'x'.repeat(60000) } });
+    expect(res.status()).toBe(400);
+  });
+
   test('UI sends a message and shows VERIFIED badge', async ({ page }) => {
     test.skip(!HAS_MATHCORE, 'mathcore-mcp not installed');
     await page.goto('/');

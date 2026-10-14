@@ -80,3 +80,41 @@ export function bearerAuthorized(req: http.IncomingMessage): boolean {
   const b = Buffer.from(expected);
   return a.length === b.length && a.length > 0 && timingSafeEqual(a, b);
 }
+
+/** Cap for a single chat message (LLM-cost and memory bound). */
+export const MAX_MESSAGE_LEN = 50_000;
+
+/** Parse + validate POST /api/chat bodies. Throws with a client message. */
+export function parseChatMessage(body: unknown): string {
+  const message = String((body as Record<string, unknown> | null)?.message ?? '').trim();
+  if (!message) throw new Error('missing message');
+  if (message.length > MAX_MESSAGE_LEN) {
+    throw new Error(`message too long (max ${MAX_MESSAGE_LEN} chars)`);
+  }
+  return message;
+}
+
+/** Parse + validate POST /api/run bodies. Throws with a client message. */
+export function parseRunCall(body: unknown): { tool: string; args: Record<string, unknown> } {
+  const tool = (body as Record<string, unknown> | null)?.tool;
+  if (typeof tool !== 'string' || !tool) throw new Error('missing tool');
+  const rawArgs = (body as Record<string, unknown>)?.args ?? {};
+  if (typeof rawArgs !== 'object' || rawArgs === null || Array.isArray(rawArgs)) {
+    throw new Error('args must be an object');
+  }
+  return { tool, args: rawArgs as Record<string, unknown> };
+}
+
+/**
+ * HSTS value when the request arrived over TLS (directly or via a
+ * TLS-terminating reverse proxy). Plain-localhost responses omit it —
+ * pinning HSTS on http://127.0.0.1 would be wrong.
+ */
+export function hstsForRequest(req: http.IncomingMessage): Record<string, string> {
+  const forwarded = String(req.headers['x-forwarded-proto'] || '').split(',')[0].trim().toLowerCase();
+  const encrypted = (req.socket as { encrypted?: boolean } | undefined)?.encrypted === true;
+  if (encrypted || forwarded === 'https') {
+    return { 'Strict-Transport-Security': 'max-age=31536000; includeSubDomains' };
+  }
+  return {};
+}

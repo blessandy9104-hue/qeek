@@ -194,6 +194,15 @@ export class MemoryStore {
       fs.mkdirSync(path.dirname(dbPath), { recursive: true });
     }
     this.db = new DatabaseSync(dbPath);
+    // Owner-only DB file: memory holds personal notes and proof history.
+    // Best-effort (no-op on Windows ACLs, harmless if it fails).
+    if (dbPath !== ':memory:') {
+      try {
+        fs.chmodSync(dbPath, 0o600);
+      } catch {
+        // ignore
+      }
+    }
     this.db.exec('PRAGMA journal_mode=WAL;');
     this.db.exec('PRAGMA foreign_keys=ON;');
     this.initSchema();

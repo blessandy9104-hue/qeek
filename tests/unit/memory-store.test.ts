@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { rmSync, mkdirSync } from 'node:fs';
+import { rmSync, mkdirSync, statSync, existsSync } from 'node:fs';
 import { MemoryStore, resetStoreForTests } from '../../packages/memory-store/src/store';
 import { zoveliMemoryStore } from '../../packages/memory-store/src/index';
 import { zoveliMemory } from '../../packages/memory/src/index';
@@ -90,6 +90,14 @@ describe('memory-store (SQLite FTS5)', () => {
   it('lists tags sorted', () => {
     store.createNote({ title: 'T1', content: 'x', tags: ['zebra', 'apple'] });
     expect(store.listTags().tags).toEqual(['apple', 'zebra']);
+  });
+
+  it('locks the DB file down to the owner', () => {
+    expect(existsSync(paths.db)).toBe(true);
+    // chmod is best-effort on Windows ACLs; POSIX must be owner-only.
+    if (process.platform !== 'win32') {
+      expect(statSync(paths.db).mode & 0o777).toBe(0o600);
+    }
   });
 });
 
