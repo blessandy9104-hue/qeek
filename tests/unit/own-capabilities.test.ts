@@ -14,7 +14,7 @@ function setup(plugin: any) {
   return ctx;
 }
 
-describe('qeek own capabilities register', () => {
+describe('zoveli own capabilities register', () => {
   it('code-analysis registers code_review tool', () => {
     const ctx = setup(zoveliCodeAnalysis);
     const call = ctx.register.mock.calls.find((c: any[]) => c[0] === 'code-analysis-tools');

@@ -1,5 +1,5 @@
 packages:
-  # Self-contained: qeek ships zero upstream-harness workspace members.
+  # Self-contained: zoveli ships zero upstream-harness workspace members.
   # Cordis profile configs still reference upstream bundle names for future
   # launcher integration, but nothing is installed from there.
   - packages/*

@@ -1,5 +1,5 @@
 # Syntax: Dockerfile
-# qeek CLI image: offline-capable assistant console.
+# zoveli CLI image: offline-capable assistant console.
 # Run interactively: docker run --rm -i zoveli-cli
 # NOTE: node:22 minimum — pnpm 11 requires node:sqlite (Node 22.5+).
 FROM node:22-alpine AS builder

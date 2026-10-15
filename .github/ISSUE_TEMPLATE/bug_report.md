@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Something in qeek is broken
+about: Something in Zoveli is broken
 title: "fix: "
 labels: ["bug"]
 ---
@@ -21,7 +21,7 @@ labels: ["bug"]
 
 ## Environment
 
-- qeek commit: <!-- `git rev-parse --short HEAD` -->
+- Zoveli commit: <!-- `git rev-parse --short HEAD` -->
 - Node: <!-- `node --version` -->
 - pnpm: <!-- `pnpm --version` -->
 - OS:
