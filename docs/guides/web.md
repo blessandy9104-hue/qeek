@@ -8,6 +8,10 @@ pnpm run web
 
 ## UI surfaces
 - **Chat:** streaming messages, `VERIFIED` badges on math, tool-call nodes.
+  Every reply names its model (`via mathcore` / `via qwen3:4b`, …) with a
+  `stays on this machine` note for local providers; URLs in messages render
+  as safe links. Recent chats persist in the browser only (capped at 100)
+  and can be wiped anytime with **Clear chats**.
 - **Vault sidebar:** browse/search notes, click wiki-links.
 - **Debug:** `/debug/events` (event trace), `/debug/events/stats`, `/metrics` (Prometheus).
 - **Grafana:** `docker compose --profile monitoring up` → `:3000` (admin/admin).

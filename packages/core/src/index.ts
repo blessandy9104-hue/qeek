@@ -31,6 +31,7 @@ function enhanceWithContext(input: any) {
 }
 
 export { zoveliPrompt } from './system-prompt';
+export { promptSectionsText } from './system-prompt';
 export { mathcoreTools } from './mathcore-tools';
 export { memoryTools } from './memory-tools';
 // Single math surface: the transport singleton lives in @zoveli/math's

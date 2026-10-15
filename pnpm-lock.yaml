@@ -78,6 +78,9 @@ importers:
       '@zoveli/auth':
         specifier: workspace:*
         version: link:../../packages/auth
+      '@zoveli/core':
+        specifier: workspace:*
+        version: link:../../packages/core
       '@zoveli/host':
         specifier: workspace:*
         version: link:../../packages/host
@@ -693,6 +696,9 @@ importers:
       '@zoveli/memory-store':
         specifier: workspace:*
         version: link:../memory-store
+      '@zoveli/persona':
+        specifier: workspace:*
+        version: link:../persona
       '@zoveli/scheduler':
         specifier: workspace:*
         version: link:../scheduler
@@ -708,6 +714,9 @@ importers:
       '@zoveli/sysinfo':
         specifier: workspace:*
         version: link:../sysinfo
+      '@zoveli/webresearch':
+        specifier: workspace:*
+        version: link:../webresearch
     devDependencies:
       '@types/node':
         specifier: ^20.10.0
@@ -1036,6 +1045,31 @@ importers:
       vitest:
         specifier: 'catalog:'
         version: 1.6.1(@types/node@20.19.43)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/persona:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+      '@zoveli/memory-store':
+        specifier: workspace:*
+        version: link:../memory-store
+    devDependencies:
+      '@types/node':
+        specifier: ^24.0.0
+        version: 24.19.2
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.18.1
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@24.19.2)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
   packages/plan:
     dependencies:
@@ -1553,6 +1587,28 @@ importers:
       vitest:
         specifier: 'catalog:'
         version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
+
+  packages/webresearch:
+    dependencies:
+      '@deepseek-ai/dsh-core':
+        specifier: workspace:*
+        version: link:../shim-dsh-core
+    devDependencies:
+      '@types/node':
+        specifier: ^24.0.0
+        version: 24.19.2
+      oxlint:
+        specifier: 'catalog:'
+        version: 0.18.1
+      tsdown:
+        specifier: ^0.23.1
+        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 1.6.1(@types/node@24.19.2)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
   packages/workflow:
     dependencies:

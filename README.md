@@ -15,7 +15,7 @@ Website: **https://blessandy9104-hue.github.io/zoveli-ai/**
 |---|---|
 | Price | **Free forever**, MIT |
 | Your data | **Stays on your machine**, never trained on |
-| Offline | **Yes** — ~51 tools, no network needed |
+| Offline | **Yes** — ~57 tools, no network needed |
 | Math | **Verified or withheld** (+ audit certificate) |
 | Lock-in | None — BYO key or local Ollama |
 | Login | Passwordless email code — the only password you'll ever need is your email account's |
@@ -106,7 +106,7 @@ Try: `/math solve x^2 - 5x + 6 = 0` · `/sys` · `/tools`.
 
 - **🔬 Verified Mathematics** — one AI math intelligence subsystem: mathcore MCP gives zero-hallucination math with hash-chained audit certificates, governed with 6 specialists (algebra, calculus, statistics, logic, units, discrete) that memorize verified proofs and recall them (keyword + semantic)
 - **🧠 Local-First Memory** — SQLite store with FTS5 ranked search, wiki-links and tags (Markdown vault kept as human-readable export mirror)
-- **🤖 Full Agent Framework** — 61 packages: agent loop, tools, LLM, MCP, sandbox, subagents, workflows (`/tools` or `GET /api/tools` lists all ~51 live tools)
+- **🤖 Full Agent Framework** — 63 packages: agent loop, tools, LLM, MCP, sandbox, subagents, workflows (`/tools` or `GET /api/tools` lists all ~57 live tools)
 - **🖥️ System & Hardware Awareness** — local OS/CPU/memory/disk/GPU/battery/network insight with budget checks (`@zoveli/sysinfo`)
 - **💻 Programming Languages** — detection, analysis, formatting, linting, testing, tooling for 17+ languages (`@zoveli/languages`)
 - **⚡ Capability Awareness** — runtime discovery, introspection, adaptation, and gap reports
@@ -116,6 +116,8 @@ Try: `/math solve x^2 - 5x + 6 = 0` · `/sys` · `/tools`.
 - **📄 Doc Generator** — offline Markdown API docs from source exports
 - **❤️ Project Health** — tests/CI/docs/deps/TODO-debt scoring
 - **🗓️ Smart Scheduler** — energy-aware prioritization + time-blocking
+- **🎭 Personas** — switchable friend, tutor, engineer, coach (`/persona`, remembered locally)
+- **🌐 Web Research** — SSRF-guarded fetch + keyless search, trusted-source flags
 - **🛡️ Security Scanner** — secrets + risky-pattern scanning
 - **📊 Telemetry** — in-memory meters + Prometheus/OTLP + Grafana
 - **🔑 Passwordless login** — email OTP for any inbox incl. @proton.me, `GET /login`
@@ -125,7 +127,7 @@ Try: `/math solve x^2 - 5x + 6 = 0` · `/sys` · `/tools`.
 
 - [Architecture](docs/architecture.md)
 - [Math intelligence subsystem](docs/math-subsystem.md) · [Memory store](docs/memory-store.md)
-- [API Reference](docs/api/)
+- [API Reference](docs/api/) · [Plugin SDK](docs/plugin-sdk/README.md)
 - [Runbooks](docs/runbooks/)
 - [ADRs](docs/adr/)
 - [Security policy](SECURITY.md)

@@ -181,6 +181,25 @@ test.describe('Web Application', () => {
     );
   });
 
+  test('chat shows model source, links, and clears local history', async ({ page }) => {
+    await page.goto('/');
+    await page.fill('[data-testid="chat-input"]', '2+2');
+    await page.click('[data-testid="send-button"]');
+    const meta = page.locator('[data-testid="reply-meta"]').last();
+    await expect(meta).toContainText('mathcore');
+    await expect(meta).toContainText('stays on this machine');
+    // User-echo linkifies safely without a model round-trip.
+    await page.fill('[data-testid="chat-input"]', 'see https://example.com/x please');
+    await page.click('[data-testid="send-button"]');
+    const echo = page.locator('[data-testid="user-message"]').last();
+    await expect(echo.locator('a[href="https://example.com/x"]')).toBeVisible();
+    // History persists across reload, then clears on demand.
+    await page.reload();
+    await expect(page.locator('[data-testid="user-message"]').first()).toBeVisible();
+    await page.click('[data-testid="chat-clear"]');
+    await expect(page.locator('[data-testid="user-message"]')).toHaveCount(0);
+  });
+
   test('theme switcher persists the chosen look, unicorn stays lazy', async ({ page }) => {
     await page.goto('/');
     await expect(page.locator('[data-testid="app-root"]')).toHaveAttribute('data-theme', 'daylight');

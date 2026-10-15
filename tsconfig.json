@@ -39,6 +39,8 @@
     { "path": "./packages/secscan" },
     { "path": "./packages/sysinfo" },
     { "path": "./packages/host" },
+    { "path": "./packages/persona" },
+    { "path": "./packages/webresearch" },
     { "path": "./packages/auth" }
   ]
 }

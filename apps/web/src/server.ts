@@ -1,5 +1,6 @@
 import * as http from 'node:http';
-import { ZoveliHost, defaultPlugins, resolveChatConfig, chat } from '@zoveli/host';
+import { ZoveliHost, defaultPlugins, resolveChatConfig, chat, isLocalProvider } from '@zoveli/host';
+import { promptSectionsText } from '@zoveli/core';
 import {
   zoveliAuth, issueCode, verifyCode, mintSession,
   sessionEmailFromCookie, sessionCookie, clearSessionCookie,
@@ -123,6 +124,7 @@ ${themeHeadScript()}
   <button type="button" data-testid="suggestion-chip" data-q="10!">10!</button>
 </div>
 <div id="log" data-testid="chat-log"></div>
+<div><button type="button" data-testid="chat-clear" id="clear-chats" style="font-size:.8rem;margin-bottom:1rem">Clear chats (stored in this browser only)</button></div>
 <form id="composer">
   <input id="chat-input" data-testid="chat-input" placeholder="Ask anything — try: 2+2 (verified offline)" autocomplete="off" />
   <button type="submit" data-testid="send-button">Send</button>
@@ -142,10 +144,11 @@ document.querySelectorAll('[data-testid="suggestion-chip"]').forEach((chip) => {
     form.requestSubmit();
   });
 });
-function addMsg(role, text, verified) {
+function addMsg(role, text, verified, meta) {
   const div = document.createElement('div');
   div.setAttribute('data-testid', role === 'user' ? 'user-message' : 'assistant-message');
-  div.textContent = (role === 'user' ? 'you: ' : 'zoveli: ') + text;
+  div.appendChild(document.createTextNode((role === 'user' ? 'you: ' : 'zoveli: ')));
+  appendLinkified(div, text);
   if (verified) {
     const b = document.createElement('span');
     b.setAttribute('data-testid', 'verification-badge');
@@ -153,8 +156,76 @@ function addMsg(role, text, verified) {
     b.textContent = 'VERIFIED';
     div.appendChild(b);
   }
+  if (meta) {
+    const m = document.createElement('div');
+    m.setAttribute('data-testid', 'reply-meta');
+    m.style.cssText = 'font-size:.75rem;opacity:.75;margin-top:2px';
+    m.textContent = meta;
+    div.appendChild(m);
+  }
   log.appendChild(div);
+  saveChat(role, text, verified, meta);
 }
+// Mirrors render.ts splitUrls (tested there): safe link rendering —
+// http(s) URLs become links, everything else stays inert text.
+// Regex-free on purpose: no backslash escaping across template layers.
+function appendLinkified(el, text) {
+  var last = 0, i = 0;
+  while (i < text.length) {
+    var h = text.indexOf('http', i);
+    if (h < 0) break;
+    var prefix = '';
+    if (text.startsWith('https://', h)) prefix = 'https://';
+    else if (text.startsWith('http://', h)) prefix = 'http://';
+    if (prefix === '') { i = h + 4; continue; }
+    var end = h + prefix.length;
+    // Char-code terminators: space, tab, newline, angle brackets, quotes,
+    // paren, bracket, brace. Codes avoid escaping issues in this template.
+    var TERMINATORS = [32, 9, 10, 60, 62, 34, 39, 41, 93, 125];
+    while (end < text.length && TERMINATORS.indexOf(text.charCodeAt(end)) < 0) end++;
+    var link = text.slice(h, end);
+    while (link.length > prefix.length && '.,;:!?'.indexOf(link[link.length - 1]) >= 0) link = link.slice(0, -1);
+    if (link.length <= prefix.length) { i = h + prefix.length; continue; }
+    if (h > last) el.appendChild(document.createTextNode(text.slice(last, h)));
+    var a = document.createElement('a');
+    a.href = link; a.rel = 'noopener'; a.target = '_blank';
+    a.textContent = link;
+    el.appendChild(a);
+    last = h + link.length;
+    i = h + link.length;
+  }
+  if (last < text.length) el.appendChild(document.createTextNode(text.slice(last)));
+}
+// Recent chats live in this browser only (Duck.ai principle, local-first):
+// persisted across reloads, capped, erasable, never sent anywhere.
+const CHAT_KEY = 'zoveli-chats';
+const CHAT_CAP = 100;
+function loadChats() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(CHAT_KEY) || '[]');
+    if (!Array.isArray(raw)) return;
+    raw.slice(-CHAT_CAP).forEach((m) => {
+      if (m && (m.role === 'user' || m.role === 'assistant') && typeof m.text === 'string') {
+        const div = document.createElement('div');
+        div.setAttribute('data-testid', m.role === 'user' ? 'user-message' : 'assistant-message');
+        div.appendChild(document.createTextNode((m.role === 'user' ? 'you: ' : 'zoveli: ') + m.text));
+        log.appendChild(div);
+      }
+    });
+  } catch (e) {}
+}
+function saveChat(role, text, verified, meta) {
+  try {
+    const raw = JSON.parse(localStorage.getItem(CHAT_KEY) || '[]');
+    raw.push({ role, text: String(text).slice(0, 4000), verified: !!verified, meta: meta || '' });
+    localStorage.setItem(CHAT_KEY, JSON.stringify(raw.slice(-CHAT_CAP)));
+  } catch (e) {}
+}
+function clearChats() {
+  try { localStorage.removeItem(CHAT_KEY); } catch (e) {}
+  log.innerHTML = '';
+}
+loadChats();
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const text = input.value.trim();
@@ -167,11 +238,13 @@ form.addEventListener('submit', async (e) => {
     body: JSON.stringify({ message: text }),
   });
   const data = await res.json();
-  addMsg('assistant', data.reply || data.error || '(empty reply)', !!data.verified);
+  const meta = data.model ? ('via ' + data.model + (data.local === false ? '' : ' · stays on this machine')) : '';
+  addMsg('assistant', data.reply || data.error || '(empty reply)', !!data.verified, meta);
 });
 fetch('/api/tools').then((r) => r.json()).then((tools) => {
   document.getElementById('tools').textContent = tools.map((t) => t.name).join(', ');
 });
+document.getElementById('clear-chats').addEventListener('click', clearChats);
 </script>
 </body>
 </html>`;
@@ -184,8 +257,9 @@ async function main(): Promise<void> {
   // otherwise tools-only offline mode (probe refuses instantly when absent).
   const chatCfg = await resolveChatConfig();
   const baseSystem = [
-    'You are Zoveli, a personal assistant with verified computation and persistent memory.',
+    'You are Zoveli, a personal helper that shows its work in math and remembers what matters to you.',
     'For any arithmetic, algebra, calculus, linear algebra, number theory, logic, statistics or unit conversion: do not compute in your head. Call the mathcore tools and state only verified values. If a result is WITHHELD, say so; never guess.',
+    promptSectionsText(),
     ...systemSections,
   ].join('\n\n');
   const history: any[] = [];
@@ -365,6 +439,9 @@ ${themeBootScript(unicornProjectId())}
               ok: true,
               reply: typeof out === 'string' ? out : JSON.stringify(out),
               verified: true,
+              model: 'mathcore',
+              provider: 'local',
+              local: true,
             });
           } catch (e) {
             json(res, 200, {
@@ -389,7 +466,14 @@ ${themeBootScript(unicornProjectId())}
         const last = [...next]
           .reverse()
           .find((m: any) => m.role === 'assistant' && m.content);
-        json(res, 200, { ok: true, verified: false, reply: last?.content ?? '(empty)' });
+        json(res, 200, {
+          ok: true,
+          verified: false,
+          reply: last?.content ?? '(empty)',
+          model: chatCfg.model,
+          provider: chatCfg.provider || 'custom',
+          local: isLocalProvider(chatCfg),
+        });
         return;
       }
       if (req.method === 'GET' && url.pathname === '/login') {

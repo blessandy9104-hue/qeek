@@ -18,6 +18,8 @@ import { zoveliDocgen } from '@zoveli/docgen';
 import { zoveliCodeAnalysis } from '@zoveli/code-analysis';
 import { zoveliCapability } from '@zoveli/capability';
 import { zoveliGuard } from '@zoveli/guard';
+import { zoveliPersona } from '@zoveli/persona';
+import { zoveliWebResearch } from '@zoveli/webresearch';
 
 /**
  * The default tool-bearing plugin set. Config-only plugins (agent loop,
@@ -47,6 +49,8 @@ export const defaultPlugins = [
   zoveliCodeAnalysis,
   zoveliCapability,
   zoveliGuard,
+  zoveliPersona,
+  zoveliWebResearch,
 ];
 
 /** Boot the host, mount the default plugins, and start the REPL. */
@@ -58,7 +62,7 @@ export async function boot(): Promise<void> {
 
 export { ZoveliHost } from './host.js';
 export { runRepl } from './repl.js';
-export { chatConfigFromEnv, resolveChatConfig, probeOllama, ollamaBaseUrl, chat } from './chat.js';
+export { chatConfigFromEnv, resolveChatConfig, probeOllama, ollamaBaseUrl, chat, chatTemperature, buildMemoryBrief, isLocalProvider, memoryBriefAllowed } from './chat.js';
 export type { ChatConfig } from './chat.js';
 
 

@@ -2,7 +2,8 @@
 
 > One paragraph: Zoveli is the assistant for work that must stay yours —
 > it runs on your hardware, proves its math instead of guessing, and costs
-> nothing to run.
+> nothing to run. The only difference between Zoveli and any other AI:
+> Zoveli is offline.
 
 ## The 10-second summary (October 2026)
 
@@ -10,7 +11,7 @@
 |---|---|
 | Price | Free forever, MIT licensed |
 | Where it runs | **Your machine** (CLI, web UI, desktop, Docker) |
-| Offline | **Yes** — ~51 local tools work with no network |
+| Offline | **Yes** — ~57 local tools work with no network |
 | Your data | **Never leaves home**; SQLite store you own (+ Markdown mirror); **never trained on** |
 | Math answers | **Verified or withheld** (mathcore: independent methods must agree + sealed certificate; governed specialists memorize proofs) |
 | Model lock-in | None — any API key, any compatible base (incl. local Ollama), or tools-only |
@@ -23,7 +24,7 @@
 - Exact computation (homework, engineering, finance) where a confident wrong
   answer is worse than no answer — `/math` and `/check` give VERIFIED/MATCH/MISMATCH.
 - Planes, labs, and locked-down networks — the CLI works fully offline.
-- Tinkerers: 61 packages, MCP servers, and an HTTP API you can extend in an afternoon.
+- Tinkerers: 63 packages, MCP servers, and an HTTP API you can extend in an afternoon.
 
 ## Honest limits
 
@@ -37,7 +38,7 @@
 
 **Does Zoveli need a chat model to work?**
 No. Chat is an optional adapter; the core — verified math, SQLite memory,
-sysinfo, scheduler, search, 61 packages — runs with no model and no network.
+sysinfo, scheduler, search, 63 packages — runs with no model and no network.
 
 **What does "verified math" mean?**
 Every computation runs through independent methods (e.g. symbolic solve +

@@ -10,9 +10,9 @@
 User (CLI / Web / Desktop)
   → dsh profile (config/*.cordis.yml)
     → Cordis context (ctx)
-      → zoveli plugins (61 packages; 19 mounted by default)
+      → zoveli plugins (63 packages; 24 mounted by default)
         → capabilities (scanner → registry → adaptation)
-        → tools (guarded pre/post pipeline, ~48 live)
+        → tools (guarded pre/post pipeline, ~57 live)
         → sessions (JSONL + projections)
         → external systems (mathcore MCP, SQLite store, vault FS, LLM APIs)
 ```
@@ -26,13 +26,13 @@ User (CLI / Web / Desktop)
 | Intelligence | `subagent`, `workflow`, `plan`, `agent-teams`, `goals`, `preset`, `todo`, `schedule`, `workspace`, `mcp` |
 | Memory/context | `memory`, `memory-store`, `context`, `compaction`, `document`, `attachment`, `conversation` |
 | System | `settings`, `credentials`, `telemetry`, `guard`, `identity`, `interaction`, `feedback`, `storage`, `webhook`, `plugin-manager`, `acp`, `sdk` |
-| Zoveli differentiators | `math-intelligence` (governor: verified compute + proof memory + rules), `math-domains` (algebra/calculus/statistics/logic/units/discrete specialists), `math` (back-compat shim), `skills`, `capability`, `languages`, `search`, `event-logger`, `otel`, `code-analysis`, `docgen`, `health`, `graph`, `scheduler`, `secscan`, `sysinfo`, `auth` |
+| Zoveli differentiators | `math-intelligence` (governor: verified compute + proof memory + rules), `math-domains` (algebra/calculus/statistics/logic/units/discrete specialists), `math` (back-compat shim), `skills`, `capability`, `languages`, `search`, `event-logger`, `otel`, `code-analysis`, `docgen`, `health`, `graph`, `scheduler`, `secscan`, `sysinfo`, `auth`, `persona` (switchable friend/tutor/engineer/coach), `webresearch` (guarded fetch + search) |
 | Host + compat | `host` (loader, REPL, chat, HTTP wiring), `shim-dsh-core` (local authoring shim, not a runtime) |
 
-The host's `defaultPlugins` (19) are the tool-bearing set: core,
-math-intelligence, the 4 math specialists, memory-store, memory, skills,
+The host's `defaultPlugins` (24) are the tool-bearing set: core,
+math-intelligence, the 6 math specialists, memory-store, memory, skills,
 languages, sysinfo, search, scheduler, secscan, health, graph, docgen,
-code-analysis, capability.
+code-analysis, capability, guard, persona, webresearch.
 
 ## Data flows
 

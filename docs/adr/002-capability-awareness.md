@@ -4,7 +4,7 @@
 Accepted
 
 ## Context
-Zoveli has 61 packages providing diverse capabilities (math, browser, shell, LSP, etc.). The agent needs to:
+Zoveli has 63 packages providing diverse capabilities (math, browser, shell, LSP, etc.). The agent needs to:
 - Know what capabilities are available at runtime
 - Adapt task execution based on available capabilities
 - Detect degraded/unavailable capabilities

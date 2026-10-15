@@ -37,7 +37,9 @@
     "@zoveli/docgen": "workspace:*",
     "@zoveli/code-analysis": "workspace:*",
     "@zoveli/capability": "workspace:*",
-    "@zoveli/guard": "workspace:*"
+    "@zoveli/guard": "workspace:*",
+    "@zoveli/persona": "workspace:*",
+    "@zoveli/webresearch": "workspace:*"
   },
   "devDependencies": {
     "tsdown": "^0.3.0",

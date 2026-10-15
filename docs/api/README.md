@@ -19,6 +19,15 @@ Tools are the agent-facing API. Full JSON schemas live in each plugin's `src/ind
 - `vault_search {query, tags?, limit?, offset?}` (SQLite FTS5, ranked)
 - `vault_graph {vaultPath?, format?}` → nodes/edges/orphans/hubs or DOT
 
+## Persona (trusted, switchable)
+- `persona_switch {persona}` → friend, tutor, engineer, or coach (remembered)
+- `persona_current {}` → active persona + choices
+- CLI: `/persona [name]` shows or switches; `ZOVELI_PERSONA` env pins one
+
+## Web research (trusted sources, SSRF-guarded)
+- `web_fetch {url, maxChars?}` → title + readable text + trusted flag
+- `web_search {query, limit?}` → keyless source discovery with trust flags
+
 ## Languages
 - `language_detect {filePath, content?}`
 - `language_analyze {filePath, content?, language?, includeMetrics?, includeIssues?}`
