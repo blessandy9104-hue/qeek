@@ -22,6 +22,8 @@ pnpm run web
   (DNS-rebinding guard; `ZOVELI_ALLOWED_HOSTS` adds explicit extras).
 - Hardening headers on every response; `HttpOnly` + `SameSite=Lax` cookies.
 - Per-IP rate limits: auth routes 30/min, `/api/chat` + `/api/run` 120/min.
+  Test mode (`ZOVELI_AUTH_DEV_ECHO=1`, e2e only) disables rate limiting so
+  all 5 browser projects can share one server; production always enforces.
 - Optional bearer token for tool-running routes: set `ZOVELI_API_TOKEN`
   (min 16 chars) to require `Authorization: Bearer` on `POST /api/run`
   and `POST /api/chat`. Off by default to preserve no-account local UX.

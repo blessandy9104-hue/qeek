@@ -57,6 +57,14 @@ const LENIS_BUNDLE = loadVendorLenis();
 const authLimiter = new RateLimiter(30, 60_000);
 const apiLimiter = new RateLimiter(120, 60_000);
 
+// Test-mode escape hatch: the e2e suite runs 5 browser projects against
+// one server, which would legitimately trip per-IP budgets (auth PROVEN to
+// 429 the last project on CI). DEV_ECHO already marks test mode — it echoes
+// OTP codes — so limits stay enforced everywhere else, including production.
+function rateLimitsEnabled(): boolean {
+  return process.env.ZOVELI_AUTH_DEV_ECHO !== '1';
+}
+
 function clientIp(req: http.IncomingMessage): string {
   return req.socket?.remoteAddress || 'unknown';
 }
@@ -392,7 +400,7 @@ ${themeBootScript(unicornProjectId())}
           json(res, 401, { ok: false, error: 'unauthorized' });
           return;
         }
-        if (!apiLimiter.allow(`run:${clientIp(req)}`)) {
+        if (rateLimitsEnabled() && !apiLimiter.allow(`run:${clientIp(req)}`)) {
           res.writeHead(429, withSecurityHeaders({
             'Content-Type': 'application/json; charset=utf-8',
             'Retry-After': '60',
@@ -423,7 +431,7 @@ ${themeBootScript(unicornProjectId())}
           json(res, 401, { ok: false, error: 'unauthorized' });
           return;
         }
-        if (!apiLimiter.allow(`chat:${clientIp(req)}`)) {
+        if (rateLimitsEnabled() && !apiLimiter.allow(`chat:${clientIp(req)}`)) {
           res.writeHead(429, withSecurityHeaders({
             'Content-Type': 'application/json; charset=utf-8',
             'Retry-After': '60',
@@ -485,7 +493,7 @@ ${themeBootScript(unicornProjectId())}
         return;
       }
       if (req.method === 'POST' && url.pathname === '/api/auth/request') {
-        if (!authLimiter.allow(`auth:${clientIp(req)}`)) {
+        if (rateLimitsEnabled() && !authLimiter.allow(`auth:${clientIp(req)}`)) {
           res.writeHead(429, withSecurityHeaders({
             'Content-Type': 'application/json; charset=utf-8',
             'Retry-After': '60',
@@ -510,7 +518,7 @@ ${themeBootScript(unicornProjectId())}
         return;
       }
       if (req.method === 'POST' && url.pathname === '/api/auth/verify') {
-        if (!authLimiter.allow(`auth:${clientIp(req)}`)) {
+        if (rateLimitsEnabled() && !authLimiter.allow(`auth:${clientIp(req)}`)) {
           res.writeHead(429, withSecurityHeaders({
             'Content-Type': 'application/json; charset=utf-8',
             'Retry-After': '60',
