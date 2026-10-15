@@ -96,12 +96,31 @@ docs(api): update capability API reference
 - E2E tests for user-facing changes
 - Maintain 80% code coverage
 
+## Product Scope
+
+Zoveli's core is the offline CLI assistant — verified math, local memory,
+and local tools. Web, desktop, and non-default plugins are secondary and
+must never break the core. Read [docs/core-plugins.md](docs/core-plugins.md)
+before adding anything: it declares what counts as core vs experimental.
+
+## New Package Policy
+
+No new package without all four:
+
+- an **owner** (who maintains it),
+- a **use case** (which user journey needs it),
+- a **test** (unit, plus e2e if user-facing),
+- a **lifecycle** (core or experimental, and why).
+
+New packages start as **experimental** — mount them opt-in, never in
+`defaultPlugins`. Promotion to core needs an ADR and maintainer sign-off.
+
 ## Project Structure
 
 ```
 zoveli-ai/
 ├── apps/                    # Applications (CLI, Web, Desktop)
-├── packages/                # 61 packages (@zoveli/*)
+├── packages/                # 63 packages (@zoveli/*)
 │   ├── core                 # Core integration plugin
 │   ├── math-intelligence    # Governed verified math + proof memory
 │   ├── math-domains         # Algebra/calculus/statistics/logic/units/discrete specialists
@@ -123,7 +142,10 @@ zoveli-ai/
 2. Add `package.json` with workspace dependencies
 3. Implement `src/index.ts` with `definePlugin`
 4. Add tests in `tests/unit/`
-5. Mount in `packages/host/src/index.ts` (`defaultPlugins`) and reference in root `tsconfig.json`
+5. Mount it **opt-in** (experimental by default — see the New Package
+   Policy above). Adding to `defaultPlugins` in
+   `packages/host/src/index.ts` is a core change: it needs an ADR and
+   maintainer sign-off, plus a reference in root `tsconfig.json`
 6. Update documentation
 
 ## Style Guide

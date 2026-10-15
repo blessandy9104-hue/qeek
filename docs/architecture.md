@@ -4,6 +4,14 @@
 > Math and memory subsystems have their own maps:
 > [math-subsystem.md](math-subsystem.md), [memory-store.md](memory-store.md).
 
+## Product scope (MVP)
+
+The core product is the **offline CLI assistant**: verified math, local
+memory, and local tools. Everything is judged against it — web, desktop,
+and non-default plugins are secondary surfaces that must never break the
+core. [core-plugins.md](core-plugins.md) declares exactly which packages
+are core (stable, semver-minded) vs experimental (opt-in, may change).
+
 ## Runtime composition
 
 ```

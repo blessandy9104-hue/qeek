@@ -1,0 +1,38 @@
+# Core vs experimental packages
+
+The core product is the **offline CLI assistant** — verified math, local
+memory, and local tools (see the product scope in the
+[README](../README.md) and [architecture](architecture.md)). This file
+declares which packages carry that promise and which are free to evolve.
+
+## Core (stable)
+
+Everything the default boot path needs: `apps/cli` → `@zoveli/host`
+(`defaultPlugins`, REPL, chat) and its direct providers:
+
+`host`, `core`, `math`, `math-intelligence`, `math-domains`,
+`memory-store`, `memory`, `skills`, `languages`, `sysinfo`, `search`,
+`scheduler`, `secscan`, `health`, `graph`, `docgen`, `code-analysis`,
+`capability`, `guard`, `persona`, `webresearch`, `shim-dsh-core`
+(authoring shim), `apps/cli`.
+
+Rules for core:
+
+- Changes should include tests; breaking changes need an ADR entry.
+- New packages start as experimental — promotion to core needs an ADR
+  and maintainer sign-off.
+- The fast local loop builds core only: `pnpm run build:core`.
+
+## Experimental (opt-in)
+
+Every other package. Safe to use, but may change without notice and is
+not covered by the core stability promise. If an experimental package
+grows a second independent consumer or a public surface worth keeping,
+propose promotion via ADR instead of letting dependents sprawl.
+
+## Contributor checklist
+
+- [ ] Does this belong in core, or is experimental the right home?
+- [ ] New package? Justify it in the PR (link this file in
+      `.github/PULL_REQUEST_TEMPLATE.md` terms: core vs experimental).
+- [ ] Ran `pnpm run doctor`, `pnpm run build:core`, and the affected tests.
