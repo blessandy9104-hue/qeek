@@ -1,2 +1,18 @@
-# Default owner for everything in qeek.
+# CODEOWNERS — who must review changes for different parts of the repo
+# Format: <pattern> <owner>
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owner for everything
 * @blessandy9104-hue
+
+# Areas and owners
+/docs/ @blessandy9104-hue
+/mathcore/ @blessandy9104-hue
+/plugins/ @blessandy9104-hue
+/install/ @blessandy9104-hue
+/.github/ @blessandy9104-hue
+
+# Critical files
+/package.json @blessandy9104-hue
+/pnpm-workspace.yaml @blessandy9104-hue
+/README.md @blessandy9104-hue

@@ -1,0 +1,17 @@
+daysUntilStale: 60
+daysUntilClose: 14
+exemptLabels:
+  - pinned
+  - security
+  - good first issue
+  - help wanted
+  - blocked
+markComment: >
+  This issue has been automatically marked as stale because it has not had
+  recent activity for 60 days. It will be closed in 14 days unless there is
+  more activity.
+unmarkComment: >
+  This issue has been automatically marked as stale and unmarked.
+closeComment: >
+  This issue was closed automatically due to inactivity.
+only: issues
