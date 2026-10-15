@@ -18,13 +18,13 @@ export const zoveliScope = definePlugin({
         parent,
         name,
         registrations: new Map(),
-        register: (key: any, value: any) => { /* scope registration */ },
-        unregister: (key: any) => { /* scope unregistration */ },
-        get: (key: any) => { /* scope get */ },
-        has: (key: any) => { /* scope has */ }
+        register: (_key: any, _value: any) => { /* scope registration */ },
+        unregister: (_key: any) => { /* scope unregistration */ },
+        get: (_key: any) => { /* scope get */ },
+        has: (_key: any) => { /* scope has */ }
       }),
       getCurrentScope: () => { /* get current scope */ },
-      runInScope: (scope: any, fn: any) => { /* run function in scope */ }
+      runInScope: (_scope: any, _fn: any) => { /* run function in scope */ }
     });
   }
 });

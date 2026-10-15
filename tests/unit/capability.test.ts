@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { CapabilityScanner } from '@zoveli/capability/src/scanner';
 import { CapabilityRegistry } from '@zoveli/capability/src/registry';
 import { CapabilityAdaptation } from '@zoveli/capability/src/adaptation';

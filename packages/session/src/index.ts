@@ -27,11 +27,11 @@ export const zoveliSession = definePlugin({
     });
 
     // Event handlers
-    ctx.on('session/event', (event) => {
+    ctx.on('session/event', (_event) => {
       // Index events for search
     });
 
-    ctx.on('session/created', (session) => {
+    ctx.on('session/created', (_session) => {
       // Initialize session with vault context
     });
   }

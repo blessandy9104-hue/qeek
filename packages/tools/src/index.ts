@@ -10,7 +10,7 @@ const builtinTools: Tool[] = [
       properties: { path: { type: 'string' } },
       required: ['path']
     },
-    async execute({ path }) { /* implementation */ }
+    async execute({ path: _path }) { /* implementation */ }
   },
   {
     name: 'fs_write',
@@ -20,7 +20,7 @@ const builtinTools: Tool[] = [
       properties: { path: { type: 'string' }, content: { type: 'string' } },
       required: ['path', 'content']
     },
-    async execute({ path, content }) { /* implementation */ }
+    async execute({ path: _path, content: _content }) { /* implementation */ }
   },
   {
     name: 'fs_list',
@@ -30,7 +30,7 @@ const builtinTools: Tool[] = [
       properties: { path: { type: 'string' } },
       required: ['path']
     },
-    async execute({ path }) { /* implementation */ }
+    async execute({ path: _path }) { /* implementation */ }
   },
   {
     name: 'shell_exec',
@@ -40,7 +40,7 @@ const builtinTools: Tool[] = [
       properties: { command: { type: 'string' }, cwd: { type: 'string' }, timeout: { type: 'number' } },
       required: ['command']
     },
-    async execute({ command, cwd, timeout }) { /* implementation */ }
+    async execute({ command: _command, cwd: _cwd, timeout: _timeout }) { /* implementation */ }
   },
   {
     name: 'browser_navigate',
@@ -50,7 +50,7 @@ const builtinTools: Tool[] = [
       properties: { url: { type: 'string' }, waitUntil: { type: 'string' } },
       required: ['url']
     },
-    async execute({ url, waitUntil }) { /* implementation */ }
+    async execute({ url: _url, waitUntil: _waitUntil }) { /* implementation */ }
   },
   {
     name: 'browser_click',
@@ -60,7 +60,7 @@ const builtinTools: Tool[] = [
       properties: { selector: { type: 'string' } },
       required: ['selector']
     },
-    async execute({ selector }) { /* implementation */ }
+    async execute({ selector: _selector }) { /* implementation */ }
   },
   {
     name: 'browser_type',
@@ -70,7 +70,7 @@ const builtinTools: Tool[] = [
       properties: { selector: { type: 'string' }, text: { type: 'string' } },
       required: ['selector', 'text']
     },
-    async execute({ selector, text }) { /* implementation */ }
+    async execute({ selector: _selector, text: _text }) { /* implementation */ }
   },
   {
     name: 'browser_extract',
@@ -80,7 +80,7 @@ const builtinTools: Tool[] = [
       properties: { selector: { type: 'string' }, attribute: { type: 'string' } },
       required: ['selector']
     },
-    async execute({ selector, attribute }) { /* implementation */ }
+    async execute({ selector: _selector, attribute: _attribute }) { /* implementation */ }
   }
 ];
 

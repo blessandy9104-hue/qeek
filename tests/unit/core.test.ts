@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { zoveliCore } from '../../packages/core/src/index';
 import { zoveliMath } from '../../packages/math/src/index';
 import {

@@ -1,9 +1,6 @@
 import { 
   Capability, 
-  CapabilityCategory, 
   CapabilityStatus, 
-  CapabilityRequirement,
-  CapabilityMetadata,
   CapabilityHealth,
   CapabilityScanOptions 
 } from './types';
@@ -636,7 +633,7 @@ export class CapabilityScanner {
     return capabilities;
   }
 
-  private async queryMCPCapabilities(name: string, config: any): Promise<Capability[]> {
+  private async queryMCPCapabilities(name: string, _config: any): Promise<Capability[]> {
     return [{
       name: `mcp.${name}`,
       displayName: `MCP: ${name}`,
