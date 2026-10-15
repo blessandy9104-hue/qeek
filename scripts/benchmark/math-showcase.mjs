@@ -1,4 +1,4 @@
-// qeek verified-math showcase: runs a fixed problem set through the
+// zoveli verified-math showcase: runs a fixed problem set through the
 // mathcore MCP server and prints VERIFIED / WITHHELD + certificate hashes.
 // Usage: MATHCORE_AUDIT=./audit.jsonl node scripts/benchmark/math-showcase.mjs
 import { spawn } from 'node:child_process';

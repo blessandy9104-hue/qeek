@@ -1,0 +1,569 @@
+import type { DatabaseSync as DatabaseSyncType } from 'node:sqlite';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
+import * as os from 'node:os';
+
+// node:sqlite is a runtime builtin (needs Node >=22.16 for FTS5).
+// Loaded via process.getBuiltinModule so vite/vitest never sees a static
+// `node:sqlite` specifier (Vite 5 strips it to `sqlite` and fails), and the
+// same code works in tsc CJS output and tsdown ESM output. The string
+// literal below is opaque to bundlers.
+function loadDatabaseSync(): typeof import('node:sqlite')['DatabaseSync'] {
+  const p = process as unknown as { getBuiltinModule?: (id: string) => { DatabaseSync: typeof import('node:sqlite')['DatabaseSync'] } };
+  if (typeof p.getBuiltinModule === 'function') {
+    return p.getBuiltinModule('node:sqlite').DatabaseSync;
+  }
+  const g = globalThis as unknown as { require?: (id: string) => { DatabaseSync: typeof import('node:sqlite')['DatabaseSync'] } };
+  if (typeof g.require === 'function') {
+    return g.require('node:sqlite').DatabaseSync;
+  }
+  throw new Error('node:sqlite unavailable (need Node >=22.16)');
+}
+const DatabaseSync = loadDatabaseSync();
+
+export interface CreateNoteInput {
+  title: string;
+  content: string;
+  tags?: string[];
+  links?: string[];
+}
+
+export interface UpdateNoteInput {
+  title: string;
+  newTitle?: string;
+  content?: string;
+  tags?: string[];
+  links?: string[];
+}
+
+export interface SearchInput {
+  query: string;
+  tags?: string[];
+  limit?: number;
+  offset?: number;
+  highlight?: boolean;
+}
+
+export interface NoteRow {
+  title: string;
+  body: string;
+  created: string;
+  updated: string;
+  tags: string[];
+  links: string[];
+}
+
+export interface SearchHit {
+  id: string;
+  title: string;
+  path: string;
+  content: string;
+  tags: string[];
+  links: string[];
+  score: number;
+  highlights: string[];
+}
+
+export interface GraphResult {
+  nodes: { id: string; title: string; tags: string[] }[];
+  edges: { from: string; to: string }[];
+  orphans: string[];
+  hubs: { id: string; degree: number }[];
+}
+
+export function resolveDbPath(): string {
+  if (process.env.ZOVELI_MEMORY_DB) return process.env.ZOVELI_MEMORY_DB;
+  return path.join(os.homedir(), '.zoveli', 'memory.db');
+}
+
+export function resolveVaultPath(): string {
+  return process.env.ZOVELI_VAULT_PATH || path.join(process.cwd(), 'knowledge-vault');
+}
+
+export function exportEnabled(): boolean {
+  return process.env.ZOVELI_MEMORY_EXPORT !== '0';
+}
+
+export function sanitizeFilename(str: string): string {
+  return str.replace(/[<>:"/\\|?*]/g, '_').trim();
+}
+
+function normalizeTags(tags: string[] = []): string[] {
+  const out = new Set<string>();
+  for (const t of tags) {
+    const v = String(t).trim().replace(/^#+/, '');
+    if (v) out.add(v);
+  }
+  return [...out];
+}
+
+function extractWikiLinks(body: string): string[] {
+  const re = /\[\[([^\]|]+)(?:\|[^\]]+)?\]\]/g;
+  const out = new Set<string>();
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(body)) !== null) {
+    const t = m[1].trim();
+    if (t) out.add(t);
+  }
+  return [...out];
+}
+
+function tokenizeQuery(query: string): string[] {
+  return query
+    .toLowerCase()
+    .split(/[^a-z0-9_#@+-]+/i)
+    .map((t) => t.trim())
+    .filter((t) => t.length > 1);
+}
+
+function toFtsQuery(query: string): string | null {
+  const terms = tokenizeQuery(query);
+  if (terms.length === 0) return null;
+  // Prefix search per term, OR-joined. Escape double quotes for FTS5.
+  return terms.map((t) => `"${t.replace(/"/g, '""')}"*`).join(' OR ');
+}
+
+function sentenceHighlights(body: string, query: string, max = 3): string[] {
+  const terms = tokenizeQuery(query);
+  if (terms.length === 0) return [];
+  return body
+    .split(/[.!?\n]+/)
+    .filter((s) => {
+      const low = s.toLowerCase();
+      return terms.some((t) => low.includes(t));
+    })
+    .slice(0, max)
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
+function parseMarkdownFile(content: string, fallbackTitle: string): { title: string; body: string; tags: string[] } {
+  const fm = content.match(/^---\n([\s\S]*?)\n---/);
+  let title = fallbackTitle;
+  let tags: string[] = [];
+  let body = content;
+  if (fm) {
+    const yaml = fm[1];
+    const titleMatch = yaml.match(/title:\s*"([^"]+)"/) || yaml.match(/title:\s*(.+)/);
+    if (titleMatch) title = titleMatch[1].trim().replace(/"/g, '');
+    const tagsMatch = yaml.match(/tags:\s*\[([^\]]*)\]/);
+    if (tagsMatch && tagsMatch[1].trim()) {
+      tags = tagsMatch[1]
+        .split(',')
+        .map((t) => t.trim().replace(/"/g, '').replace(/^#+/, ''))
+        .filter(Boolean);
+    }
+    body = content.slice(fm[0].length).trim();
+  } else {
+    const h1 = content.match(/^#\s+(.+)$/m);
+    if (h1) title = h1[1].trim();
+  }
+  // Collect #hashtags in body as well (graph parity).
+  const hashTags = [...body.matchAll(/#([\w-]+)/g)].map((m) => m[1]).slice(0, 20);
+  const merged = [...new Set([...tags, ...hashTags])];
+  return { title, body, tags: merged };
+}
+
+function toMarkdownFile(title: string, body: string, tags: string[], links: string[]): string {
+  const frontmatter = [
+    '---',
+    `title: "${title.replace(/"/g, "'")}"`,
+    `created: ${new Date().toISOString()}`,
+    `tags: [${tags.map((t) => `"${t}"`).join(', ')}]`,
+    '---',
+    '',
+  ].join('\n');
+  const linkSection = links.length > 0 ? '\n## Links\n' + links.map((l) => `- [[${l}]]`).join('\n') : '';
+  return frontmatter + body + linkSection;
+}
+
+/**
+ * SQLite-backed memory store. Single file, synchronous (node:sqlite),
+ * FTS5 with LIKE fallback. Markdown vault is an export mirror, not truth.
+ */
+export class MemoryStore {
+  private db: DatabaseSyncType;
+  private ftsAvailable: boolean;
+  readonly dbPath: string;
+  readonly vaultPath: string;
+
+  constructor(dbPath = resolveDbPath(), vaultPath = resolveVaultPath()) {
+    this.dbPath = dbPath;
+    this.vaultPath = vaultPath;
+    if (dbPath !== ':memory:') {
+      fs.mkdirSync(path.dirname(dbPath), { recursive: true });
+    }
+    this.db = new DatabaseSync(dbPath);
+    // Owner-only DB file: memory holds personal notes and proof history.
+    // Best-effort (no-op on Windows ACLs, harmless if it fails).
+    if (dbPath !== ':memory:') {
+      try {
+        fs.chmodSync(dbPath, 0o600);
+      } catch {
+        // ignore
+      }
+    }
+    this.db.exec('PRAGMA journal_mode=WAL;');
+    this.db.exec('PRAGMA foreign_keys=ON;');
+    this.initSchema();
+    this.ftsAvailable = this.detectFts();
+    if (!this.ftsAvailable) {
+      // Recreate FTS as plain table? No — just use LIKE fallback at query time.
+    }
+    this.maybeImportVault();
+  }
+
+  private initSchema(): void {
+    this.db.exec(`
+      CREATE TABLE IF NOT EXISTS notes(
+        title TEXT PRIMARY KEY,
+        body TEXT NOT NULL DEFAULT '',
+        created TEXT NOT NULL,
+        updated TEXT NOT NULL
+      );
+      CREATE TABLE IF NOT EXISTS tags(
+        note_title TEXT NOT NULL REFERENCES notes(title) ON DELETE CASCADE ON UPDATE CASCADE,
+        tag TEXT NOT NULL,
+        PRIMARY KEY(note_title, tag)
+      );
+      CREATE INDEX IF NOT EXISTS idx_tags_tag ON tags(tag);
+      CREATE TABLE IF NOT EXISTS links(
+        from_title TEXT NOT NULL REFERENCES notes(title) ON DELETE CASCADE ON UPDATE CASCADE,
+        to_title TEXT NOT NULL,
+        PRIMARY KEY(from_title, to_title)
+      );
+      CREATE INDEX IF NOT EXISTS idx_links_to ON links(to_title);
+    `);
+  }
+
+  private detectFts(): boolean {
+    try {
+      this.db.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS notes_fts USING fts5(title, body, tokenize='porter');`);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  private maybeImportVault(): void {
+    try {
+      const count = (this.db.prepare('SELECT COUNT(*) AS c FROM notes').get() as { c: number }).c;
+      if (count > 0) return;
+      const files = this.findMarkdownFiles(this.vaultPath);
+      if (files.length === 0) return;
+      for (const f of files) {
+        try {
+          const raw = fs.readFileSync(f, 'utf-8');
+          const fallback = path.basename(f, '.md');
+          const parsed = parseMarkdownFile(raw, fallback);
+          const wiki = extractWikiLinks(raw);
+          // Seed without re-exporting (file already exists).
+          this.insertNoteRow(parsed.title, parsed.body, parsed.tags, wiki, false);
+        } catch {
+          // Skip unreadable files during import.
+        }
+      }
+    } catch {
+      // Import is best-effort; DB remains usable.
+    }
+  }
+
+  private findMarkdownFiles(dir: string): string[] {
+    const out: string[] = [];
+    const walk = (d: string) => {
+      let entries: fs.Dirent[];
+      try {
+        entries = fs.readdirSync(d, { withFileTypes: true });
+      } catch {
+        return;
+      }
+      for (const e of entries) {
+        if (e.name.startsWith('.')) continue;
+        const full = path.join(d, e.name);
+        if (e.isDirectory()) walk(full);
+        else if (e.isFile() && e.name.endsWith('.md')) out.push(full);
+      }
+    };
+    walk(dir);
+    return out;
+  }
+
+  private exportNote(title: string, body: string, tags: string[], links: string[]): void {
+    if (!exportEnabled()) return;
+    if (this.dbPath === ':memory:') return;
+    try {
+      fs.mkdirSync(this.vaultPath, { recursive: true });
+      const file = path.join(this.vaultPath, sanitizeFilename(title) + '.md');
+      fs.writeFileSync(file, toMarkdownFile(title, body, tags, links), 'utf-8');
+    } catch {
+      // Export is best-effort.
+    }
+  }
+
+  private removeExport(title: string): void {
+    if (!exportEnabled()) return;
+    if (this.dbPath === ':memory:') return;
+    try {
+      const file = path.join(this.vaultPath, sanitizeFilename(title) + '.md');
+      fs.rmSync(file, { force: true });
+    } catch {
+      // ignore
+    }
+  }
+
+  private getRowId(title: string): number | null {
+    try {
+      const row = this.db.prepare('SELECT rowid AS id FROM notes WHERE title = ?').get(title) as { id: number } | undefined;
+      return row ? row.id : null;
+    } catch {
+      return null;
+    }
+  }
+
+  private insertNoteRow(title: string, body: string, tags: string[], links: string[], doExport = true): void {
+    const now = new Date().toISOString();
+    const cleanTags = normalizeTags(tags);
+    const wiki = extractWikiLinks(body);
+    const allLinks = [...new Set([...(links || []).map(String).map((s) => s.trim()).filter(Boolean), ...wiki])];
+    this.db.prepare('INSERT INTO notes(title, body, created, updated) VALUES(?, ?, ?, ?)').run(title, body, now, now);
+    const rowid = this.getRowId(title);
+    if (this.ftsAvailable && rowid !== null) {
+      this.db.prepare('INSERT INTO notes_fts(rowid, title, body) VALUES(?, ?, ?)').run(rowid, title, body);
+    }
+    for (const t of cleanTags) {
+      this.db.prepare('INSERT OR IGNORE INTO tags(note_title, tag) VALUES(?, ?)').run(title, t);
+    }
+    for (const l of allLinks) {
+      this.db.prepare('INSERT OR IGNORE INTO links(from_title, to_title) VALUES(?, ?)').run(title, l);
+    }
+    if (doExport) this.exportNote(title, body, cleanTags, allLinks);
+  }
+
+  createNote(input: CreateNoteInput): { success: boolean; title: string } {
+    const title = String(input.title || '').trim();
+    if (!title) throw new Error('title is required');
+    const body = String(input.content ?? '');
+    const existing = this.db.prepare('SELECT title FROM notes WHERE title = ?').get(title) as { title: string } | undefined;
+    if (existing) throw new Error(`note already exists: ${title}`);
+    this.insertNoteRow(title, body, input.tags || [], input.links || [], true);
+    return { success: true, title };
+  }
+
+  readNote(title: string): NoteRow {
+    const name = String(title || '').trim();
+    const direct = this.db.prepare('SELECT title, body, created, updated FROM notes WHERE title = ?').get(name) as Omit<NoteRow, 'tags' | 'links'> | undefined;
+    let row = direct;
+    if (!row && name.endsWith('.md')) {
+      const base = path.basename(name, '.md');
+      row = this.db.prepare('SELECT title, body, created, updated FROM notes WHERE title = ?').get(base) as Omit<NoteRow, 'tags' | 'links'> | undefined;
+    }
+    if (!row) throw new Error(`note not found: ${title}`);
+    const tags = (this.db.prepare('SELECT tag FROM tags WHERE note_title = ? ORDER BY tag').all(row.title) as { tag: string }[]).map((r) => r.tag);
+    const links = (this.db.prepare('SELECT to_title AS t FROM links WHERE from_title = ? ORDER BY to_title').all(row.title) as { t: string }[]).map((r) => r.t);
+    return { ...row, tags, links };
+  }
+
+  updateNote(input: UpdateNoteInput): { success: boolean; title: string } {
+    const title = String(input.title || '').trim();
+    if (!title) throw new Error('title is required');
+    const current = this.db.prepare('SELECT title, body FROM notes WHERE title = ?').get(title) as { title: string; body: string } | undefined;
+    if (!current) throw new Error(`note not found: ${title}`);
+    const newTitle = (input.newTitle || title).trim() || title;
+    const body = input.content !== undefined ? String(input.content) : current.body;
+    const now = new Date().toISOString();
+
+    if (newTitle !== title) {
+      const clash = this.db.prepare('SELECT title FROM notes WHERE title = ?').get(newTitle) as { title: string } | undefined;
+      if (clash) throw new Error(`note already exists: ${newTitle}`);
+    }
+
+    const tags = input.tags !== undefined ? normalizeTags(input.tags) : null;
+    let links: string[] | null = null;
+    if (input.links !== undefined) {
+      const wiki = extractWikiLinks(body);
+      links = [...new Set([...input.links.map(String).map((s) => s.trim()).filter(Boolean), ...wiki])];
+    } else if (input.content !== undefined) {
+      // Body changed: merge stored explicit links with newly extracted wiki links.
+      const stored = (this.db.prepare('SELECT to_title AS t FROM links WHERE from_title = ?').all(title) as { t: string }[]).map((r) => r.t);
+      const wiki = extractWikiLinks(body);
+      links = [...new Set([...stored, ...wiki])];
+    }
+
+    this.db.prepare('UPDATE notes SET title = ?, body = ?, updated = ? WHERE title = ?').run(newTitle, body, now, title);
+    if (newTitle !== title) {
+      // ON UPDATE CASCADE handles tags.from/link.from; to_title is dangling by design — remap manually.
+      this.db.prepare('UPDATE links SET to_title = ? WHERE to_title = ?').run(newTitle, title);
+      this.removeExport(title);
+    }
+    const rowid = this.getRowId(newTitle);
+    if (this.ftsAvailable && rowid !== null) {
+      this.db.prepare('UPDATE notes_fts SET title = ?, body = ? WHERE rowid = ?').run(newTitle, body, rowid);
+    }
+    if (tags !== null) {
+      this.db.prepare('DELETE FROM tags WHERE note_title = ?').run(newTitle);
+      for (const t of tags) this.db.prepare('INSERT OR IGNORE INTO tags(note_title, tag) VALUES(?, ?)').run(newTitle, t);
+    }
+    if (links !== null) {
+      this.db.prepare('DELETE FROM links WHERE from_title = ?').run(newTitle);
+      for (const l of links) this.db.prepare('INSERT OR IGNORE INTO links(from_title, to_title) VALUES(?, ?)').run(newTitle, l);
+    }
+    const finalTags = tags !== null ? tags : (this.db.prepare('SELECT tag FROM tags WHERE note_title = ?').all(newTitle) as { tag: string }[]).map((r) => r.tag);
+    const finalLinks = links !== null ? links : (this.db.prepare('SELECT to_title AS t FROM links WHERE from_title = ?').all(newTitle) as { t: string }[]).map((r) => r.t);
+    this.exportNote(newTitle, body, finalTags, finalLinks);
+    return { success: true, title: newTitle };
+  }
+
+  deleteNote(title: string): { success: boolean; title: string } {
+    const name = String(title || '').trim();
+    const row = this.db.prepare('SELECT title FROM notes WHERE title = ?').get(name) as { title: string } | undefined;
+    const target = row ? row.title : name.endsWith('.md') ? path.basename(name, '.md') : null;
+    if (!target) throw new Error(`note not found: ${title}`);
+    const exists = this.db.prepare('SELECT title FROM notes WHERE title = ?').get(target) as { title: string } | undefined;
+    if (!exists) throw new Error(`note not found: ${title}`);
+    const rowid = this.getRowId(target);
+    this.db.prepare('DELETE FROM notes WHERE title = ?').run(target);
+    if (this.ftsAvailable && rowid !== null) {
+      try {
+        this.db.prepare('DELETE FROM notes_fts WHERE rowid = ?').run(rowid);
+      } catch {
+        // ignore
+      }
+    }
+    this.removeExport(target);
+    return { success: true, title: target };
+  }
+
+  searchNotes(input: SearchInput): { results: SearchHit[] } {
+    const query = String(input.query || '');
+    const tags = (input.tags || []).map(String).map((s) => s.trim()).filter(Boolean);
+    const limit = Math.min(Math.max(input.limit ?? 10, 1), 100);
+    const offset = Math.max(input.offset ?? 0, 0);
+    const highlight = input.highlight !== false;
+
+    const tagFilter = tags.length > 0 ? `AND n.title IN (SELECT note_title FROM tags WHERE tag IN (${tags.map(() => '?').join(', ')}))` : '';
+    const tagParams: string[] = [...tags];
+
+    const ftsQuery = toFtsQuery(query);
+    let rows: { title: string; body: string; rank: number }[] = [];
+
+    if (this.ftsAvailable && ftsQuery) {
+      try {
+        const sql = `
+          SELECT n.title AS title, n.body AS body, bm25(notes_fts) AS rank
+          FROM notes_fts JOIN notes n ON n.rowid = notes_fts.rowid
+          WHERE notes_fts MATCH ? ${tagFilter}
+          ORDER BY rank LIMIT ? OFFSET ?`;
+        rows = this.db.prepare(sql).all(ftsQuery, ...tagParams, limit, offset) as typeof rows;
+      } catch {
+        rows = [];
+      }
+    }
+
+    if (rows.length === 0) {
+      // LIKE fallback (also covers single-char queries and FTS-unavailable runtimes).
+      const like = `%${query}%`;
+      const sql = `
+        SELECT n.title AS title, n.body AS body, 0 AS rank FROM notes n
+        WHERE (n.title LIKE ? OR n.body LIKE ?) ${tagFilter}
+        ORDER BY n.updated DESC LIMIT ? OFFSET ?`;
+      try {
+        rows = this.db.prepare(sql).all(like, like, ...tagParams, limit, offset) as typeof rows;
+      } catch {
+        rows = [];
+      }
+      // Emulate old substring case-insensitivity already handled by LIKE (ASCII).
+      // Filter empty query to nothing (preserve old searchNotes contract of slice, not full dump).
+      if (!query.trim()) return { results: [] };
+    }
+
+    const results: SearchHit[] = rows.map((r) => {
+      const tagRows = this.db.prepare('SELECT tag FROM tags WHERE note_title = ?').all(r.title) as { tag: string }[];
+      const linkRows = this.db.prepare('SELECT to_title AS t FROM links WHERE from_title = ?').all(r.title) as { t: string }[];
+      // FTS rank is negative (lower = better); convert to positive score.
+      const score = typeof r.rank === 'number' && r.rank < 0 ? -r.rank : 1;
+      return {
+        id: r.title,
+        title: r.title,
+        path: r.title,
+        content: r.body.slice(0, 500),
+        tags: tagRows.map((x) => x.tag),
+        links: linkRows.map((x) => x.t),
+        score,
+        highlights: highlight ? sentenceHighlights(r.body, query) : [],
+      };
+    });
+    return { results };
+  }
+
+  listTags(): { tags: string[] } {
+    const rows = this.db.prepare('SELECT tag FROM tags GROUP BY tag ORDER BY tag').all() as { tag: string }[];
+    return { tags: rows.map((r) => r.tag) };
+  }
+
+  buildGraph(): GraphResult {
+    const notes = this.db.prepare('SELECT title FROM notes ORDER BY title').all() as { title: string }[];
+    const nodes = notes.map((n) => {
+      const tags = (this.db.prepare('SELECT tag FROM tags WHERE note_title = ?').all(n.title) as { tag: string }[]).map((r) => r.tag).slice(0, 20);
+      return { id: n.title, title: n.title, tags };
+    });
+    const edges = (this.db.prepare('SELECT from_title AS f, to_title AS t FROM links ORDER BY from_title, to_title').all() as { f: string; t: string }[])
+      .filter((e) => e.f && e.t && e.f !== e.t)
+      .map((e) => ({ from: e.f, to: e.t }));
+    const degree = new Map<string, number>();
+    for (const e of edges) {
+      degree.set(e.from, (degree.get(e.from) ?? 0) + 1);
+      degree.set(e.to, (degree.get(e.to) ?? 0) + 1);
+    }
+    const linked = new Set([...edges.map((e) => e.from), ...edges.map((e) => e.to)]);
+    const orphans = nodes.map((n) => n.id).filter((id) => !linked.has(id));
+    const hubs = [...degree.entries()]
+      .map(([id, d]) => ({ id, degree: d }))
+      .sort((a, b) => b.degree - a.degree)
+      .slice(0, 10);
+    return { nodes, edges, orphans, hubs };
+  }
+
+  toDot(graph: GraphResult): string {
+    const lines = ['digraph vault {', '  rankdir=LR;', '  node [shape=box, style=rounded];'];
+    for (const n of graph.nodes) lines.push(`  "${n.id.replace(/"/g, "'")}" [label="${n.title.replace(/"/g, "'")}"];`);
+    for (const e of graph.edges) lines.push(`  "${e.from.replace(/"/g, "'")}" -> "${e.to.replace(/"/g, "'")}";`);
+    lines.push('}');
+    return lines.join('\n');
+  }
+
+  count(): number {
+    return (this.db.prepare('SELECT COUNT(*) AS c FROM notes').get() as { c: number }).c;
+  }
+
+  close(): void {
+    try {
+      this.db.close();
+    } catch {
+      // ignore
+    }
+  }
+}
+
+const singletons = new Map<string, MemoryStore>();
+
+/** Process-wide singleton per DB path (resettable in tests). */
+export function getStore(dbPath = resolveDbPath(), vaultPath = resolveVaultPath()): MemoryStore {
+  const key = `${dbPath}::${vaultPath}`;
+  let s = singletons.get(key);
+  if (!s) {
+    s = new MemoryStore(dbPath, vaultPath);
+    singletons.set(key, s);
+  }
+  return s;
+}
+
+export function resetStoreForTests(): void {
+  for (const s of singletons.values()) {
+    try {
+      s.close();
+    } catch {
+      // ignore
+    }
+  }
+  singletons.clear();
+}

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Zoveli AI security — local-first protection</title>
+<meta name="description" content="How Zoveli AI protects you: passwordless login, local data, verified math, guardrails, and responsible disclosure." />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header>
+  <nav><a href="index.html">Zoveli AI</a> · <a href="install.html">Install</a> · <a href="features.html">Features</a> · <a href="security.html">Security</a> · <a href="faq.html">FAQ</a> · <a href="https://github.com/blessandy9104-hue/zoveli-ai">GitHub</a></nav>
+  <h1>Security, by construction</h1>
+  <p class="tagline">The safest data is data that never leaves your machine.</p>
+</header>
+
+<section>
+  <h2>🔑 No passwords, ever</h2>
+  <p>Zoveli stores zero passwords. Login is a 6-digit code emailed to any inbox, including <code>@proton.me</code> — the only password you'll ever need is your email account's. Codes expire in 10 minutes, allow 5 attempts, and are hashed, never stored.</p>
+</section>
+
+<section>
+  <h2>🏠 Local-first data</h2>
+  <ul>
+    <li><strong>Your notes</strong> live in a SQLite database on your disk (owner-only permissions) with a Markdown mirror you can read anywhere.</li>
+    <li><strong>Sessions</strong> are HMAC-signed tokens on your machine — 30-day expiry, HttpOnly cookies.</li>
+    <li><strong>No cloud sync exists.</strong> Backups are encrypted copies you make yourself.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>🛡️ Guardrails that enforce</h2>
+  <ul>
+    <li><strong>Destructive shell commands are blocked</strong> before they run — switch policies live with <code>guard_set_policy</code>.</li>
+    <li><strong>Verified math or silence</strong> — independent methods must agree; anything else is withheld, never guessed.</li>
+    <li><strong>Secrets are redacted</strong> from errors and logs; audit trails are hash-chained and tamper-evident.</li>
+    <li><strong>Local web server</strong> binds loopback only, rejects foreign hosts, rate-limits auth and tool routes, and ships hardening headers.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>🔍 Open and auditable</h2>
+  <p>MIT licensed and built in the open. Every release runs lint, strict typechecks, 180+ tests, Playwright e2e, Trivy scans, secret scans, and Docker builds. Scan it yourself: the <code>security_scan</code> tool audits any path for secrets and risky patterns.</p>
+</section>
+
+<section>
+  <h2>📣 Report a vulnerability</h2>
+  <p><strong>Do not open public issues for security reports.</strong> Email <code>blessandy9104@gmail.com</code> with a description, reproduction steps, and impact. We aim to acknowledge within 48 hours with a fix timeline inside 7 days. See the full <a href="https://github.com/blessandy9104-hue/zoveli-ai/blob/main/SECURITY.md">security policy</a>.</p>
+</section>
+
+<footer>
+  <p><a href="index.html">← Back to Zoveli AI home</a></p>
+</footer>
+<script src="https://unpkg.com/lenis@1.3.26/dist/lenis.min.js" defer></script>
+<script>
+window.addEventListener('DOMContentLoaded', function () {
+  if (window.Lenis) { try { new window.Lenis({ autoRaf: true }); } catch (e) {} }
+});
+</script>
+</body>
+</html>

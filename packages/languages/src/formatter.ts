@@ -88,7 +88,7 @@ export class CodeFormatter {
   }
 
   private async tryNativeFormatter(
-    filePath: string, content: string, language: string, opts: Required<FormatOptions>
+    filePath: string, content: string, language: string, _opts: Required<FormatOptions>
   ): Promise<string | null> {
     try {
       const tmp = await fs.mkdtemp(path.join(os.tmpdir(), 'zoveli-fmt-'));

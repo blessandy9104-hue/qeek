@@ -105,6 +105,13 @@ def test_all_engines_wrong_and_different_releases_nothing(orch):
     assert "1000" not in OutputGuard().release(report)
 
 
+@pytest.mark.skipif(
+    os.name != "posix",
+    reason="time_limit() enforces wall-clock budgets via SIGALRM, which only "
+    "exists on POSIX; elsewhere it is a documented no-op, so the hanging "
+    "engine sleeps the full 30s and no timeout is recorded (CI proves this "
+    "on ubuntu-latest)",
+)
 def test_crashing_and_hanging_engines_do_not_break_the_run(orch):
     def crash(a):
         raise RuntimeError("boom")
@@ -155,6 +162,12 @@ def test_tie_between_equal_support_is_refused():
     assert cert.status == REJECTED and cert.value is None
 
 
+@pytest.mark.skipif(
+    os.name != "posix",
+    reason="factor_integer methods rely on SIGALRM wall-clock budgets, which "
+    "only exist on POSIX; on Windows a 46-digit semiprime would grind for "
+    "hours instead of withholding at 1s (CI proves this on ubuntu-latest)",
+)
 def test_hard_factorisation_times_out_and_withholds():
     p, q = sp.nextprime(10 ** 22), sp.nextprime(3 * 10 ** 22)
     o = Orchestrator(max_seconds=1.0)

@@ -9,17 +9,18 @@ Website: **https://blessandy9104-hue.github.io/zoveli-ai/**
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue.svg)](https://www.typescriptlang.org/)
 [![Node](https://img.shields.io/badge/Node-22%2B-green.svg)](https://nodejs.org/)
 
-## Why Zoveli instead of ChatGPT / Claude?
+## Why local-first?
 
-| | Zoveli AI | ChatGPT / Claude |
-|---|---|---|
-| Price | **Free forever**, MIT | $8–$20+/mo subscriptions |
-| Your data | **Stays on your machine**, never trained on | Processed in their cloud |
-| Offline | **Yes** — ~39 tools, no network needed | Internet required |
-| Math | **Verified or withheld** (+ audit certificate) | Confident best-effort guesses |
-| Lock-in | None — BYO key or local Ollama | One vendor's models |
+| | Zoveli AI |
+|---|---|
+| Price | **Free forever**, MIT |
+| Your data | **Stays on your machine**, never trained on |
+| Offline | **Yes** — ~57 tools, no network needed |
+| Math | **Verified or withheld** (+ audit certificate) |
+| Lock-in | None — BYO key or local Ollama |
+| Login | Passwordless email code — the only password you'll ever need is your email account's |
 
-Details + honest "when not to pick us": [docs/why-zoveli.md](docs/why-zoveli.md).
+Details: [docs/why-zoveli.md](docs/why-zoveli.md).
 
 ## Try it in 30 seconds
 
@@ -42,7 +43,7 @@ No account, no API key needed — local tools (math, memory, sysinfo, …) work 
 > Windows PowerShell: `irm https://raw.githubusercontent.com/blessandy9104-hue/zoveli-ai/main/install/install-zoveli.ps1 | iex`
 > See [`install/install-zoveli.sh`](install/install-zoveli.sh) (idempotent, `--yes/--dir/--branch` flags, no telemetry).
 
-Prerequisites: Node.js 22+, Python 3.11+, pnpm 11.7.0+.
+Prerequisites: Node.js 22.16+, Python 3.11+, pnpm 11.7.0+.
 
 **Windows (PowerShell):**
 
@@ -103,18 +104,20 @@ Try: `/math solve x^2 - 5x + 6 = 0` · `/sys` · `/tools`.
 
 ## Features (all runnable today)
 
-- **🔬 Verified Mathematics** — mathcore MCP gives zero-hallucination math with hash-chained audit certificates
-- **🧠 Local-First Memory** — Obsidian-compatible vault with wiki-links and tags
-- **🤖 Full Agent Framework** — 57 plugins: agent loop, tools, LLM, MCP, sandbox, subagents, workflows (`/tools` or `GET /api/tools` lists all ~39 live tools)
+- **🔬 Verified Mathematics** — one AI math intelligence subsystem: mathcore MCP gives zero-hallucination math with hash-chained audit certificates, governed with 6 specialists (algebra, calculus, statistics, logic, units, discrete) that memorize verified proofs and recall them (keyword + semantic)
+- **🧠 Local-First Memory** — SQLite store with FTS5 ranked search, wiki-links and tags (Markdown vault kept as human-readable export mirror)
+- **🤖 Full Agent Framework** — 63 packages: agent loop, tools, LLM, MCP, sandbox, subagents, workflows (`/tools` or `GET /api/tools` lists all ~57 live tools)
 - **🖥️ System & Hardware Awareness** — local OS/CPU/memory/disk/GPU/battery/network insight with budget checks (`@zoveli/sysinfo`)
 - **💻 Programming Languages** — detection, analysis, formatting, linting, testing, tooling for 17+ languages (`@zoveli/languages`)
 - **⚡ Capability Awareness** — runtime discovery, introspection, adaptation, and gap reports
-- **🔍 Vault Search** — dependency-free full-text search with live indexing
+- **🔍 Vault Search** — SQLite FTS5 ranked full-text search over the knowledge store
 - **🕸️ Knowledge Graph** — wiki-link graph with orphans, hubs, DOT export
 - **🧪 Code Review** — complexity hotspots, duplication, dead code, secret detection
 - **📄 Doc Generator** — offline Markdown API docs from source exports
 - **❤️ Project Health** — tests/CI/docs/deps/TODO-debt scoring
 - **🗓️ Smart Scheduler** — energy-aware prioritization + time-blocking
+- **🎭 Personas** — switchable friend, tutor, engineer, coach (`/persona`, remembered locally)
+- **🌐 Web Research** — SSRF-guarded fetch + keyless search, trusted-source flags
 - **🛡️ Security Scanner** — secrets + risky-pattern scanning
 - **📊 Telemetry** — in-memory meters + Prometheus/OTLP + Grafana
 - **🔑 Passwordless login** — email OTP for any inbox incl. @proton.me, `GET /login`
@@ -123,9 +126,11 @@ Try: `/math solve x^2 - 5x + 6 = 0` · `/sys` · `/tools`.
 ## Documentation
 
 - [Architecture](docs/architecture.md)
-- [API Reference](docs/api/)
+- [Math intelligence subsystem](docs/math-subsystem.md) · [Memory store](docs/memory-store.md)
+- [API Reference](docs/api/) · [Plugin SDK](docs/plugin-sdk/README.md)
 - [Runbooks](docs/runbooks/)
 - [ADRs](docs/adr/)
+- [Security policy](SECURITY.md)
 - [Desktop guide](docs/guides/desktop.md) · [CLI guide](docs/guides/cli.md) · [Web guide](docs/guides/web.md)
 
 ## Contributing

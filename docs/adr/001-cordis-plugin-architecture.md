@@ -4,7 +4,7 @@
 Accepted
 
 ## Context
-qeek needs a modular, extensible architecture where every feature is a plugin that can be:
+Zoveli needs a modular, extensible architecture where every feature is a plugin that can be:
 - Added/removed without core changes
 - Hot-reloaded during development
 - Composed into different profiles (CLI, Web, Desktop)
@@ -24,19 +24,22 @@ Use **Cordis** as the plugin framework, following the DeepSeek Harness pattern.
 ### Structure
 ```
 packages/
-  qeek-core/          # Core integration plugin
-  qeek-agent/         # Agent loop, registry
-  qeek-session/       # Session log, persistence
-  qeek-tools/         # Tool registry, built-in tools
-  qeek-llm/           # LLM provider adapters
-  qeek-mcp/           # MCP client/server
-  qeek-fs/            # Filesystem with policy
-  qeek-shell/         # Shell execution
-  qeek-browser/       # Browser automation
-  qeek-sandbox/       # Process sandboxing
-  qeek-subagent/      # Subagent delegation
-  qeek-workflow/      # Workflow orchestration
-  qeek-*/             # 30+ more plugins
+  core/             # Core integration plugin
+  agent/            # Agent loop, registry
+  session/          # Session log, persistence
+  tools/            # Tool registry, built-in tools
+  llm/              # LLM provider adapters
+  mcp/              # MCP client/server
+  fs/               # Filesystem with policy
+  shell/            # Shell execution
+  browser/          # Browser automation
+  sandbox/          # Process sandboxing
+  subagent/         # Subagent delegation
+  workflow/         # Workflow orchestration
+  math-intelligence/ # Governed verified math + proof memory
+  math-domains/     # Algebra/calculus/statistics/logic specialists
+  memory-store/     # SQLite-backed local-first memory
+  */                # 40+ more packages
 config/
   personal-assistant.cordis.yml      # Web profile
   personal-assistant-headless.cordis.yml  # CLI profile

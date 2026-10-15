@@ -1,11 +1,21 @@
 import { test, expect } from '@playwright/test';
 import { spawn, spawnSync } from 'child_process';
+import { tmpdir } from 'os';
+import { join } from 'path';
 
 const CLI = 'apps/cli/dist/cli.js';
 
-// mathcore-mcp comes from a sibling checkout that CI clones do not have.
+// CLI e2e isolation: the math intelligence layer auto-memorizes VERIFIED
+// proofs to $ZOVELI_MEMORY_DB (+ Markdown export). Point both at throwaway
+// locations so runs never pollute the developer's home DB or the repo vault.
+const CLI_TEST_ENV = {
+  ZOVELI_MEMORY_DB: join(tmpdir(), 'zoveli-e2e-cli-memory.db'),
+  ZOVELI_MEMORY_EXPORT: '0',
+};
+
+// mathcore-mcp comes from the vendored ./mathcore (pip install -e ./mathcore).
 // Math-dependent tests skip cleanly when it is absent (and run for real
-// where it is installed, e.g. local dev).
+// where it is installed, e.g. local dev and CI's e2e job).
 function hasMathcore(): boolean {
   const r = spawnSync('mathcore-mcp', ['--help'], { timeout: 15000 });
   return !r.error;
@@ -23,7 +33,10 @@ function runCliOnce(
   timeout = 60000
 ): Promise<{ stdout: string; stderr: string; code: number | null }> {
   return new Promise((resolve, reject) => {
-    const cli = spawn('node', [CLI], { stdio: ['pipe', 'pipe', 'pipe'] });
+    const cli = spawn('node', [CLI], {
+      stdio: ['pipe', 'pipe', 'pipe'],
+      env: { ...process.env, ...CLI_TEST_ENV },
+    });
     let stdout = '';
     let stderr = '';
     const timer = setTimeout(() => {
@@ -120,6 +133,10 @@ test.describe('Web Application', () => {
     const body = await res.json();
     expect(body.ok).toBe(true);
     expect(body.tools).toBeGreaterThan(20);
+    // Hardening headers ship on every response.
+    const headers = res.headers();
+    expect(headers['x-content-type-options']).toBe('nosniff');
+    expect(headers['x-frame-options']).toBe('SAMEORIGIN');
   });
 
   test('tools API lists mathcore tools', async ({ request }) => {
@@ -138,13 +155,20 @@ test.describe('Web Application', () => {
     expect(JSON.stringify(body.reply)).toContain('4');
   });
 
+  test('chat API rejects oversized messages', async ({ request }) => {
+    const res = await request.post('/api/chat', { data: { message: 'x'.repeat(60000) } });
+    expect(res.status()).toBe(400);
+  });
+
   test('UI sends a message and shows VERIFIED badge', async ({ page }) => {
     test.skip(!HAS_MATHCORE, 'mathcore-mcp not installed');
     await page.goto('/');
     await expect(page.locator('h1')).toContainText('Zoveli');
     await page.fill('[data-testid="chat-input"]', '2+2');
     await page.click('[data-testid="send-button"]');
-    await expect(page.locator('[data-testid="assistant-message"]').last()).toBeVisible();
+    // Timing-sensitive under parallel workers (Firefox especially): allow
+    // extra time rather than flaking. CI also retries (retries: 2).
+    await expect(page.locator('[data-testid="assistant-message"]').last()).toBeVisible({ timeout: 15000 });
     await expect(page.locator('[data-testid="verification-badge"]').first()).toContainText(
       'VERIFIED'
     );
@@ -155,6 +179,41 @@ test.describe('Web Application', () => {
     await expect(page.locator('[data-testid="tools-list"]')).toContainText(
       'mathcore_compute'
     );
+  });
+
+  test('chat shows model source, links, and clears local history', async ({ page }) => {
+    await page.goto('/');
+    await page.fill('[data-testid="chat-input"]', '2+2');
+    await page.click('[data-testid="send-button"]');
+    const meta = page.locator('[data-testid="reply-meta"]').last();
+    await expect(meta).toContainText('mathcore');
+    await expect(meta).toContainText('stays on this machine');
+    // User-echo linkifies safely without a model round-trip.
+    await page.fill('[data-testid="chat-input"]', 'see https://example.com/x please');
+    await page.click('[data-testid="send-button"]');
+    const echo = page.locator('[data-testid="user-message"]').last();
+    await expect(echo.locator('a[href="https://example.com/x"]')).toBeVisible();
+    // History persists across reload, then clears on demand.
+    await page.reload();
+    await expect(page.locator('[data-testid="user-message"]').first()).toBeVisible();
+    await page.click('[data-testid="chat-clear"]');
+    await expect(page.locator('[data-testid="user-message"]')).toHaveCount(0);
+  });
+
+  test('theme switcher persists the chosen look, unicorn stays lazy', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('[data-testid="app-root"]')).toHaveAttribute('data-theme', 'daylight');
+    await expect(page.locator('[data-testid="theme-switcher"]')).toBeVisible();
+    // No Unicorn runtime by default (zero external requests).
+    expect(await page.evaluate(() => document.getElementById('us-sdk'))).toBeNull();
+    await page.click('[data-testid="theme-option-midnight"]');
+    await expect(page.locator('[data-testid="app-root"]')).toHaveAttribute('data-theme', 'midnight');
+    await expect(page.locator('[data-testid="theme-option-midnight"]')).toHaveAttribute('aria-pressed', 'true');
+    await page.reload();
+    await expect(page.locator('[data-testid="app-root"]')).toHaveAttribute('data-theme', 'midnight');
+    // Vendored Lenis is same-origin served.
+    const lenis = await page.request.get('/vendor/lenis.min.js');
+    expect(lenis.ok()).toBeTruthy();
   });
 });
 

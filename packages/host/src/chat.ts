@@ -90,25 +90,30 @@ export function ollamaBaseUrl(): string {
 
 /**
  * Probe for a free local Ollama server. Returns a keyless config when one
- * answers, else null. Never throws and never waits longer than timeoutMs —
- * safe to call at startup (a missing server refuses instantly on localhost).
+ * answers, else null. Never throws. Retries once: on loaded machines the
+ * server occasionally accepts but answers slowly, and a single retry rides
+ * through the hiccup. Worst case ~2x timeoutMs, only when no API key is set
+ * (keyed setups never reach the network here).
  */
-export async function probeOllama(timeoutMs = 1500): Promise<ChatConfig | null> {
+export async function probeOllama(timeoutMs = 2000, retries = 1): Promise<ChatConfig | null> {
   const base = ollamaBaseUrl();
-  try {
-    const res = await fetch(`${base}/api/tags`, { signal: AbortSignal.timeout(timeoutMs) });
-    if (!res.ok) return null;
-    return {
-      apiKey: 'ollama',
-      baseUrl: `${base}/v1`,
-      model:
-        process.env.ZOVELI_MODEL || process.env.ZOVELI_OLLAMA_MODEL || DEFAULT_OLLAMA_MODEL,
-      provider: 'ollama',
-      maxSteps: 10,
-    };
-  } catch {
-    return null;
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      const res = await fetch(`${base}/api/tags`, { signal: AbortSignal.timeout(timeoutMs) });
+      if (!res.ok) return null;
+      return {
+        apiKey: 'ollama',
+        baseUrl: `${base}/v1`,
+        model:
+          process.env.ZOVELI_MODEL || process.env.ZOVELI_OLLAMA_MODEL || DEFAULT_OLLAMA_MODEL,
+        provider: 'ollama',
+        maxSteps: 10,
+      };
+    } catch {
+      if (attempt === retries) return null;
+    }
   }
+  return null;
 }
 
 /**
@@ -140,6 +145,74 @@ function safeJsonParse(text: string): any {
   }
 }
 
+/** Sampling temperature from `ZOVELI_TEMPERATURE` (default 0.7, clamped 0–2). */
+export function chatTemperature(): number {
+  const raw = parseFloat(process.env.ZOVELI_TEMPERATURE || '');
+  if (!Number.isFinite(raw)) return 0.7;
+  return Math.min(2, Math.max(0, raw));
+}
+
+/**
+ * True for providers that never leave the machine. Memory briefs (private
+ * notes) ride along only for local providers — or for cloud providers with
+ * explicit `ZOVELI_MEMORY_TO_CLOUD=1`. No key or network can override this.
+ */
+export function isLocalProvider(cfg: Pick<ChatConfig, 'provider' | 'baseUrl'>): boolean {
+  if (cfg.provider === 'ollama') return true;
+  return /localhost|127\.0\.0\.1|\[::1\]/.test(cfg.baseUrl || '');
+}
+
+export function memoryBriefAllowed(cfg: Pick<ChatConfig, 'provider' | 'baseUrl'>): boolean {
+  if (process.env.ZOVELI_MEMORY_BRIEF === '0') return false;
+  return isLocalProvider(cfg) || process.env.ZOVELI_MEMORY_TO_CLOUD === '1';
+}
+
+/**
+ * One-paragraph memory of the user, recalled from the local store so turns
+ * feel continuous. Best-effort and side-effect free: returns '' when
+ * disabled (`ZOVELI_MEMORY_BRIEF=0`), when no store exists yet (fresh
+ * users have nothing to recall — and no DB file is created), or on any
+ * error. Never needs a key or a network.
+ */
+export interface BriefStore {
+  searchNotes: (input: { query: string; tags?: string[]; limit?: number }) => { results: { title: string; content: string }[] };
+}
+
+/**
+ * One-paragraph memory of the user, recalled from the local store so turns
+ * feel continuous. Best-effort and side-effect free: returns '' when
+ * disabled (`ZOVELI_MEMORY_BRIEF=0`), when no store exists yet (fresh
+ * users have nothing to recall — and no DB file is created), or on any
+ * error. Never needs a key or a network. Pass a store to override the
+ * default singleton (tests).
+ */
+export async function buildMemoryBrief(store?: BriefStore): Promise<string> {
+  try {
+    if (process.env.ZOVELI_MEMORY_BRIEF === '0') return '';
+    let search: BriefStore['searchNotes'];
+    if (store) {
+      search = store.searchNotes.bind(store);
+    } else {
+      const { resolveDbPath, getStore } = await import('@zoveli/memory-store');
+      const dbPath = resolveDbPath();
+      if (dbPath !== ':memory:') {
+        const { existsSync } = await import('node:fs');
+        if (!existsSync(dbPath)) return '';
+      }
+      search = getStore().searchNotes.bind(getStore());
+    }
+    const { results } = search({
+      query: 'user preferences profile about the user',
+      limit: 3,
+    });
+    if (results.length === 0) return '';
+    const lines = results.map((r) => `- ${r.title}: ${r.content.slice(0, 160)}`);
+    return `What you remember about the user (from local memory; use naturally, never announce it):\n${lines.join('\n')}`;
+  } catch {
+    return '';
+  }
+}
+
 /**
  * Minimal agentic loop over an OpenAI-compatible chat-completions endpoint
  * (DeepSeek API, Ollama, or anything speaking the same protocol).
@@ -153,27 +226,46 @@ export async function chat(
   onEvent: (kind: 'text' | 'tool', text: string) => void
 ): Promise<ChatMessage[]> {
   const tools = host.tools().map(toFunctionTool);
+  const brief = memoryBriefAllowed(cfg) ? await buildMemoryBrief() : '';
+  let personaPrompt = '';
+  try {
+    const { resolvePersona } = await import('@zoveli/persona');
+    personaPrompt = resolvePersona(userText).prompt;
+  } catch {
+    // personas are enhancement-only; chat works without them
+  }
+  const system = [systemPrompt, brief, personaPrompt].filter(Boolean).join('\n\n');
   const messages: ChatMessage[] = [
-    { role: 'system', content: systemPrompt },
+    { role: 'system', content: system },
     ...history,
     { role: 'user', content: userText },
   ];
   const steps = cfg.maxSteps ?? 10;
+  const temperature = chatTemperature();
 
   for (let step = 0; step < steps; step++) {
-    const res = await fetch(`${cfg.baseUrl}/chat/completions`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${cfg.apiKey}`,
-      },
+    const postChat = () =>
+      fetch(`${cfg.baseUrl}/chat/completions`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${cfg.apiKey}`,
+        },
       body: JSON.stringify({
         model: cfg.model,
         messages,
         tools: tools.length > 0 ? tools : undefined,
-        temperature: 0.7,
+        temperature,
       }),
-    });
+      });
+    let res: Response;
+    try {
+      res = await postChat();
+    } catch {
+      // Transport-level flake (e.g. local server dropping a connection while
+      // paging a model in): exactly one retry. HTTP errors are NOT retried.
+      res = await postChat();
+    }
     if (!res.ok) {
       const body = await res.text().catch(() => '');
       if (res.status === 404 && /localhost:11434|127\.0\.0\.1:11434|ollama/i.test(cfg.baseUrl)) {

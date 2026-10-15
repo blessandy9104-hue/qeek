@@ -18,7 +18,10 @@
   "references": [
     { "path": "./packages/core" },
     { "path": "./packages/math" },
+    { "path": "./packages/math-intelligence" },
+    { "path": "./packages/math-domains" },
     { "path": "./packages/memory" },
+    { "path": "./packages/memory-store" },
     { "path": "./packages/skills" },
     { "path": "./apps/cli" },
     { "path": "./apps/web" },
@@ -36,6 +39,8 @@
     { "path": "./packages/secscan" },
     { "path": "./packages/sysinfo" },
     { "path": "./packages/host" },
+    { "path": "./packages/persona" },
+    { "path": "./packages/webresearch" },
     { "path": "./packages/auth" }
   ]
 }

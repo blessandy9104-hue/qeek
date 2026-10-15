@@ -49,8 +49,33 @@ const PATTERNS: { rule: string; severity: SecFinding['severity']; re: RegExp; me
   },
 ];
 
-export const zoveliSecscan = definePlugin({
-  name: 'zoveli-secscan',
+const REDACT_PATTERNS: RegExp[] = [
+  // OpenAI-style keys, GitHub tokens, AWS keys, generic Bearer tokens.
+  /\bsk-[A-Za-z0-9_-]{16,}\b/g,
+  /\b(ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9_]{20,}\b/g,
+  /\bAKIA[0-9A-Z]{16}\b/g,
+  /\bBearer\s+[A-Za-z0-9\-._~+/=]{16,}/g,
+  // Private key blocks (multiline).
+  /-----BEGIN (?:RSA |EC |DSA |OPENSSH )?PRIVATE KEY-----[\s\S]*?-----END (?:RSA |EC |DSA |OPENSSH )?PRIVATE KEY-----/g,
+  // Assigned secrets: api_key = "...", password: '...'.
+  /\b(api[_-]?key|secret|passwd|password|client[_-]?secret)\s*[:=]\s*['"][^'"]+['"]/gi,
+];
+
+/**
+ * Redact probable secrets from text destined for logs, errors, or telemetry.
+ * Conservative by design: only well-shaped key material is masked, so
+ * verified-math certificates and hashes pass through untouched.
+ */
+export function redactSecrets(text: string): string {
+  let out = text;
+  for (const re of REDACT_PATTERNS) {
+    re.lastIndex = 0;
+    out = out.replace(re, '[REDACTED]');
+  }
+  return out;
+}
+
+export const zoveliSecscan = definePlugin({  name: 'zoveli-secscan',
   description: 'Scan files for secrets and risky patterns',
 
   setup(ctx) {

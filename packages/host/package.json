@@ -22,6 +22,9 @@
     "@deepseek-ai/dsh-core": "workspace:*",
     "@zoveli/core": "workspace:*",
     "@zoveli/math": "workspace:*",
+    "@zoveli/math-intelligence": "workspace:*",
+    "@zoveli/math-domains": "workspace:*",
+    "@zoveli/memory-store": "workspace:*",
     "@zoveli/memory": "workspace:*",
     "@zoveli/skills": "workspace:*",
     "@zoveli/languages": "workspace:*",
@@ -33,7 +36,10 @@
     "@zoveli/graph": "workspace:*",
     "@zoveli/docgen": "workspace:*",
     "@zoveli/code-analysis": "workspace:*",
-    "@zoveli/capability": "workspace:*"
+    "@zoveli/capability": "workspace:*",
+    "@zoveli/guard": "workspace:*",
+    "@zoveli/persona": "workspace:*",
+    "@zoveli/webresearch": "workspace:*"
   },
   "devDependencies": {
     "tsdown": "^0.3.0",

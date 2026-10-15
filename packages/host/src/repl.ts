@@ -2,6 +2,7 @@ import * as readline from 'node:readline';
 import type { ZoveliHost } from './host.js';
 import { resolveChatConfig, chat } from './chat.js';
 import { mathcore } from '@zoveli/core/mathcore-mcp';
+import { promptSectionsText } from '@zoveli/core';
 
 /** True for the error Node throws when piped stdin ends mid-session. */
 function isReadlineClosed(e: unknown): boolean {
@@ -28,14 +29,16 @@ const HELP = `zoveli commands:
   /check <q> ;; <a>     audit a proposed answer against mathcore
   /sys                  host snapshot (OS/CPU/RAM/disk/GPU)
   /caps                 capability summary
+  /persona [name]       show or switch persona (friend, tutor, engineer, coach)
   /quit                 exit
 Anything else: chat (any API key, or free local Ollama) or math when it looks like math.`;
 
 export async function runRepl(host: ZoveliHost, agent: { systemSections: string[] }): Promise<void> {
   const chatCfg = await resolveChatConfig();
   const baseSystem = [
-    'You are Zoveli, a personal assistant with verified computation and persistent memory.',
+    'You are Zoveli, a personal helper that shows its work in math and remembers what matters to you.',
     'For any arithmetic, algebra, calculus, linear algebra, number theory, logic, statistics or unit conversion: do not compute in your head. Call the mathcore tools and state only verified values. If a result is WITHHELD, say so; never guess.',
+    promptSectionsText(),
     ...agent.systemSections,
   ].join('\n\n');
 
@@ -61,7 +64,7 @@ export async function runRepl(host: ZoveliHost, agent: { systemSections: string[
     console.log('Try in 30 seconds (all offline, math is verified or withheld):');
     console.log('  /math solve x^2 - 5x + 6 = 0   proven answer + certificate');
     console.log('  /sys                           this machine: OS/CPU/RAM/disk/GPU');
-    console.log('  /tools                         every local tool (~39), no API key needed');
+    console.log('  /tools                         every local tool (~51), no API key needed');
   }
 
   // Created lazily in TTY mode only: an Interface starts consuming stdin
@@ -115,6 +118,17 @@ export async function runRepl(host: ZoveliHost, agent: { systemSections: string[
           console.log(`${ok}/${list.length} capabilities available`);
         } catch {
           console.log('capability scan unavailable in this profile');
+        }
+      } else if (text === '/persona' || text.startsWith('/persona ')) {
+        const name = text.slice('/persona'.length).trim();
+        try {
+          if (!name) {
+            console.log(JSON.stringify(await host.runTool('persona_current', {})));
+          } else {
+            console.log(JSON.stringify(await host.runTool('persona_switch', { persona: name })));
+          }
+        } catch {
+          console.log('personas unavailable in this profile (choose friend, tutor, engineer, or coach)');
         }
       } else if (text === '/sys') {
         console.log(JSON.stringify(await host.runTool('sysinfo_snapshot', {}), null, 2).slice(0, 2000));

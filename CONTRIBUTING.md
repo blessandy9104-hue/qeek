@@ -1,6 +1,6 @@
-# Contributing to qeek
+# Contributing to Zoveli AI
 
-Thank you for your interest in contributing to qeek! This document provides guidelines for contributing to the project.
+Thank you for your interest in contributing to Zoveli AI! This document provides guidelines for contributing to the project.
 
 ## Code of Conduct
 
@@ -10,7 +10,7 @@ By participating in this project, you agree to abide by our [Code of Conduct](CO
 
 ### Prerequisites
 
-- Node.js 22+ (pnpm 11 needs `node:sqlite`, unavailable on Node 20)
+- Node.js 22.16+ (memory store needs `node:sqlite` FTS5, unavailable below 22.16; pnpm 11 needs Node 22.5+)
 - Python 3.11+
 - pnpm 11.7.0 (`npm install -g pnpm@11.7.0`; matches `packageManager` and upstream)
 - Git
@@ -99,11 +99,14 @@ docs(api): update capability API reference
 ## Project Structure
 
 ```
-qeek/
+zoveli-ai/
 ├── apps/                    # Applications (CLI, Web, Desktop)
-├── packages/                # 43+ plugins
-│   ├── qeek-*              # Core plugins
-│   └── qeek-capability     # Capability awareness
+├── packages/                # 61 packages (@zoveli/*)
+│   ├── core                 # Core integration plugin
+│   ├── math-intelligence    # Governed verified math + proof memory
+│   ├── math-domains         # Algebra/calculus/statistics/logic/units/discrete specialists
+│   ├── memory-store         # SQLite-backed local-first memory
+│   ├── capability           # Capability awareness
 ├── tests/                   # Test suites
 │   ├── unit/
 │   ├── integration/
@@ -116,11 +119,11 @@ qeek/
 
 ## Adding a New Plugin
 
-1. Create directory in `packages/qeek-<name>/`
+1. Create directory in `packages/<name>/` (`@zoveli/<name>`)
 2. Add `package.json` with workspace dependencies
 3. Implement `src/index.ts` with `definePlugin`
 4. Add tests in `tests/unit/`
-5. Register in `config/personal-assistant.cordis.yml`
+5. Mount in `packages/host/src/index.ts` (`defaultPlugins`) and reference in root `tsconfig.json`
 6. Update documentation
 
 ## Style Guide
@@ -147,5 +150,4 @@ Report security vulnerabilities to **blessandy9104@gmail.com** (not public issue
 ## Questions?
 
 - GitHub Discussions for general questions
-- Discord: [qeek community](https://discord.gg/qeek)
 - Email: blessandy9104@gmail.com

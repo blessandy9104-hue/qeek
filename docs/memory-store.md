@@ -1,0 +1,59 @@
+# Memory store (one subsystem)
+
+Zoveli's memory is a single SQLite subsystem. The Markdown vault is an
+export mirror for humans/Obsidian/git — never the source of truth.
+
+```
+Markdown vault     knowledge-vault/           human-readable export mirror
+                        (import once when DB is empty, export on every write)
+                             |
+SQLite (node:sqlite) ~/.zoveli/memory.db      notes / tags / links + FTS5
+  zero-dep builtin, WAL, single file          ZOVELI_MEMORY_DB overrides path
+                             |
+TS store             @zoveli/memory-store     MemoryStore (sync) + getStore()
+  single source: DB path, vault path,         no `node:sqlite` static import
+  FTS query builder, markdown codec           (process.getBuiltinModule, vite-safe)
+                             |
+TS tools             memory_create_note       registered by @zoveli/memory-store
+                     memory_search            as memory-store-tools; @zoveli/core
+                     memory_read_note         (assistant-memory-tools),
+                     memory_list_tags         @zoveli/memory, @zoveli/search
+                     memory_update_note       (vault_search), @zoveli/graph
+                     memory_delete_note       (vault_graph) delegate to it.
+                     vault_search / vault_graph  names preserved, deduped by host
+                             |
+Callers              CLI /tools, web /api/tools, agent loop, REPL
+```
+
+## Schema (do not duplicate — lives in `packages/memory-store/src/store.ts`)
+
+- `notes(title TEXT PK, body TEXT, created TEXT, updated TEXT)` + implicit `rowid`
+- `notes_fts(title, body)` with `tokenize='porter'`; `rowid` mapped manually
+  (insert/update/delete keep FTS in sync; LIKE fallback when FTS missing)
+- `tags(note_title, tag)` + `idx_tags_tag`; `links(from_title, to_title)` +
+  `idx_links_to` (`to_title` dangling by design, like `[[missing]]`)
+
+## Environment
+
+`ZOVELI_MEMORY_DB` (default `~/.zoveli/memory.db`, `:memory:` in tests),
+`ZOVELI_VAULT_PATH` (default `./knowledge-vault`),
+`ZOVELI_MEMORY_EXPORT=0` disables the Markdown mirror.
+Engines: Node `>=22.16.0` (FTS5 guarantee; verified on 24.21 / SQLite 3.53.4).
+
+## Guarantees
+
+- **ACID + ranked search:** one writer (WAL), FTS5 `bm25` ranking, tag filter,
+  `LIMIT/OFFSET` pagination; empty query returns nothing (no full dump).
+- **CRUD complete:** old vault had no update/delete; now `memory_update_note`
+  (incl. rename + link remap) and `memory_delete_note` (removes export too).
+- **Graph from SQL:** nodes/edges/orphans/hubs via queries, `DOT` export —
+  no per-call file walk.
+- **Obsidian interop kept:** every write exports frontmatter Markdown;
+  first boot with an empty DB imports existing `*.md` (migration).
+
+## Tests
+
+- `tests/unit/memory-store.test.ts` — CRUD, ranked+tag search, graph/dot,
+  tags sorted, tool-name contract + delegation.
+- E2E: `/tools` lists `vault_graph`; host smoke: create→search→graph→
+  update→read→delete + legacy `.md` import.

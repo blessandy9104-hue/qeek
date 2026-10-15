@@ -12,7 +12,8 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@deepseek-ai/dsh-core": "workspace:*"
+    "@deepseek-ai/dsh-core": "workspace:*",
+    "@zoveli/memory-store": "workspace:*"
   },
   "devDependencies": {
     "tsdown": "^0.3.0",

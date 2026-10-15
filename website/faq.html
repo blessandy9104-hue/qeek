@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Zoveli AI FAQ — questions, answered</title>
+<meta name="description" content="Frequently asked questions about Zoveli AI: cost, models, privacy, math, memory, and running it yourself." />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header>
+  <nav><a href="index.html">Zoveli AI</a> · <a href="install.html">Install</a> · <a href="features.html">Features</a> · <a href="security.html">Security</a> · <a href="faq.html">FAQ</a> · <a href="https://github.com/blessandy9104-hue/zoveli-ai">GitHub</a></nav>
+  <h1>Questions, answered</h1>
+</header>
+
+<section>
+  <h2>Does it work without a chat model?</h2>
+  <p>Yes. Verified math, memory, system insight, scheduling, search, and all ~57 local tools run with no model and no network. Chat is an optional adapter — add any key or free local Ollama when you want conversation.</p>
+</section>
+
+<section>
+  <h2>What password do I need?</h2>
+  <p>None for Zoveli. Login is a 6-digit code emailed to you. The only password you'll ever need is your email account's.</p>
+</section>
+
+<section>
+  <h2>What does "verified math" mean?</h2>
+  <p>Every computation runs through independent methods (e.g. symbolic solve + numeric roots + exact substitution). All must agree or the answer is withheld — plus a hash-chained audit certificate. Solved proofs are memorized by specialist agents (algebra, calculus, statistics, logic, units, discrete) and recalled later.</p>
+</section>
+
+<section>
+  <h2>Where is my data?</h2>
+  <p>On your disk: a SQLite store with a Markdown mirror you can open in any editor. Nothing is sent anywhere, nothing trains on it. Backups are encrypted copies you make yourself.</p>
+</section>
+
+<section>
+  <h2>What does it cost to run?</h2>
+  <p>Electricity. No subscription, no credits, no seat fees. Optional model API usage is billed by whoever provides your key, not by us.</p>
+</section>
+
+<section>
+  <h2>Can I change how it looks?</h2>
+  <p>Yes — the web interface ships five looks: Daylight, Midnight, Forest, Sunset, and an animated Unicorn Studio backdrop. Pick from the theme bar; your choice is remembered. Everything except the Unicorn backdrop works fully offline.</p>
+</section>
+
+<section>
+  <h2>Can I use it at work?</h2>
+  <p>It's MIT licensed with a threat model and security policy in the repo. But review both first: local-first means <em>you</em> own backups, updates, and access control for the machine it runs on.</p>
+</section>
+
+<section>
+  <h2>How do I install it?</h2>
+  <p>Ten minutes: Node.js 22.16+, Python 3.11+, pnpm, Git — then clone, install, build, launch. See the <a href="install.html">step-by-step guides</a>.</p>
+</section>
+
+<footer>
+  <p><a href="index.html">← Back to Zoveli AI home</a></p>
+</footer>
+<script src="https://unpkg.com/lenis@1.3.26/dist/lenis.min.js" defer></script>
+<script>
+window.addEventListener('DOMContentLoaded', function () {
+  if (window.Lenis) { try { new window.Lenis({ autoRaf: true }); } catch (e) {} }
+});
+</script>
+</body>
+</html>

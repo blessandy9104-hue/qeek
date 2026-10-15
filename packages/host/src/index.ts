@@ -2,7 +2,9 @@ import { ZoveliHost } from './host.js';
 import { runRepl } from './repl.js';
 import { chatConfigFromEnv } from './chat.js';
 import { zoveliCore } from '@zoveli/core';
-import { zoveliMath } from '@zoveli/math';
+import { zoveliMathIntelligence } from '@zoveli/math-intelligence';
+import { zoveliMathAlgebra, zoveliMathCalculus, zoveliMathStatistics, zoveliMathLogic, zoveliMathUnits, zoveliMathDiscrete } from '@zoveli/math-domains';
+import { zoveliMemoryStore } from '@zoveli/memory-store';
 import { zoveliMemory } from '@zoveli/memory';
 import { zoveliSkills } from '@zoveli/skills';
 import { zoveliLanguages } from '@zoveli/languages';
@@ -15,6 +17,9 @@ import { zoveliGraph } from '@zoveli/graph';
 import { zoveliDocgen } from '@zoveli/docgen';
 import { zoveliCodeAnalysis } from '@zoveli/code-analysis';
 import { zoveliCapability } from '@zoveli/capability';
+import { zoveliGuard } from '@zoveli/guard';
+import { zoveliPersona } from '@zoveli/persona';
+import { zoveliWebResearch } from '@zoveli/webresearch';
 
 /**
  * The default tool-bearing plugin set. Config-only plugins (agent loop,
@@ -23,7 +28,14 @@ import { zoveliCapability } from '@zoveli/capability';
  */
 export const defaultPlugins = [
   zoveliCore,
-  zoveliMath,
+  zoveliMathIntelligence,
+  zoveliMathAlgebra,
+  zoveliMathCalculus,
+  zoveliMathStatistics,
+  zoveliMathLogic,
+  zoveliMathUnits,
+  zoveliMathDiscrete,
+  zoveliMemoryStore,
   zoveliMemory,
   zoveliSkills,
   zoveliLanguages,
@@ -36,6 +48,9 @@ export const defaultPlugins = [
   zoveliDocgen,
   zoveliCodeAnalysis,
   zoveliCapability,
+  zoveliGuard,
+  zoveliPersona,
+  zoveliWebResearch,
 ];
 
 /** Boot the host, mount the default plugins, and start the REPL. */
@@ -47,7 +62,7 @@ export async function boot(): Promise<void> {
 
 export { ZoveliHost } from './host.js';
 export { runRepl } from './repl.js';
-export { chatConfigFromEnv, resolveChatConfig, probeOllama, ollamaBaseUrl, chat } from './chat.js';
+export { chatConfigFromEnv, resolveChatConfig, probeOllama, ollamaBaseUrl, chat, chatTemperature, buildMemoryBrief, isLocalProvider, memoryBriefAllowed } from './chat.js';
 export type { ChatConfig } from './chat.js';
 
 

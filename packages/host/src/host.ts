@@ -1,4 +1,5 @@
 import type { ZoveliContext, ZoveliPlugin, Tool } from '@deepseek-ai/dsh-core';
+import { checkToolCall, defaultPolicy } from '@zoveli/guard';
 
 export interface HostTool extends Tool {
   plugin: string;
@@ -112,6 +113,13 @@ export class ZoveliHost {
   }
 
   async runTool(name: string, args: any = {}): Promise<unknown> {
+    // Guard enforcement: deny destructive shell commands before dispatch.
+    // No guard plugin mounted → allow (back-compat for minimal profiles).
+    const policies = this.registrations.get('guard-policies');
+    if (policies && policies.length > 0) {
+      const verdict = checkToolCall(name, args, defaultPolicy(policies[0]));
+      if (!verdict.allowed) throw new Error(verdict.message);
+    }
     const t = this.getTool(name);
     return await t.execute(args);
   }

@@ -60,3 +60,11 @@ htmlcov/
 # Personal assistant data
 .assistant-data/
 knowledge-vault/.obsidian/workspace*
+# Local databases, sessions, and auth material (never commit)
+*.db
+*.db-*
+*.sqlite*
+*.sqlite*-*
+.session-secret
+auth.json
+zoveli-auth.json

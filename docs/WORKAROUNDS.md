@@ -1,6 +1,6 @@
 # Workarounds for Known Negative Consequences
 
-This document provides practical workarounds for all identified negative consequences in the qeek architecture.
+This document provides practical workarounds for all identified negative consequences in the Zoveli architecture.
 
 ---
 
@@ -16,7 +16,7 @@ This document provides practical workarounds for all identified negative consequ
 
 ### Negative: Event-Driven Debugging Difficulty
 **Workaround:**
-- **Event Logger Plugin**: `qeek-event-logger` captures all events with timestamps, correlation IDs
+- **Event Logger Plugin**: `event-logger` captures all events with timestamps, correlation IDs
 - **Visual Trace Viewer**: Web UI at `/debug/events` shows event flow as sequence diagram
 - **Correlation IDs**: Every request gets `x-correlation-id` propagated through all events
 - **Replay Tool**: `pnpm run replay:event <correlation-id>` reproduces event sequence
@@ -95,25 +95,26 @@ This document provides practical workarounds for all identified negative consequ
 
 ---
 
-## ADR 004: Obsidian Vault
+## ADR 004: Local-First Memory (SQLite store; vault as export mirror)
+
+> Superseded in substance by [memory-store.md](memory-store.md). The
+> flat-file negatives below applied to the old vault-as-truth design.
 
 ### Negative: Search Performance
 **Workaround:**
-- **Tantivy Index**: Background Rust-based full-text index (optional plugin)
-- **SQLite FTS5**: Built-in SQLite virtual table for metadata + content
-- **Incremental Indexing**: Only re-index changed files (fs.watch)
+- **SQLite FTS5**: ranked full-text index maintained transactionally (implemented in `packages/memory-store/`)
 - **Query Optimization**: Tag-first filtering before full-text
+- **Legacy note (vault era)**: Tantivy background index / incremental fs.watch indexing
 
 ### Negative: Concurrency Issues
-**Workaround:**
-- **File Locking**: `flock()` on note files during write
-- **Transactional Writes**: Write to temp, atomic rename
-- **Conflict Resolution**: Last-write-wins with backup (.bak)
+**Workaround (store era):**
+- **ACID**: single-writer SQLite with WAL mode; no file races
 - **Multi-User**: Not supported (single-user design), document clearly
+- **Legacy note (vault era)**: `flock()` on note files, write-to-temp + atomic rename, last-write-wins with `.bak`
 
 ### Negative: Schema Evolution
 **Workaround:**
-- **Versioned Frontmatter**: `schema_version: 1` in every note
+- **Schema in code**: `MemoryStore` DDL is versioned with the package; export Markdown stays backward compatible
 - **Migration Scripts**: `pnpm run migrate:vault` applies transformations
 - **Backward Compatibility**: Readers handle missing/extra fields gracefully
 - **Schema Registry**: Central `vault-schema.json` with validation
@@ -138,15 +139,15 @@ This document provides practical workarounds for all identified negative consequ
 
 ### Vault Corruption Risk
 **Workaround:**
-- **Git Auto-Commit**: `husky` pre-commit hooks snapshot vault
+- **SQLite backup**: scheduled copy of `~/.zoveli/memory.db` (single file) to encrypted remote
+- **Markdown mirror in git**: `knowledge-vault/` export mirror committed; legacy notes re-import on demand
 - **Integrity Checks**: SHA-256 manifest, `pnpm run vault:verify`
-- **Backup Schedule**: Daily encrypted backup to configured remote
-- **Recovery Tool**: `pnpm run vault:recover --from-backup`
+- **Recovery Tool**: restore DB backup, or rebuild from the git mirror via one-time import
 
 ### Plugin Supply Chain
 **Workaround:**
 - **Signed Plugins**: Cosign verification for all installed plugins
-- **Trusted Registry**: Official plugins from `registry.qeek.dev`
+- **Trusted Registry**: Official plugins from `registry.zoveli.dev`
 - **Sandbox Execution**: Untrusted plugins run in gVisor/Firecracker
 - **Permission Model**: Explicit user consent for new capabilities
 
@@ -165,7 +166,7 @@ This document provides practical workarounds for all identified negative consequ
 |------------|--------|----------|
 | Event Logger Plugin | ✅ Implemented | `packages/event-logger/` |
 | Visual Trace Viewer | ✅ Implemented | `/debug/events` routes in `packages/event-logger/src/index.ts` |
-| In-Memory Search Index | ✅ Implemented | `packages/search/` (dependency-free TF index; native engine is future work) |
+| In-Memory Search Index | ✅ Implemented | `packages/memory-store/` (SQLite FTS5, transactional; replaced the TF index in `packages/search/`, now a delegate) |
 | mathcore Binary Build | 📋 Planned | `scripts/build-mathcore-binary.sh` (not created yet) |
 | Connection Pooling | 📋 Planned | single stdio MCP connection per server today; pool extraction pending |
 | Plugin Generator | 📋 Planned | `scripts/create-plugin.ts` (not created yet) |

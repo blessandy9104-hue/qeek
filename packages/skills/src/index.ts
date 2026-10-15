@@ -53,7 +53,7 @@ const researchSkill = defineSkill({
     },
     required: ['topic']
   },
-    async execute({ topic, depth, sources }: any) {
+    async execute({ topic, depth, sources: _sources }: any) {
     return {
       topic,
       depth,

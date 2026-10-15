@@ -1,6 +1,6 @@
 ---
 name: Feature request
-about: Propose a capability, tool, or improvement for qeek
+about: Propose a capability, tool, or improvement for Zoveli
 title: "feat: "
 labels: ["enhancement"]
 ---

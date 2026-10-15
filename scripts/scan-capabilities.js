@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Scan all qeek capabilities and print JSON.
+ * Scan all Zoveli capabilities and print JSON.
  *
  * Usage:
  *   pnpm run build                       # required first (uses dist output)

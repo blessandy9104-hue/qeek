@@ -1,4 +1,7 @@
-# Runbook: Vault Corruption / Lost Notes
+# Runbook: Memory Store Corruption / Lost Notes
+
+Source of truth is SQLite (`~/.zoveli/memory.db`, or `ZOVELI_MEMORY_DB`);
+`knowledge-vault/` is an export mirror, not the data.
 
 ## Symptoms
 - `memory_read_note` fails on known notes
@@ -6,22 +9,24 @@
 - Graph shows sudden orphan spike
 
 ## Diagnosis
-1. `ls knowledge-vault/*.md | head` — files present?
-2. `git -C knowledge-vault status` (if vault is a git repo).
-3. Check disk: `df -h`; check permissions: `ls -la knowledge-vault`.
+1. Is the DB present and writable? `ls -la ~/.zoveli/memory.db` (or `$ZOVELI_MEMORY_DB`).
+2. Is the process using the DB you think? Check `ZOVELI_MEMORY_DB` and `ZOVELI_VAULT_PATH` env.
+3. Check disk: `df -h`; check permissions on the DB file and vault dir.
+4. Compare with the mirror: `ls knowledge-vault/*.md | head` — files present?
 
 ## Resolution
 ```bash
-# 1. Stop writers
-# 2. Restore from git backup
-git -C knowledge-vault log --oneline -5
-git -C knowledge-vault restore --source=HEAD -- .
-# 3. Force reindex (search plugin reindexes every 5 min; restart to force)
-# 4. Verify
-ls knowledge-vault/*.md | wc -l
+# 1. Stop writers (CLI/Web/Desktop)
+# 2a. Restore the DB from backup (preferred: single file)
+cp <backup>/memory.db ~/.zoveli/memory.db
+# 2b. No DB backup? Rebuild from the git mirror (one-time import on empty DB)
+rm -f ~/.zoveli/memory.db
+pnpm start   # imports knowledge-vault/*.md automatically
+# 3. Verify
+# /tools -> memory_list_tags, vault_search for a known term
 ```
 
 ## Prevention
-- Keep `knowledge-vault/` as a git repo with auto-commit hook (`.husky/pre-commit`).
+- Scheduled encrypted backup of `~/.zoveli/memory.db` (single file).
+- Keep `knowledge-vault/` export mirror in git (recovery source of last resort).
 - Daily encrypted backup to configured remote.
-- `qeek-search` file watcher + integrity re-scan every 5 minutes.

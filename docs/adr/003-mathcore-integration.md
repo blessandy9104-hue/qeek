@@ -4,7 +4,7 @@
 Accepted
 
 ## Context
-LLMs hallucinate mathematical computations. qeek requires **zero-hallucination math** for:
+LLMs hallucinate mathematical computations. Zoveli requires **zero-hallucination math** for:
 - Financial calculations
 - Engineering computations
 - Scientific research

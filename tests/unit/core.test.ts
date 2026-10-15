@@ -1,6 +1,14 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { zoveliCore } from '../../packages/core/src/index';
 import { zoveliMath } from '../../packages/math/src/index';
+import {
+  MATHCORE_MCP_COMMAND,
+  MATHCORE_MCP_SERVER_ID,
+  MATH_RULES,
+  mathcoreServerConfig,
+} from '../../packages/math/src/index';
+import { zoveliMCP } from '../../packages/mcp/src/index';
+import { mathcore } from '../../packages/core/src/index';
 import { zoveliMemory } from '../../packages/memory/src/index';
 import { zoveliSkills } from '../../packages/skills/src/index';
 import { createMockContext } from '../setup';
@@ -76,11 +84,47 @@ describe('zoveli math', () => {
   });
 });
 
+describe('one math subsystem (single source of truth)', () => {
+  it('math plugin config uses the canonical command and server id', () => {
+    const ctx = createMockContext();
+    zoveliMath.setup(ctx);
+
+    const mcpCall = ctx.register.mock.calls.find((c: any) => c[0] === 'mathcore-mcp-client');
+    expect(mcpCall).toBeDefined();
+    expect(mcpCall[1]).toEqual(mathcoreServerConfig());
+    expect(mcpCall[1].config.command).toBe(MATHCORE_MCP_COMMAND);
+    expect(mcpCall[1].config.serverName).toBe(MATHCORE_MCP_SERVER_ID);
+  });
+
+  it('mcp plugin references the same server command (never a copy)', () => {
+    const ctx = createMockContext();
+    zoveliMCP.setup(ctx);
+
+    const serversCall = ctx.register.mock.calls.find((c: any) => c[0] === 'mcp-servers');
+    expect(serversCall).toBeDefined();
+    expect(serversCall[1][MATHCORE_MCP_SERVER_ID].command).toBe(MATHCORE_MCP_COMMAND);
+  });
+
+  it('transport singleton defaults to the canonical command', () => {
+    expect((mathcore as any).command).toBe(MATHCORE_MCP_COMMAND);
+  });
+
+  it('injected agent rules are the canonical MATH_RULES verbatim', () => {
+    const ctx = createMockContext();
+    zoveliMath.setup(ctx);
+
+    const handler = ctx.on.mock.calls.find((c: any) => c[0] === 'agent/created');
+    const mockAgent = { inject: vi.fn() };
+    handler[1](mockAgent);
+    expect(mockAgent.inject).toHaveBeenCalledWith({ type: 'system', content: MATH_RULES });
+  });
+});
+
 describe('zoveli memory', () => {
   it('should provide memory service', () => {
     const ctx = createMockContext();
     zoveliMemory.setup(ctx);
-    
+
     expect(ctx.provide).toHaveBeenCalledWith('memory', expect.objectContaining({
       createNote: expect.any(Function),
       searchNotes: expect.any(Function),

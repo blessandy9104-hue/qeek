@@ -9,7 +9,7 @@
 </head>
 <body>
 <header>
-  <nav><a href="index.html">Zoveli AI</a> · <a href="install.html">Install</a> · <a href="features.html">Features</a> · <a href="https://github.com/blessandy9104-hue/zoveli-ai">GitHub</a></nav>
+  <nav><a href="index.html">Zoveli AI</a> · <a href="install.html">Install</a> · <a href="features.html">Features</a> · <a href="security.html">Security</a> · <a href="faq.html">FAQ</a> · <a href="https://github.com/blessandy9104-hue/zoveli-ai">GitHub</a></nav>
   <h1>Zoveli AI</h1>
   <p class="tagline">The assistant that proves its math, runs on your hardware, and never trains on your data.</p>
   <p>
@@ -20,15 +20,15 @@
 </header>
 
 <section>
-  <h2>Why not just use ChatGPT or Claude?</h2>
-  <p>They are great — and $20/month, cloud-only, and they learn from what you type unless you opt out. Zoveli is built on the opposite bet:</p>
+  <h2>Why local-first?</h2>
+  <p>Cloud assistants are great — and they run on someone else's computer, bill monthly, and learn from what you type unless you opt out. Zoveli is built on the opposite bet:</p>
   <table>
-    <tr><th></th><th>Zoveli AI</th><th>ChatGPT / Claude</th></tr>
-    <tr><td>Price</td><td><strong>Free</strong>, runs on your machine</td><td>$8–$20+/month subscriptions</td></tr>
-    <tr><td>Your data</td><td><strong>Stays home</strong> — plain Markdown vault you own, never used for training</td><td>Sent to the cloud; training opt-out buried in settings</td></tr>
-    <tr><td>Offline</td><td><strong>Fully offline</strong> for ~39 local tools</td><td>Requires internet, always</td></tr>
-    <tr><td>Math</td><td><strong>Verified or withheld</strong> — independent methods must agree, sealed certificate</td><td>Best-effort guesses, stated confidently</td></tr>
-    <tr><td>Model choice</td><td>Any API key, or free local Ollama (<code>ollama pull qwen3:4b</code>) — swap anytime</td><td>Locked to one vendor's models</td></tr>
+    <tr><th>Price</th><td><strong>Free</strong>, runs on your machine, MIT licensed</td></tr>
+    <tr><td>Your data</td><td><strong>Stays home</strong> — SQLite store you own plus a Markdown mirror, never used for training</td></tr>
+    <tr><td>Offline</td><td><strong>Fully offline</strong> for ~57 local tools</td></tr>
+    <tr><td>Math</td><td><strong>Verified or withheld</strong> — independent methods must agree, sealed certificate; governed specialists memorize proofs</td></tr>
+    <tr><td>Model choice</td><td>Any API key, or free local Ollama (<code>ollama pull qwen3:4b</code>) — swap anytime</td></tr>
+    <tr><td>Login</td><td><strong>Passwordless</strong> email code — the only password you'll ever need is your email account's</td></tr>
   </table>
   <p>Use Zoveli when the work is yours: private notes, exact computation, and tools that must work on a plane.</p>
 </section>
@@ -59,8 +59,8 @@ VERIFIED  solve x^2 - 5x + 6 = 0 for x
 <section>
   <h2>Local-first by construction</h2>
   <ul>
-    <li><strong>Obsidian-compatible vault</strong> — your memory is plain Markdown files you own.</li>
-    <li><strong>Offline tools</strong> — ~39 local tools work with no API key and no network.</li>
+    <li><strong>SQLite memory, Markdown mirror</strong> — your memory is a local database you own, exportable as plain Markdown files.</li>
+    <li><strong>Offline tools</strong> — ~57 local tools work with no API key and no network.</li>
     <li><strong>Passwordless login</strong> — email codes for any inbox including <code>@proton.me</code>. No passwords stored, no OAuth middleman.</li>
     <li><strong>Capability awareness</strong> — the assistant knows what it can do and says when it can't.</li>
   </ul>
@@ -79,5 +79,11 @@ pnpm run web # Web UI + API at http://127.0.0.1:3080</code></pre>
 <footer>
   <p>MIT licensed. Founded by <strong>Andy</strong> and built in the open at <a href="https://github.com/blessandy9104-hue/zoveli-ai">blessandy9104-hue/zoveli-ai</a>.</p>
 </footer>
+<script src="https://unpkg.com/lenis@1.3.26/dist/lenis.min.js" defer></script>
+<script>
+window.addEventListener('DOMContentLoaded', function () {
+  if (window.Lenis) { try { new window.Lenis({ autoRaf: true }); } catch (e) {} }
+});
+</script>
 </body>
 </html>

@@ -13,7 +13,8 @@
   },
   "dependencies": {
     "@deepseek-ai/dsh-core": "workspace:*",
-    "@zoveli/core": "workspace:*"
+    "@zoveli/core": "workspace:*",
+    "@zoveli/math": "workspace:*"
   },
   "devDependencies": {
     "tsdown": "^0.3.0",
