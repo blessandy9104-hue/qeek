@@ -2,6 +2,10 @@
 
 > The assistant that proves its math, runs on your hardware, and never trains on your data.
 
+> **Product scope:** Zoveli's core is the offline CLI assistant — verified math, local memory, and local tools.
+> Web, desktop, and the wider plugin set are valuable but secondary: they must never break the core.
+> See [docs/core-plugins.md](docs/core-plugins.md) for what counts as core vs experimental.
+
 Website: **https://blessandy9104-hue.github.io/zoveli-ai/**
 
 [![CI](https://github.com/blessandy9104-hue/zoveli-ai/actions/workflows/ci.yml/badge.svg)](https://github.com/blessandy9104-hue/zoveli-ai/actions/workflows/ci.yml)

@@ -17,3 +17,4 @@
 - [ ] No secrets, keys, or private vault notes included
 - [ ] Docs updated (`docs/`, README counts, ADRs for decisions)
 - [ ] New tools have unit tests + are registered in capability scanner docs where applicable
+- [ ] New packages justified (core vs experimental — see `docs/core-plugins.md`)

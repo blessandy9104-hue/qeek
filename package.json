@@ -6,6 +6,8 @@
   "author": "Andy <blessandy9104@gmail.com> (https://github.com/blessandy9104-hue)",
   "scripts": {
     "build": "pnpm --filter \"./packages/*\" --filter \"./apps/*\" exec tsc -p tsconfig.json",
+    "build:core": "pnpm --filter @zoveli/cli... exec tsc -p tsconfig.json",
+    "doctor": "node scripts/doctor.js",
     "prestart": "pnpm run build",
     "start": "node apps/cli/dist/cli.js",
     "preweb": "pnpm run build",
