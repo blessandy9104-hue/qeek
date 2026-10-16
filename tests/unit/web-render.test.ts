@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { splitUrls } from '../../apps/web/src/render';
+import { splitUrls } from '../../apps/desktop/src/server/render';
 
 describe('splitUrls (safe link rendering)', () => {
   it('passes plain text through untouched', () => {

@@ -6,16 +6,16 @@
 
 ## Product scope (MVP)
 
-The core product is the **offline CLI assistant**: verified math, local
-memory, and local tools. Everything is judged against it — web, desktop,
-and non-default plugins are secondary surfaces that must never break the
-core. [core-plugins.md](core-plugins.md) declares exactly which packages
+The core product is the **offline computer assistant**: CLI (Windows/macOS/Linux terminals) + Electron desktop shell. Verified math, local
+memory, and local tools. Everything is judged against it — the desktop
+server is internal to the Electron shell, never a standalone web platform.
+[core-plugins.md](core-plugins.md) declares exactly which packages
 are core (stable, semver-minded) vs experimental (opt-in, may change).
 
 ## Runtime composition
 
 ```
-User (CLI / Web / Desktop)
+User (CLI / Desktop)
   → dsh profile (config/*.cordis.yml)
     → Cordis context (ctx)
       → zoveli plugins (22 packages; 24 mounted by default)
@@ -53,7 +53,7 @@ code-analysis, capability, guard, persona, webresearch.
 Apps boot through `@zoveli/host` (`ZoveliHost.mount` + REPL/HTTP), not
 through a Cordis launcher. `config/*.cordis.yml` declares the intended
 full-profile plugin composition for future upstream-Cordis integration;
-today they are documentation, not executed code. The web server mounts
+today they are documentation, not executed code. The desktop-internal server mounts
 `defaultPlugins` + `zoveli-auth`; the CLI mounts `defaultPlugins`.
 
 ## Observability

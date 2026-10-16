@@ -30,7 +30,7 @@ const PORT = parseInt(process.env.PORT || '3080', 10);
 const HOST = '127.0.0.1';
 
 // Vendored Lenis smooth-scroll runtime (same origin, pinned version).
-// Resolves from dist/../vendor in production and apps/web/vendor in dev.
+// Resolves from dist/../../vendor in production and apps/desktop/vendor in dev.
 function loadVendorLenis(): Buffer | null {
   // Works in CJS (tsc) and ESM (tsdown) outputs alike.
   const here =
@@ -38,8 +38,9 @@ function loadVendorLenis(): Buffer | null {
       ? __dirname
       : path.dirname(process.argv[1] || process.cwd());
   const candidates = [
+    path.join(here, '..', '..', 'vendor', 'lenis.min.js'),
     path.join(here, '..', 'vendor', 'lenis.min.js'),
-    path.join(process.cwd(), 'apps', 'web', 'vendor', 'lenis.min.js'),
+    path.join(process.cwd(), 'apps', 'desktop', 'vendor', 'lenis.min.js'),
   ];
   for (const file of candidates) {
     try {

@@ -236,13 +236,11 @@ cat <<EOF
 
 Run it:
   cd $TARGET_DIR && source .venv/bin/activate
-  pnpm start            # CLI assistant (works fully offline)
-  pnpm run web          # Web UI + HTTP API at http://127.0.0.1:3080
-  pnpm run desktop      # Electron shell (dev mode)
+  pnpm start            # CLI assistant (works fully offline, Windows/macOS/Linux)
+  pnpm run desktop      # Electron desktop shell (dev mode)
 
 Docker:
   docker compose -f docker/docker-compose.yml --profile cli up --build
-  docker compose -f docker/docker-compose.yml --profile web up --build
 
 Try in the CLI: /math solve x^2 - 5x + 6 = 0  ·  /sys  ·  /tools  ·  /help
 Free offline chat (no keys): install Ollama (https://ollama.com), run 'ollama pull qwen3:4b'.

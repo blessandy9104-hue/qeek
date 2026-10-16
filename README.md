@@ -92,9 +92,8 @@ pnpm test
 ## Launch it
 
 ```bash
-pnpm start            # CLI assistant (works fully offline)
-pnpm run web          # Web UI + HTTP API at http://127.0.0.1:3080
-pnpm run desktop      # Electron shell (dev mode)
+pnpm start            # CLI assistant (works fully offline, Windows/macOS/Linux terminals)
+pnpm run desktop      # Electron desktop shell (dev mode, spawns local server internally)
 ```
 
 The CLI works fully offline for all local tools (verified math via
@@ -134,7 +133,7 @@ Try: `/math solve x^2 - 5x + 6 = 0` · `/sys` · `/tools`.
 - [Runbooks](docs/runbooks/)
 - [ADRs](docs/adr/)
 - [Security policy](SECURITY.md)
-- [Desktop guide](docs/guides/desktop.md) · [CLI guide](docs/guides/cli.md) · [Web guide](docs/guides/web.md)
+- [Desktop guide](docs/guides/desktop.md) · [CLI guide](docs/guides/cli.md)
 
 ## Contributing
 

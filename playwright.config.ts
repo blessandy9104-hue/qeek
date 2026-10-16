@@ -21,7 +21,8 @@ export default defineConfig({
     actionTimeout: 10000,
     navigationTimeout: 30000
   },
-  // Full matrix: `pnpm exec playwright install` fetches all three engines.
+  // Desktop-only matrix: CLI + Electron desktop on Windows/macOS/Linux.
+  // Mobile browser projects removed with standalone web scope.
   projects: [
     {
       name: 'chromium',
@@ -34,18 +35,10 @@ export default defineConfig({
     {
       name: 'webkit',
       use: { ...devices['Desktop Safari'] }
-    },
-    {
-      name: 'mobile-chrome',
-      use: { ...devices['Pixel 5'] }
-    },
-    {
-      name: 'mobile-safari',
-      use: { ...devices['iPhone 12'] }
     }
   ],
   webServer: {
-    command: 'node apps/web/dist/server.js',
+    command: 'node apps/desktop/dist/server/server.js',
     url: 'http://localhost:3080/health',
     reuseExistingServer: !process.env.CI,
     timeout: 120000,

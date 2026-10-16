@@ -303,17 +303,6 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Build and push Web
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./docker/Dockerfile.web
-          push: ${{ github.event_name == 'release' }}
-          tags: ${{ steps.meta.outputs.tags }}-web
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
   sbom:
     name: SBOM
     runs-on: ubuntu-latest
@@ -392,7 +381,6 @@ jobs:
           # (see NOTE above), so the pattern matches no files.
           files: |
             docker/Dockerfile.cli
-            docker/Dockerfile.web
             docker/docker-compose.yml
             docker/prometheus.yml
             docker/grafana/dashboards/zoveli-overview.json

@@ -23,7 +23,6 @@
     { "path": "./packages/memory-store" },
     { "path": "./packages/skills" },
     { "path": "./apps/cli" },
-    { "path": "./apps/web" },
     { "path": "./apps/desktop" },
     { "path": "./packages/languages" },
     { "path": "./packages/capability" },
