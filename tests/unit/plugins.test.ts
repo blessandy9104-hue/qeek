@@ -22,7 +22,8 @@ describe('plugin contract: every built package loads and sets up', () => {
 
   it('discovers a healthy package set', () => {
     // Guard against the test silently covering nothing.
-    expect(entries.length).toBeGreaterThanOrEqual(55);
+    // 22 packages ship (CLI boot path + web); the rest were deleted as dead.
+    expect(entries.length).toBeGreaterThanOrEqual(20);
   });
 
   for (const { pkg, entry } of entries) {

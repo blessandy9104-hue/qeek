@@ -53,6 +53,7 @@ html.meta.json.gz
 __pycache__/
 *.pyc
 .pytest_cache/
+.hypothesis/
 .coverage
 htmlcov/
 *.egg-info/

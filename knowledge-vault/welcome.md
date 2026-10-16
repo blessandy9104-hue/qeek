@@ -33,7 +33,6 @@ This is an Obsidian-compatible markdown vault that serves as the long-term memor
 See the other files in this vault for examples:
 - `preferences.md` - Your preferences
 - `projects.md` - Active projects
-- `contacts.md` - Important contacts
 
 ## Usage
 

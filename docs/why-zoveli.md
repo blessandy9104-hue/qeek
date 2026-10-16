@@ -24,7 +24,7 @@
 - Exact computation (homework, engineering, finance) where a confident wrong
   answer is worse than no answer — `/math` and `/check` give VERIFIED/MATCH/MISMATCH.
 - Planes, labs, and locked-down networks — the CLI works fully offline.
-- Tinkerers: 63 packages, MCP servers, and an HTTP API you can extend in an afternoon.
+- Tinkerers: 22 packages, MCP servers, and an HTTP API you can extend in an afternoon.
 
 ## Honest limits
 
@@ -38,7 +38,7 @@
 
 **Does Zoveli need a chat model to work?**
 No. Chat is an optional adapter; the core — verified math, SQLite memory,
-sysinfo, scheduler, search, 63 packages — runs with no model and no network.
+sysinfo, scheduler, search, 22 packages — runs with no model and no network.
 
 **What does "verified math" mean?**
 Every computation runs through independent methods (e.g. symbolic solve +

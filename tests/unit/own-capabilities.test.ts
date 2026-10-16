@@ -5,7 +5,6 @@ import { zoveliHealth } from '../../packages/health/src/index';
 import { zoveliGraph } from '../../packages/graph/src/index';
 import { zoveliScheduler } from '../../packages/scheduler/src/index';
 import { zoveliSecscan } from '../../packages/secscan/src/index';
-import { zoveliTelemetry } from '../../packages/otel/src/index';
 import { createMockContext } from '../setup';
 
 function setup(plugin: any) {
@@ -50,12 +49,6 @@ describe('zoveli own capabilities register', () => {
     const ctx = setup(zoveliSecscan);
     const call = ctx.register.mock.calls.find((c: any[]) => c[0] === 'secscan-tools');
     expect(call).toBeDefined();
-  });
-
-  it('telemetry provides snapshot api', () => {
-    const ctx = setup(zoveliTelemetry);
-    expect(ctx.provide).toHaveBeenCalledWith('telemetry', expect.any(Object));
-    expect(ctx.register).toHaveBeenCalledWith('telemetry-config', expect.any(Object));
   });
 });
 

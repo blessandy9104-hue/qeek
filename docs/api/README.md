@@ -68,13 +68,8 @@ Tools are the agent-facing API. Full JSON schemas live in each plugin's `src/ind
 - `sysinfo_network {}` → local interfaces only, never probes externally
 - `sysinfo_check {minFreeMemBytes?, minFreeDiskBytes?, maxCpuPercent?}` → budget gate
 
-## Telemetry / debug
-- `telemetry_snapshot {}`
-- `GET /debug/events`, `/debug/events/stats`, `/debug/events/trace/:id`, `/debug/events/export`
-
-## Skills / workflows
+## Skills
 - Skills: `daily-briefing`, `research`, `task-planning`, `code-review` (see `packages/skills`)
-- `run_workflow {template, inputs?}` — templates: `research-report`, `code-review`, `daily-briefing`
 
 ## HTTP endpoints (web server, `http://127.0.0.1:3080`)
 

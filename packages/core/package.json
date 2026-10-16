@@ -25,7 +25,6 @@
   },
   "dependencies": {
     "@deepseek-ai/dsh-core": "workspace:*",
-    "@zoveli/math": "workspace:*",
     "@zoveli/math-intelligence": "workspace:*",
     "@zoveli/memory-store": "workspace:*"
   },

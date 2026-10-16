@@ -18,7 +18,7 @@ are core (stable, semver-minded) vs experimental (opt-in, may change).
 User (CLI / Web / Desktop)
   → dsh profile (config/*.cordis.yml)
     → Cordis context (ctx)
-      → zoveli plugins (63 packages; 24 mounted by default)
+      → zoveli plugins (22 packages; 24 mounted by default)
         → capabilities (scanner → registry → adaptation)
         → tools (guarded pre/post pipeline, ~57 live)
         → sessions (JSONL + projections)
@@ -29,13 +29,12 @@ User (CLI / Web / Desktop)
 
 | Area | Plugins |
 |------|---------|
-| Core | `core`, `agent`, `session`, `tools`, `llm`, `scope` |
-| Execution | `fs`, `shell`, `browser`, `sandbox`, `terminal`, `computer-use`, `lsp` |
-| Intelligence | `subagent`, `workflow`, `plan`, `agent-teams`, `goals`, `preset`, `todo`, `schedule`, `workspace`, `mcp` |
-| Memory/context | `memory`, `memory-store`, `context`, `compaction`, `document`, `attachment`, `conversation` |
-| System | `settings`, `credentials`, `telemetry`, `guard`, `identity`, `interaction`, `feedback`, `storage`, `webhook`, `plugin-manager`, `acp`, `sdk` |
-| Zoveli differentiators | `math-intelligence` (governor: verified compute + proof memory + rules), `math-domains` (algebra/calculus/statistics/logic/units/discrete specialists), `math` (back-compat shim), `skills`, `capability`, `languages`, `search`, `event-logger`, `otel`, `code-analysis`, `docgen`, `health`, `graph`, `scheduler`, `secscan`, `sysinfo`, `auth`, `persona` (switchable friend/tutor/engineer/coach), `webresearch` (guarded fetch + search) |
-| Host + compat | `host` (loader, REPL, chat, HTTP wiring), `shim-dsh-core` (local authoring shim, not a runtime) |
+| Core | `core`, `host`, `shim-dsh-core` (authoring shim, not a runtime) |
+| Math | `math-intelligence` (governor: verified compute + proof memory + rules), `math-domains` (algebra/calculus/statistics/logic/units/discrete specialists) |
+| Memory | `memory`, `memory-store` (SQLite FTS5 + vault export mirror) |
+| Capabilities | `capability`, `skills`, `languages`, `search`, `docgen`, `code-analysis`, `health`, `graph`, `scheduler`, `sysinfo` |
+| Safety | `guard`, `secscan`, `auth` |
+| Interaction | `persona` (switchable friend/tutor/engineer/coach), `webresearch` (guarded fetch + search) |
 
 The host's `defaultPlugins` (24) are the tool-bearing set: core,
 math-intelligence, the 6 math specialists, memory-store, memory, skills,
@@ -59,4 +58,7 @@ today they are documentation, not executed code. The web server mounts
 
 ## Observability
 
-In-memory meters always on (`zoveli_turns_total`, `zoveli_tools_called`, `zoveli_math_verified`, `zoveli_memory_operations`); Prometheus + OTLP when `TELEMETRY_ENABLED=true`. Grafana dashboard in `docker/grafana/dashboards/zoveli-overview.json`. Event tracing via `event-logger` at `/debug/events`.
+Health and inventory: `GET /health` (tool count) and `GET /api/tools`
+(full live tool list). Servers log to stdout; math audit certificates go
+to `MATHCORE_AUDIT`. The old telemetry/event-logger plugins were removed
+as dead code — check git history if observability needs to come back.

@@ -17,7 +17,6 @@
   "exclude": ["node_modules", "dist", "**/dist/**"],
   "references": [
     { "path": "./packages/core" },
-    { "path": "./packages/math" },
     { "path": "./packages/math-intelligence" },
     { "path": "./packages/math-domains" },
     { "path": "./packages/memory" },
@@ -28,9 +27,7 @@
     { "path": "./apps/desktop" },
     { "path": "./packages/languages" },
     { "path": "./packages/capability" },
-    { "path": "./packages/event-logger" },
     { "path": "./packages/search" },
-    { "path": "./packages/otel" },
     { "path": "./packages/code-analysis" },
     { "path": "./packages/docgen" },
     { "path": "./packages/health" },

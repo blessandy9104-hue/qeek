@@ -1,13 +1,12 @@
 import { describe, it, expect, vi } from 'vitest';
 import { zoveliCore } from '../../packages/core/src/index';
-import { zoveliMath } from '../../packages/math/src/index';
+import { zoveliMath } from '../../packages/math-intelligence/src/index';
 import {
   MATHCORE_MCP_COMMAND,
   MATHCORE_MCP_SERVER_ID,
   MATH_RULES,
   mathcoreServerConfig,
-} from '../../packages/math/src/index';
-import { zoveliMCP } from '../../packages/mcp/src/index';
+} from '../../packages/math-intelligence/src/index';
 import { mathcore } from '../../packages/core/src/index';
 import { zoveliMemory } from '../../packages/memory/src/index';
 import { zoveliSkills } from '../../packages/skills/src/index';
@@ -94,15 +93,6 @@ describe('one math subsystem (single source of truth)', () => {
     expect(mcpCall[1]).toEqual(mathcoreServerConfig());
     expect(mcpCall[1].config.command).toBe(MATHCORE_MCP_COMMAND);
     expect(mcpCall[1].config.serverName).toBe(MATHCORE_MCP_SERVER_ID);
-  });
-
-  it('mcp plugin references the same server command (never a copy)', () => {
-    const ctx = createMockContext();
-    zoveliMCP.setup(ctx);
-
-    const serversCall = ctx.register.mock.calls.find((c: any) => c[0] === 'mcp-servers');
-    expect(serversCall).toBeDefined();
-    expect(serversCall[1][MATHCORE_MCP_SERVER_ID].command).toBe(MATHCORE_MCP_COMMAND);
   });
 
   it('transport singleton defaults to the canonical command', () => {

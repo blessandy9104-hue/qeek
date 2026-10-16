@@ -29,3 +29,16 @@ for (const group of ['packages', 'apps']) {
   }
 }
 console.log(`clean done: ${removed} dist director${removed === 1 ? 'y' : 'ies'} removed`);
+
+// Test-run scratch: auth OTP/session material and property-test cache.
+// All gitignored; safe to drop when no server or test run is active.
+for (const extra of [
+  join(root, 'test-auth-data', 'auth.json'),
+  join(root, 'test-auth-data', '.session-secret'),
+  join(root, '.hypothesis'),
+]) {
+  if (existsSync(extra)) {
+    rmSync(extra, { recursive: true, force: true });
+    console.log('removed', extra.replace(root + '/', ''));
+  }
+}
