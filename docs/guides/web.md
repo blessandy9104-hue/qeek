@@ -13,8 +13,7 @@ pnpm run web
   as safe links. Recent chats persist in the browser only (capped at 100)
   and can be wiped anytime with **Clear chats**.
 - **Vault sidebar:** browse/search notes, click wiki-links.
-- **Debug:** `/debug/events` (event trace), `/debug/events/stats`, `/metrics` (Prometheus).
-- **Grafana:** `docker compose --profile monitoring up` → `:3000` (admin/admin).
+- **Health:** `/health` (tool count) and `/api/tools` (full live tool list).
 
 ## Security posture (localhost server)
 

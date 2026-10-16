@@ -147,6 +147,32 @@ test.describe('Web Application', () => {
     expect(names).toContain('sysinfo_snapshot');
   });
 
+  test('run API executes a tool end-to-end', async ({ request }) => {
+    const res = await request.post('/api/run', {
+      data: { tool: 'sysinfo_snapshot', args: {} },
+    });
+    expect(res.status()).toBe(200);
+    const body = await res.json();
+    expect(body.ok).toBe(true);
+    expect(body.result).toBeDefined();
+  });
+
+  test('run API validates bodies and reports unknown tools', async ({ request }) => {
+    const missing = await request.post('/api/run', { data: { args: {} } });
+    expect(missing.status()).toBe(400);
+    const badArgs = await request.post('/api/run', {
+      data: { tool: 'sysinfo_snapshot', args: [] },
+    });
+    expect(badArgs.status()).toBe(400);
+    const unknown = await request.post('/api/run', {
+      data: { tool: 'no_such_tool_xyz', args: {} },
+    });
+    expect(unknown.status()).toBe(200);
+    const body = await unknown.json();
+    expect(body.ok).toBe(false);
+    expect(body.error).toContain('unknown tool');
+  });
+
   test('chat API verifies bare arithmetic', async ({ request }) => {
     test.skip(!HAS_MATHCORE, 'mathcore-mcp not installed');
     const res = await request.post('/api/chat', { data: { message: '2+2' } });

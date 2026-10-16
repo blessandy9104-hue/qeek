@@ -1,7 +1,0 @@
-{
-  "name": "example-plugin",
-  "version": "0.1.0",
-  "main": "dist/index.js",
-  "capabilities": ["tool"],
-  "description": "A tiny example plugin that registers a ping tool."
-}

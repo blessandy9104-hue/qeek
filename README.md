@@ -110,7 +110,7 @@ Try: `/math solve x^2 - 5x + 6 = 0` · `/sys` · `/tools`.
 
 - **🔬 Verified Mathematics** — one AI math intelligence subsystem: mathcore MCP gives zero-hallucination math with hash-chained audit certificates, governed with 6 specialists (algebra, calculus, statistics, logic, units, discrete) that memorize verified proofs and recall them (keyword + semantic)
 - **🧠 Local-First Memory** — SQLite store with FTS5 ranked search, wiki-links and tags (Markdown vault kept as human-readable export mirror)
-- **🤖 Full Agent Framework** — 63 packages: agent loop, tools, LLM, MCP, sandbox, subagents, workflows (`/tools` or `GET /api/tools` lists all ~57 live tools)
+- **🤖 Full Agent Framework** — 22 packages: agent loop, tools, chat, verified math, memory, and system capabilities (`/tools` or `GET /api/tools` lists all ~57 live tools)
 - **🖥️ System & Hardware Awareness** — local OS/CPU/memory/disk/GPU/battery/network insight with budget checks (`@zoveli/sysinfo`)
 - **💻 Programming Languages** — detection, analysis, formatting, linting, testing, tooling for 17+ languages (`@zoveli/languages`)
 - **⚡ Capability Awareness** — runtime discovery, introspection, adaptation, and gap reports
@@ -123,7 +123,6 @@ Try: `/math solve x^2 - 5x + 6 = 0` · `/sys` · `/tools`.
 - **🎭 Personas** — switchable friend, tutor, engineer, coach (`/persona`, remembered locally)
 - **🌐 Web Research** — SSRF-guarded fetch + keyless search, trusted-source flags
 - **🛡️ Security Scanner** — secrets + risky-pattern scanning
-- **📊 Telemetry** — in-memory meters + Prometheus/OTLP + Grafana
 - **🔑 Passwordless login** — email OTP for any inbox incl. @proton.me, `GET /login`
 - **🔒 Privacy-First** — runs locally, no cloud required, MIT licensed
 

@@ -12,9 +12,7 @@ import {
   getMathStats,
   resetMathStatsForTests,
   zoveliMathIntelligence,
-  zoveliMath,
 } from '../../packages/math-intelligence/src/index';
-import * as mathShim from '../../packages/math/src/index';
 import { mathcore as coreMathcore } from '../../packages/core/src/index';
 import { mathcoreTools as coreTools } from '../../packages/core/src/mathcore-tools';
 import { resetStoreForTests } from '../../packages/memory-store/src/store';
@@ -43,22 +41,6 @@ describe('one AI math intelligence subsystem (single source of truth)', () => {
     expect(MATH_RULES).toContain('DO NOT compute in your head');
     expect(mathcoreServerConfig().config.command).toBe(MATHCORE_MCP_COMMAND);
     expect(mathcoreServerConfig().config.serverName).toBe(MATHCORE_MCP_SERVER_ID);
-  });
-
-  it('math shim re-exports the canonical values (zero drift)', () => {
-    expect((mathShim as any).MATHCORE_MCP_COMMAND).toBe(MATHCORE_MCP_COMMAND);
-    expect((mathShim as any).MATHCORE_MCP_SERVER_ID).toBe(MATHCORE_MCP_SERVER_ID);
-    expect((mathShim as any).MATH_RULES).toBe(MATH_RULES);
-    // Same contract via a fresh mock context (module instances may differ
-    // src-vs-dist under vitest; behavior must not).
-    const a = createMockContext();
-    const b = createMockContext();
-    (mathShim as any).zoveliMath.setup(a);
-    zoveliMath.setup(b);
-    expect(a.register.mock.calls.map((c: any) => c[0]).sort()).toEqual(
-      b.register.mock.calls.map((c: any) => c[0]).sort()
-    );
-    expect((mathShim as any).zoveliMath.name).toBe('zoveli-math-intelligence');
   });
 
   it('transport singleton defaults to the canonical command', () => {

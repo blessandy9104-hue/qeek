@@ -8,13 +8,14 @@ declares which packages carry that promise and which are free to evolve.
 ## Core (stable)
 
 Everything the default boot path needs: `apps/cli` → `@zoveli/host`
-(`defaultPlugins`, REPL, chat) and its direct providers:
+(`defaultPlugins`, REPL, chat) and its direct providers — 22 shipped
+packages:
 
-`host`, `core`, `math`, `math-intelligence`, `math-domains`,
+`host`, `core`, `math-intelligence`, `math-domains`,
 `memory-store`, `memory`, `skills`, `languages`, `sysinfo`, `search`,
 `scheduler`, `secscan`, `health`, `graph`, `docgen`, `code-analysis`,
-`capability`, `guard`, `persona`, `webresearch`, `shim-dsh-core`
-(authoring shim), `apps/cli`.
+`capability`, `guard`, `persona`, `webresearch`, `auth`,
+`shim-dsh-core` (authoring shim), `apps/cli`.
 
 Rules for core:
 
@@ -25,10 +26,12 @@ Rules for core:
 
 ## Experimental (opt-in)
 
-Every other package. Safe to use, but may change without notice and is
-not covered by the core stability promise. If an experimental package
-grows a second independent consumer or a public surface worth keeping,
-propose promotion via ADR instead of letting dependents sprawl.
+None currently — the 41 unreachable packages were removed as dead code
+(see git history). New packages start here: safe to use, but may change
+without notice and not covered by the core stability promise. If an
+experimental package grows a second independent consumer or a public
+surface worth keeping, propose promotion via ADR instead of letting
+dependents sprawl.
 
 ## Contributor checklist
 
