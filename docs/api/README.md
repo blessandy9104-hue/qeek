@@ -6,7 +6,7 @@ Tools are the agent-facing API. Full JSON schemas live in each plugin's `src/ind
 - `mathcore_compute {expression, operation?}` → verified result + certificate (auto-memorized)
 - `mathcore_check_answer {question, answer}` → MATCH | MISMATCH | UNCOMPARABLE | UNVERIFIABLE
 - `mathcore_list_operations {}` → operation catalog
-- Specialists (governed, namespaced proof memory): `math_algebra_solve`, `math_calculus_solve`, `math_stats_solve`, `math_logic_solve`, `math_units_solve`, `math_discrete_solve` (`{request, operation?}`)
+- Specialists (governed, namespaced proof memory): `math_algebra_solve`, `math_calculus_solve`, `math_stats_solve`, `math_logic_solve`, `math_units_solve`, `math_discrete_solve`, `math_arithmetic_solve`, `math_geometry_solve`, `math_trigonometry_solve`, `math_probability_solve`, `math_linear_solve`, `math_number_solve` (`{request, operation?}`)
 - Intelligence: `math_recall {query, limit?, domain?}`, `math_recall_semantic {query, domain?, limit?}` (vector cosine when an embedding model is available, else keyword overlap), `math_route {request, operation?}`, `math_memorize {request, result}`, `math_stats {}`
 
 ## Memory / store (SQLite + FTS5 — see `docs/memory-store.md`)

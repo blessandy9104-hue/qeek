@@ -44,12 +44,14 @@ All in `packages/math-intelligence/src/`:
   (`mathcore`), `defaultMathcoreAuditPath()` (`MATHCORE_AUDIT` overrides),
   `MATH_RULES` (verbatim 5-rule text), `MATH_INTELLIGENCE_RULES` (recall-first
   guidance), `mathcoreServerConfig()` (the one stdio spawn config).
-- `domains.ts`: `DOMAIN_OPERATIONS` (algebra 18, calculus 4, statistics 1,
-  logic 2, units 1, discrete 1 — all 27 ops owned), `routeDomain()` (explicit
-  operation wins, else keyword hints calculus → statistics → logic → units →
-  discrete → algebra, else `general`), `OP_INVOCATION` / `invocationHead()` /
-  `buildCommand()` (op id → parser-compatible surface head; `stat` passes
-  through), `domainMemoryTag()` / `domainTitlePrefix()` (proof-memory
+- `domains.ts`: `DOMAIN_OPERATIONS` (algebra 5, calculus 4, statistics 1,
+  logic 2, units 1, discrete 1, arithmetic 2, geometry 3, trigonometry 1,
+  probability 1, linear 6, number 7 — all 34 ops owned), `routeDomain()` (explicit
+  operation wins, else keyword hints calculus → statistics → probability →
+  logic → units → discrete → geometry → trigonometry → arithmetic →
+  linear → number → algebra, else `general`), `OP_INVOCATION` / `invocationHead()` /
+  `buildCommand()` (op id → parser-compatible surface head; `stat`/`trig`/
+  `probability` pass through), `domainMemoryTag()` / `domainTitlePrefix()` (proof-memory
   namespacing).
 - `transport.ts`: `MathcoreClient` + `mathcore` singleton.
 - `tools.ts`: `mathcoreTools` (3, names frozen) + `mathIntelligenceTools`
@@ -62,16 +64,24 @@ All in `packages/math-intelligence/src/`:
 
 ## Governed specialists (`packages/math-domains/`)
 
-`zoveli-math-algebra`, `zoveli-math-calculus`, `zoveli-math-statistics`
+`zoveli-math-algebra` (core: evaluate/simplify/expand/factor/solve),
+`zoveli-math-calculus`, `zoveli-math-statistics`
 (`stat`), `zoveli-math-logic` (`sat`, `prove`), `zoveli-math-units`
-(`convert`), `zoveli-math-discrete` (`shortest_path`) under the governor:
+(`convert`), `zoveli-math-discrete` (`shortest_path`),
+`zoveli-math-arithmetic` (`percent`, `ratio`),
+`zoveli-math-geometry` (`area`, `volume`, `pythagoras`),
+`zoveli-math-trigonometry` (`trig`), `zoveli-math-probability`
+(`probability`), `zoveli-math-linear` (`determinant`, `rank`,
+`inverse`, `linsolve`, `matmul`, `eigenvalues`), `zoveli-math-number`
+(`is_prime`, `factor_int`, `gcd`, `lcm`, `modpow`, `factorial`,
+`choose`) under the governor:
 
 - Specialists never spawn mathcore: they call the governor's shared transport
   and memorize into their own namespace. Out-of-domain operations are rejected
   before any spawn (`math_algebra_solve` + `math_calculus_solve`).
 - Each declares `capabilities: [math.<domain>]` for Cordis-class hosts and
-  injects a one-line domain hint. The local host mounts both after the
-  governor (17 default plugins).
+  injects a one-line domain hint. The local host mounts all twelve after the
+  governor.
 - Every mathcore op is owned by exactly one specialist; `general` takes only
   unrecognized input. To add a future op: extend `DOMAIN_OPERATIONS` plus a
   plugin entry, nothing else changes.
@@ -107,8 +117,9 @@ deterministic keyword overlap (`mode: 'keyword'`). Never throws, never hangs
 - TS unity: `tests/unit/math-intelligence.test.ts` → "one AI math intelligence
   subsystem" (constants, shim drift, transport default, tool names, memorize/
   recall, withheld opt-out, plugin contract); `tests/unit/math-domains.test.ts`
-  → routing table (explicit + keyword incl. statistics/logic, single
-  ownership), namespaced memory, specialist contracts, out-of-domain
+  → routing table (explicit + keyword incl. arithmetic/geometry/trigonometry/
+  probability/linear/number, single
+  ownership of all 34 ops), namespaced memory, specialist contracts, out-of-domain
   rejection; `tests/unit/math-semantic.test.ts` → cosine/keywordScore,
   keyword degradation, stubbed vector ranking, empty-memory safety; `tests/unit/core.test.ts` →
   "one math subsystem" (legacy contract still green via shims).

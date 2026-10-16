@@ -18,9 +18,9 @@ are core (stable, semver-minded) vs experimental (opt-in, may change).
 User (CLI / Desktop)
   → dsh profile (config/*.cordis.yml)
     → Cordis context (ctx)
-      → zoveli plugins (22 packages; 24 mounted by default)
+      → zoveli plugins (22 packages; 30 mounted by default)
         → capabilities (scanner → registry → adaptation)
-        → tools (guarded pre/post pipeline, ~57 live)
+        → tools (guarded pre/post pipeline, ~63 live)
         → sessions (JSONL + projections)
         → external systems (mathcore MCP, SQLite store, vault FS, LLM APIs)
 ```
@@ -30,14 +30,14 @@ User (CLI / Desktop)
 | Area | Plugins |
 |------|---------|
 | Core | `core`, `host`, `shim-dsh-core` (authoring shim, not a runtime) |
-| Math | `math-intelligence` (governor: verified compute + proof memory + rules), `math-domains` (algebra/calculus/statistics/logic/units/discrete specialists) |
+| Math | `math-intelligence` (governor: verified compute + proof memory + rules), `math-domains` (algebra/calculus/statistics/logic/units/discrete/arithmetic/geometry/trigonometry/probability/linear/number specialists) |
 | Memory | `memory`, `memory-store` (SQLite FTS5 + vault export mirror) |
 | Capabilities | `capability`, `skills`, `languages`, `search`, `docgen`, `code-analysis`, `health`, `graph`, `scheduler`, `sysinfo` |
 | Safety | `guard`, `secscan`, `auth` |
 | Interaction | `persona` (switchable friend/tutor/engineer/coach), `webresearch` (guarded fetch + search) |
 
-The host's `defaultPlugins` (24) are the tool-bearing set: core,
-math-intelligence, the 6 math specialists, memory-store, memory, skills,
+The host's `defaultPlugins` (30) are the tool-bearing set: core,
+math-intelligence, the 12 math specialists, memory-store, memory, skills,
 languages, sysinfo, search, scheduler, secscan, health, graph, docgen,
 code-analysis, capability, guard, persona, webresearch.
 

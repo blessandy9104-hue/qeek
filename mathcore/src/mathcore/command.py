@@ -319,9 +319,174 @@ def _dsolve(m: re.Match, raw: str) -> Command:
     return _dsolve_text(m.group(1), raw)
 
 
+def _frac(text: str, what: str) -> Fraction:
+    try:
+        return Fraction(text)
+    except (ValueError, ZeroDivisionError):
+        raise ParseError(f"{what} must be a number, got {text!r}")
+
+
+def _positive(v: Fraction, what: str) -> Fraction:
+    if v <= 0:
+        raise ParseError(f"{what} must be positive")
+    return v
+
+
+def _percent(m: re.Match, raw: str) -> Command:
+    pct, base = _frac(m.group(1), "percentage"), _frac(m.group(2), "base value")
+    return Command("percent", {"pct": _fmt(pct), "base": _fmt(base)},
+                   f"percent {_fmt(pct)} of {_fmt(base)}", raw)
+
+
+def _ratio(m: re.Match, raw: str) -> Command:
+    body = m.group(1).strip()
+    cm = (re.fullmatch(r"(" + _NUM + r")\s*:\s*(" + _NUM + r")", body)
+          or re.fullmatch(r"(" + _NUM + r")\s+to\s+(" + _NUM + r")", body, _I))
+    if cm:
+        a, b = _frac(cm.group(1), "ratio term"), _frac(cm.group(2), "ratio term")
+    else:
+        vals = _numbers(body)
+        if vals is None or len(vals) != 2:
+            raise ParseError("ratio needs two numbers, like 'ratio 2:4' or 'ratio 2 to 4'")
+        a, b = vals
+    if b == 0:
+        raise ParseError("ratio needs a nonzero second term")
+    return Command("ratio", {"a": _fmt(a), "b": _fmt(b)}, f"ratio {_fmt(a)}:{_fmt(b)}", raw)
+
+
+def _area(m: re.Match, raw: str) -> Command:
+    body = m.group(1).strip()
+    cm = re.fullmatch(r"circle\s+(?:radius\s+|r\s+)?(" + _NUM + r")", body, _I)
+    if cm:
+        r = _positive(_frac(cm.group(1), "radius"), "radius")
+        return Command("area", {"shape": "circle", "radius": _fmt(r)},
+                       f"area circle radius {_fmt(r)}", raw)
+    cm = re.fullmatch(r"rect(?:angle)?\s+(" + _NUM + r")\s*(?:by|x|\*)\s*(" + _NUM + r")", body, _I)
+    if cm:
+        length = _positive(_frac(cm.group(1), "length"), "length")
+        width = _positive(_frac(cm.group(2), "width"), "width")
+        return Command("area", {"shape": "rectangle", "length": _fmt(length), "width": _fmt(width)},
+                       f"area rectangle {_fmt(length)} by {_fmt(width)}", raw)
+    cm = (re.fullmatch(r"tri(?:angle)?\s+base\s+(" + _NUM + r")\s+height\s+(" + _NUM + r")", body, _I)
+          or re.fullmatch(r"tri(?:angle)?\s+(" + _NUM + r")\s*[,\s]\s*(" + _NUM + r")", body, _I))
+    if cm:
+        base = _positive(_frac(cm.group(1), "base"), "base")
+        height = _positive(_frac(cm.group(2), "height"), "height")
+        return Command("area", {"shape": "triangle", "base": _fmt(base), "height": _fmt(height)},
+                       f"area triangle base {_fmt(base)} height {_fmt(height)}", raw)
+    raise ParseError("area needs 'circle radius <r>', 'rectangle <l> by <w>' or 'triangle base <b> height <h>'")
+
+
+def _volume(m: re.Match, raw: str) -> Command:
+    body = m.group(1).strip()
+    cm = re.fullmatch(r"sphere\s+(?:radius\s+|r\s+)?(" + _NUM + r")", body, _I)
+    if cm:
+        r = _positive(_frac(cm.group(1), "radius"), "radius")
+        return Command("volume", {"shape": "sphere", "radius": _fmt(r)},
+                       f"volume sphere radius {_fmt(r)}", raw)
+    cm = re.fullmatch(r"box\s+(" + _NUM + r")\s*(?:by|x|\*)\s*(" + _NUM + r")\s*(?:by|x|\*)\s*(" + _NUM + r")",
+                      body, _I)
+    if cm:
+        dims = [_positive(_frac(cm.group(i), "edge"), "edge") for i in (1, 2, 3)]
+        shown = " by ".join(_fmt(d) for d in dims)
+        return Command("volume", {"shape": "box", "length": _fmt(dims[0]),
+                                  "width": _fmt(dims[1]), "height": _fmt(dims[2])},
+                       f"volume box {shown}", raw)
+    cm = (re.fullmatch(r"cylinder\s+radius\s+(" + _NUM + r")\s+height\s+(" + _NUM + r")", body, _I)
+          or re.fullmatch(r"cylinder\s+(" + _NUM + r")\s*[,\s]\s*(" + _NUM + r")", body, _I))
+    if cm:
+        r = _positive(_frac(cm.group(1), "radius"), "radius")
+        h = _positive(_frac(cm.group(2), "height"), "height")
+        return Command("volume", {"shape": "cylinder", "radius": _fmt(r), "height": _fmt(h)},
+                       f"volume cylinder radius {_fmt(r)} height {_fmt(h)}", raw)
+    raise ParseError("volume needs 'sphere radius <r>', 'box <l> by <w> by <h>' or 'cylinder radius <r> height <h>'")
+
+
+def _pythagoras(m: re.Match, raw: str) -> Command:
+    body = m.group(1).strip()
+    cm = re.fullmatch(r"legs?\s+(" + _NUM + r")\s*[,\s]\s*(" + _NUM + r")", body, _I)
+    if cm:
+        a = _positive(_frac(cm.group(1), "leg"), "leg")
+        b = _positive(_frac(cm.group(2), "leg"), "leg")
+        return Command("pythagoras", {"mode": "legs", "a": _fmt(a), "b": _fmt(b)},
+                       f"pythagoras legs {_fmt(a)} {_fmt(b)}", raw)
+    hyp_first = re.fullmatch(r"hyp(?:otenuse)?\s+(" + _NUM + r")\s+leg\s+(" + _NUM + r")", body, _I)
+    leg_first = (None if hyp_first is not None
+                 else re.fullmatch(r"leg\s+(" + _NUM + r")\s+hyp(?:otenuse)?\s+(" + _NUM + r")", body, _I))
+    if hyp_first is not None:
+        hyp = _positive(_frac(hyp_first.group(1), "hypotenuse"), "hypotenuse")
+        leg = _positive(_frac(hyp_first.group(2), "leg"), "leg")
+    elif leg_first is not None:
+        leg = _positive(_frac(leg_first.group(1), "leg"), "leg")
+        hyp = _positive(_frac(leg_first.group(2), "hypotenuse"), "hypotenuse")
+    else:
+        raise ParseError("pythagoras needs 'legs <a> <b>' or 'hypotenuse <h> leg <l>'")
+    if hyp <= leg:
+        raise ParseError("the hypotenuse must be longer than the given leg")
+    return Command("pythagoras", {"mode": "hyp", "hyp": _fmt(hyp), "leg": _fmt(leg)},
+                   f"pythagoras hypotenuse {_fmt(hyp)} leg {_fmt(leg)}", raw)
+
+
+def _trig(m: re.Match, raw: str) -> Command:
+    func, rest = m.group(1).lower(), m.group(2).strip()
+    dm = re.fullmatch(r"(.*?)\s*(?:degrees|degree|deg)\s*", rest, _I)
+    if dm and dm.group(1).strip():
+        angle_text, unit = dm.group(1).strip(), "degrees"
+    else:
+        angle_text, unit = rest, "radians"
+    if not angle_text:
+        raise ParseError("give an angle, like 'trig sin 30 degrees' or 'trig cos pi/3'")
+    try:
+        to_sympy(angle_text)
+    except Exception as exc:
+        raise ParseError(f"bad angle: {exc}")
+    canon = f"trig {func} {angle_text}" + (" degrees" if unit == "degrees" else "")
+    return Command("trig", {"func": func, "angle": angle_text, "unit": unit}, canon, raw)
+
+
+def _probability(m: re.Match, raw: str) -> Command:
+    body = m.group(1).strip()
+    bm = re.fullmatch(r"binomial\s+n\s*=?\s*(\d+)\s+k\s*=?\s*(\d+)\s+p\s*=?\s*(" + _NUM + r")", body, _I)
+    if bm:
+        n, k, p = int(bm.group(1)), int(bm.group(2)), _frac(bm.group(3), "p")
+        if n < 0 or n > 100000:
+            raise ParseError("n must be between 0 and 100000")
+        if not 0 <= k <= n:
+            raise ParseError("k must be between 0 and n")
+        if not 0 <= p <= 1:
+            raise ParseError("p must be between 0 and 1")
+        return Command("probability", {"kind": "binomial", "n": n, "k": k, "p": _fmt(p)},
+                       f"probability binomial n {n} k {k} p {_fmt(p)}", raw)
+    dm = re.fullmatch(r"dice\s+(?:sum\s*(?:of\s*)?)?(\d+)", body, _I)
+    if dm:
+        total = int(dm.group(1))
+        if not 2 <= total <= 12:
+            raise ParseError("two dice sum to between 2 and 12")
+        return Command("probability", {"kind": "dice", "total": total},
+                       f"probability dice sum {total}", raw)
+    cm = re.fullmatch(r"coin\s+(\d+)\s+heads?\s+in\s+(\d+)(?:\s+flips?)?", body, _I)
+    if cm:
+        k, n = int(cm.group(1)), int(cm.group(2))
+        if n < 1 or n > 100000:
+            raise ParseError("n must be between 1 and 100000")
+        if not 0 <= k <= n:
+            raise ParseError("k must be between 0 and n")
+        return Command("probability", {"kind": "coin", "n": n, "k": k},
+                       f"probability coin {k} heads in {n}", raw)
+    raise ParseError("probability needs 'binomial n <n> k <k> p <p>', 'dice sum <s>' or 'coin <k> heads in <n>'")
+
+
 # --------------------------------------------------------------------------- pattern table
 _I = re.IGNORECASE
 _PATTERNS: List[Tuple[re.Pattern, Builder]] = [
+    (re.compile(r"^percent\s+(" + _NUM + r")\s*%?\s+of\s+(" + _NUM + r")$", _I), _percent),
+    (re.compile(r"^(" + _NUM + r")\s*%\s+of\s+(" + _NUM + r")$", _I), _percent),
+    (re.compile(r"^ratio\s+(.+)$", _I), _ratio),
+    (re.compile(r"^area\s+(.+)$", _I), _area),
+    (re.compile(r"^volume\s+(.+)$", _I), _volume),
+    (re.compile(r"^pythagoras\s+(.+)$", _I), _pythagoras),
+    (re.compile(r"^trig\s+(sin|cos|tan)\s+(.+)$", _I), _trig),
+    (re.compile(r"^probability\s+(.+)$", _I), _probability),
     (re.compile(r"^(?:dsolve|solve ode|ode)[: ]\s*(.+)$", _I), _dsolve),
     (re.compile(r"^(?P<kw>prove|show that|verify|is it always true that)\s*(?:\[?(?P<dom>int(?:eger)?|real)\]?\s*[:,]?)?\s*(?P<formula>.+)$", _I), _logic),
     (re.compile(r"^(?P<kw>sat|satisfiable|is satisfiable|find values(?: such that)?|constraints?)\s*(?:\[?(?P<dom>int(?:eger)?|real)\]?\s*[:,]?)?\s*(?P<formula>.+)$", _I), _logic),
