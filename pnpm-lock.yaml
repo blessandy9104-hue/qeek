@@ -62,18 +62,6 @@ importers:
         version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
 
   apps/desktop:
-    devDependencies:
-      electron:
-        specifier: ^44.7.0
-        version: 44.7.0
-      oxlint:
-        specifier: 'catalog:'
-        version: 0.18.1
-      vitest:
-        specifier: 'catalog:'
-        version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)
-
-  apps/web:
     dependencies:
       '@zoveli/auth':
         specifier: workspace:*
@@ -88,15 +76,12 @@ importers:
         specifier: workspace:*
         version: link:../../packages/secscan
     devDependencies:
+      electron:
+        specifier: ^44.7.0
+        version: 44.7.0
       oxlint:
         specifier: 'catalog:'
         version: 0.18.1
-      tsdown:
-        specifier: ^0.23.1
-        version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
       vitest:
         specifier: 'catalog:'
         version: 1.6.1(@types/node@26.6.5)(@vitest/ui@1.6.1)(happy-dom@20.14.6)

@@ -25,35 +25,6 @@ services:
     profiles:
       - cli
 
-  # Web UI application
-  zoveli-web:
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile.web
-    container_name: zoveli-web
-    ports:
-      - "3080:3080"
-    volumes:
-      - ./data/vault:/app/data/vault
-      - ./data/sessions:/app/data/sessions
-      - ./data/audit:/app/data/audit
-      - ../knowledge-vault:/app/knowledge-vault:ro
-    environment:
-      - NODE_ENV=development
-      - PORT=3080
-      - ZOVELI_VAULT_PATH=/app/data/vault
-      - MATHCORE_AUDIT=/app/data/audit/audit.jsonl
-      # Free local chat: points the app at the `ollama` service below.
-      - ZOVELI_OLLAMA_URL=http://ollama:11434
-    healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3080/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
-    profiles:
-      - web
-
   # Ollama for local LLM inference
   ollama:
     image: ollama/ollama:latest

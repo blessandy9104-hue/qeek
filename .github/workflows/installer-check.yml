@@ -93,7 +93,7 @@ jobs:
           Write-Output ".ps1 parses clean"
 
   docker-build:
-    name: Docker Build (CLI + Web, no push)
+    name: Docker Build (CLI, no push)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -111,15 +111,5 @@ jobs:
           file: ./docker/Dockerfile.cli
           push: false
           tags: zoveli-cli:installer-check
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-      - name: Build Web image (proves z3-solver wheel builds)
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./docker/Dockerfile.web
-          push: false
-          tags: zoveli-web:installer-check
           cache-from: type=gha
           cache-to: type=gha,mode=max

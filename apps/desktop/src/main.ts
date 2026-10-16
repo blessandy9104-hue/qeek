@@ -13,7 +13,7 @@ import * as path from 'node:path';
 
 const PORT = parseInt(process.env.ZOVELI_DESKTOP_PORT || '3080', 10);
 const HOST = '127.0.0.1';
-const SERVER_ENTRY = path.join(__dirname, '..', '..', 'web', 'dist', 'server.js');
+const SERVER_ENTRY = path.join(__dirname, 'server', 'server.js');
 
 let serverProc: ChildProcess | null = null;
 let mainWindow: BrowserWindow | null = null;

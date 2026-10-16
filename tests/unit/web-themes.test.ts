@@ -11,7 +11,7 @@ import {
   themeSwitcherHTML,
   themeHeadScript,
   themeBootScript,
-} from '../../apps/web/src/themes';
+} from '../../apps/desktop/src/server/themes';
 
 const REQUIRED_VARS = ['--bg', '--fg', '--muted', '--accent', '--panel', '--border', '--badge-bg', '--badge-fg'];
 

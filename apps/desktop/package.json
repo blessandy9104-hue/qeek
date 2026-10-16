@@ -12,6 +12,12 @@
     "lint": "oxlint",
     "clean": "echo clean"
   },
+  "dependencies": {
+    "@zoveli/auth": "workspace:*",
+    "@zoveli/core": "workspace:*",
+    "@zoveli/host": "workspace:*",
+    "@zoveli/secscan": "workspace:*"
+  },
   "devDependencies": {
     "electron": "^44.7.0",
     "vitest": "catalog:",

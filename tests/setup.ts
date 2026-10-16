@@ -1,18 +1,28 @@
 import { beforeAll, afterAll, beforeEach, afterEach, vi } from 'vitest';
 import { tmpdir } from 'os';
-import { join } from 'path';
-import { mkdirSync, rmSync, writeFileSync } from 'fs';
+import { dirname, join } from 'path';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'fs';
 
-// Global test setup
-export const TEST_VAULT_PATH = join(tmpdir(), 'zoveli-test-vault');
-export const TEST_AUDIT_PATH = join(tmpdir(), 'zoveli-test-audit.jsonl');
-export const TEST_SESSION_PATH = join(tmpdir(), 'zoveli-test-sessions');
+// Global test setup.
+// NOTE: temp dirs are unique per test file run (mkdtempSync in beforeAll).
+// The old fixed names (zoveli-test-vault, ...) raced on CI: parallel
+// workers share tmpdir(), so one worker's afterAll rm -rf deleted the dir
+// while another worker's beforeAll was writing (ENOENT on Windows).
+// Unique base dirs eliminate the race on all platforms.
+export let TEST_VAULT_PATH = join(tmpdir(), `zoveli-test-vault-${process.pid}`);
+export let TEST_AUDIT_PATH = join(tmpdir(), `zoveli-test-audit-${process.pid}.jsonl`);
+export let TEST_SESSION_PATH = join(tmpdir(), `zoveli-test-sessions-${process.pid}`);
 
 beforeAll(() => {
-  // Create test directories
-  [TEST_VAULT_PATH, TEST_SESSION_PATH].forEach(dir => {
-    try { mkdirSync(dir, { recursive: true }); } catch {}
-  });
+  // Unique base per file run; no cross-worker collisions.
+  const base = mkdtempSync(join(tmpdir(), 'zoveli-test-'));
+  TEST_VAULT_PATH = join(base, 'vault');
+  TEST_SESSION_PATH = join(base, 'sessions');
+  TEST_AUDIT_PATH = join(base, 'audit.jsonl');
+
+  // Create test directories (throw on failure — never swallow mkdir errors)
+  mkdirSync(TEST_VAULT_PATH, { recursive: true });
+  mkdirSync(TEST_SESSION_PATH, { recursive: true });
 
   // Write test vault files
   writeFileSync(join(TEST_VAULT_PATH, 'welcome.md'), `# Welcome\nTest vault for Zoveli`);
@@ -29,11 +39,8 @@ beforeAll(() => {
 });
 
 afterAll(() => {
-  // Cleanup test directories
-  [TEST_VAULT_PATH, TEST_SESSION_PATH].forEach(dir => {
-    try { rmSync(dir, { recursive: true, force: true }); } catch {}
-  });
-  try { rmSync(TEST_AUDIT_PATH, { force: true }); } catch {}
+  // Cleanup the unique base dir for this file run (vault + sessions + audit)
+  try { rmSync(dirname(TEST_VAULT_PATH), { recursive: true, force: true }); } catch {}
 });
 
 beforeEach(() => {

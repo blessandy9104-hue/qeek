@@ -17,7 +17,7 @@ import {
   parseRunCall,
   hstsForRequest,
   MAX_MESSAGE_LEN,
-} from '../../apps/web/src/security';
+} from '../../apps/desktop/src/server/security';
 
 function shellPlugin() {
   return {
