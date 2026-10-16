@@ -36,6 +36,6 @@ export { mathcoreTools } from './mathcore-tools';
 export { memoryTools } from './memory-tools';
 // Single math surface: the transport singleton lives in @zoveli/math's
 // subsystem; re-exported here so existing deep imports keep working.
-export { mathcore, MathcoreClient } from './mathcore-mcp';
+export { mathcore } from './mathcore-mcp';
 
 

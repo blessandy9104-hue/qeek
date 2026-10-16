@@ -67,8 +67,7 @@ export async function boot(): Promise<void> {
 }
 
 export { ZoveliHost } from './host.js';
-export { runRepl } from './repl.js';
-export { chatConfigFromEnv, resolveChatConfig, probeOllama, ollamaBaseUrl, chat, chatTemperature, buildMemoryBrief, isLocalProvider, memoryBriefAllowed } from './chat.js';
+export { chatConfigFromEnv, resolveChatConfig, probeOllama, chat, chatTemperature, buildMemoryBrief, isLocalProvider, memoryBriefAllowed } from './chat.js';
 export type { ChatConfig } from './chat.js';
 
 

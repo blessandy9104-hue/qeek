@@ -126,9 +126,6 @@ importers:
       tsdown:
         specifier: ^0.23.1
         version: 0.23.1(tsx@4.23.15)(typescript@5.9.3)
-      tsx:
-        specifier: ^4.7.0
-        version: 4.23.15
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
@@ -235,9 +232,6 @@ importers:
       '@deepseek-ai/dsh-core':
         specifier: workspace:*
         version: link:../shim-dsh-core
-      '@zoveli/core':
-        specifier: workspace:*
-        version: link:../core
     devDependencies:
       oxlint:
         specifier: 'catalog:'
@@ -2578,6 +2572,7 @@ snapshots:
       '@esbuild/win32-arm64': 0.28.2
       '@esbuild/win32-ia32': 0.28.2
       '@esbuild/win32-x64': 0.28.2
+    optional: true
 
   estree-walker@3.0.3:
     dependencies:
@@ -2945,6 +2940,7 @@ snapshots:
       esbuild: 0.28.2
     optionalDependencies:
       fsevents: 2.3.3
+    optional: true
 
   type-detect@4.1.0: {}
 

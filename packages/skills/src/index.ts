@@ -116,5 +116,3 @@ const codeReviewSkill = defineSkill({
   }
 });
 
-export default zoveliSkills;
-

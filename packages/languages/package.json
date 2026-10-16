@@ -9,26 +9,6 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.js"
-    },
-    "./detector": {
-      "types": "./dist/detector.d.ts",
-      "import": "./dist/detector.js"
-    },
-    "./analyzer": {
-      "types": "./dist/analyzer.d.ts",
-      "import": "./dist/analyzer.js"
-    },
-    "./formatter": {
-      "types": "./dist/formatter.d.ts",
-      "import": "./dist/formatter.js"
-    },
-    "./runner": {
-      "types": "./dist/runner.d.ts",
-      "import": "./dist/runner.js"
-    },
-    "./tooling": {
-      "types": "./dist/tooling.d.ts",
-      "import": "./dist/tooling.js"
     }
   },
   "scripts": {
