@@ -21,7 +21,7 @@ const SPECIALISTS: Record<SpecialistDomain, SpecialistConfig> = {
   algebra: {
     tool: 'math_algebra_solve',
     defaultOp: 'solve',
-    hint: 'ALGEBRA SPECIALIST: you own evaluate/simplify/expand/factor/solve and linear-algebra/number-theory ops. CALL math_algebra_solve; STATE ONLY VERIFIED values.',
+    hint: 'ALGEBRA SPECIALIST: you own evaluate/simplify/expand/factor/solve (linear/number moved to linear/number specialists). CALL math_algebra_solve; STATE ONLY VERIFIED values.',
   },
   calculus: {
     tool: 'math_calculus_solve',
@@ -47,6 +47,36 @@ const SPECIALISTS: Record<SpecialistDomain, SpecialistConfig> = {
     tool: 'math_discrete_solve',
     defaultOp: 'shortest_path',
     hint: 'DISCRETE SPECIALIST: you own shortest_path (cheapest path in weighted graphs). CALL math_discrete_solve; STATE ONLY VERIFIED values.',
+  },
+  arithmetic: {
+    tool: 'math_arithmetic_solve',
+    defaultOp: 'percent',
+    hint: 'ARITHMETIC SPECIALIST: you own percent/ratio. CALL math_arithmetic_solve; STATE ONLY VERIFIED values.',
+  },
+  geometry: {
+    tool: 'math_geometry_solve',
+    defaultOp: 'area',
+    hint: 'GEOMETRY SPECIALIST: you own area/volume/pythagoras. CALL math_geometry_solve; STATE ONLY VERIFIED values.',
+  },
+  trigonometry: {
+    tool: 'math_trigonometry_solve',
+    defaultOp: 'trig',
+    hint: 'TRIGONOMETRY SPECIALIST: you own trig. CALL math_trigonometry_solve; STATE ONLY VERIFIED values.',
+  },
+  probability: {
+    tool: 'math_probability_solve',
+    defaultOp: 'probability',
+    hint: 'PROBABILITY SPECIALIST: you own probability. CALL math_probability_solve; STATE ONLY VERIFIED values.',
+  },
+  linear: {
+    tool: 'math_linear_solve',
+    defaultOp: 'linsolve',
+    hint: 'LINEAR SPECIALIST: you own determinant/rank/inverse/linsolve/matmul/eigenvalues. CALL math_linear_solve; STATE ONLY VERIFIED values.',
+  },
+  number: {
+    tool: 'math_number_solve',
+    defaultOp: 'is_prime',
+    hint: 'NUMBER SPECIALIST: you own is_prime/factor_int/gcd/lcm/modpow/factorial/choose. CALL math_number_solve; STATE ONLY VERIFIED values.',
   },
 };
 
@@ -160,5 +190,11 @@ export const zoveliMathStatistics = defineDomainSpecialist('statistics');
 export const zoveliMathLogic = defineDomainSpecialist('logic');
 export const zoveliMathUnits = defineDomainSpecialist('units');
 export const zoveliMathDiscrete = defineDomainSpecialist('discrete');
+export const zoveliMathArithmetic = defineDomainSpecialist('arithmetic');
+export const zoveliMathGeometry = defineDomainSpecialist('geometry');
+export const zoveliMathTrigonometry = defineDomainSpecialist('trigonometry');
+export const zoveliMathProbability = defineDomainSpecialist('probability');
+export const zoveliMathLinear = defineDomainSpecialist('linear');
+export const zoveliMathNumber = defineDomainSpecialist('number');
 
 export default zoveliMathAlgebra;

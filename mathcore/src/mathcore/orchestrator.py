@@ -23,7 +23,7 @@ from typing import Any, Dict, List, Optional, Tuple
 import mpmath as mp
 import sympy as sp
 
-from . import ops_algebra, ops_calculus, ops_data, ops_integer, ops_linear, ops_logic  # noqa: F401  (register ops)
+from . import ops_algebra, ops_arithmetic, ops_calculus, ops_data, ops_geometry, ops_integer, ops_linear, ops_logic, ops_probability, ops_trig  # noqa: F401  (register ops)
 from .command import Authorization, Command, authorize, parse
 from .framework import ERROR, PARTIAL, REGISTRY, REJECTED, VERIFIED, Certificate, compute
 from .numeric import close, to_mp
