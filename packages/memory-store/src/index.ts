@@ -35,10 +35,10 @@ export const zoveliMemoryStore = definePlugin({
       getStats: () => ({ indexedFiles: store.count(), backend: 'sqlite-fts5', lastReindex: new Date() }),
     });
 
-    ctx.provide('graph', {
-      build: async () => store.buildGraph(),
-      toDot: (g: Parameters<MemoryStore['toDot']>[0]) => store.toDot(g),
-    });
+    // Keep the dedicated graph plugin as the canonical graph service. The
+    // memory-store package provides search/memory primitives only; registering
+    // `graph` here duplicates the same service already registered by
+    // `packages/graph/src/index.ts` and creates a last-writer-wins conflict.
 
     ctx.register('memory-store-tools', [
       {
