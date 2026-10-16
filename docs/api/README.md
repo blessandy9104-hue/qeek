@@ -76,3 +76,12 @@ Tools are the agent-facing API. Full JSON schemas live in each plugin's `src/ind
 - Skills: `daily-briefing`, `research`, `task-planning`, `code-review` (see `packages/skills`)
 - `run_workflow {template, inputs?}` — templates: `research-report`, `code-review`, `daily-briefing`
 
+## HTTP endpoints (web server, `http://127.0.0.1:3080`)
+
+- `GET /health` → `{ok, tools}` (tool count; also the Docker/CI readiness probe)
+- `GET /api/tools` → `[{name, description, plugin}]` (the live tool list)
+- `POST /api/chat {message}` → `{ok, verified, reply, model, provider, local}` (50k-char cap; per-IP rate limit)
+- `POST /api/run {tool, args}` → `{ok, result}` on success, `{ok:false, error}` when the tool throws (unknown tools included); malformed bodies get 400
+- `GET /login`, `POST /api/auth/request`, `POST /api/auth/verify`, `GET /api/auth/me`, `POST /api/auth/logout` (passwordless email OTP)
+- `POST /api/run` and `/api/chat` accept an optional bearer gate: set `ZOVELI_API_TOKEN` (min 16 chars) to require `Authorization: Bearer`; per-IP rate limits apply (auth 30/min, chat/run 120/min; disabled when `ZOVELI_AUTH_DEV_ECHO=1` test mode is on)
+

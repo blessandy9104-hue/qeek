@@ -72,6 +72,26 @@ jobs:
           python -c "import mathcore; print('mathcore OK')"
           node apps/cli/dist/cli.js --help || pnpm start -- --help || true
 
+  powershell-syntax:
+    name: PowerShell Syntax (.ps1)
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Parse install-zoveli.ps1 (no execution)
+        shell: pwsh
+        run: |
+          $errors = $null
+          [void][System.Management.Automation.Language.Parser]::ParseFile('install/install-zoveli.ps1', [ref]$null, [ref]$errors)
+          if ($errors.Count -gt 0) {
+            $errors | ForEach-Object { Write-Error $_.Message }
+            exit 1
+          }
+          Write-Output ".ps1 parses clean"
+
   docker-build:
     name: Docker Build (CLI + Web, no push)
     runs-on: ubuntu-latest
