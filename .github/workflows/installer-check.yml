@@ -2,7 +2,7 @@ name: Installer Check
 
 # Validates the opencode-style one-line installer on PRs without privileged
 # operations (no sudo). Uses the runner's preinstalled git/curl/python/node
-# plus setup-node/setup-python/setup-pnpm. Also builds both Docker images so
+# plus setup-node/setup-python/setup-pnpm. Also builds the CLI Docker image so
 # the mathcore z3-solver fix is proven on PRs, because the main CI
 # `build-docker` job is gated with `if: github.event_name != 'pull_request'`
 # and therefore never runs on pull requests.

@@ -70,7 +70,6 @@ function createWindow(): void {
     height: 800,
     title: 'Zoveli AI',
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
       sandbox: true,
     },

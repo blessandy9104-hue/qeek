@@ -9,10 +9,6 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.js"
-    },
-    "./collectors": {
-      "types": "./dist/collectors.d.ts",
-      "import": "./dist/collectors.js"
     }
   },
   "scripts": {
