@@ -174,11 +174,12 @@ export class CodeAnalyzer {
           suggestion: 'Break into shorter lines',
         });
       }
-      if (/\bTODO\b|\bFIXME\b/.test(line)) {
+      const todoMatch = line.match(/\b(TODO|FIXME)\b/);
+      if (todoMatch) {
         issues.push({
           type: 'info', severity: 'low', rule: 'todo-comment',
-          message: 'TODO/FIXME marker found',
-          filePath, line: idx + 1, column: line.indexOf('TODO') + 1,
+          message: `${todoMatch[1]} marker found`,
+          filePath, line: idx + 1, column: (todoMatch.index ?? 0) + 1,
         });
       }
       if (/\bconsole\.log\b/.test(line) && (language === 'typescript' || language === 'javascript')) {
