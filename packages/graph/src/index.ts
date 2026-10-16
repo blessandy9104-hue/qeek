@@ -1,5 +1,5 @@
 import { definePlugin } from '@deepseek-ai/dsh-core';
-import { getStore } from '@zoveli/memory-store';
+import { getStore, resolveVaultPath } from '@zoveli/memory-store';
 
 export const zoveliGraph = definePlugin({
   name: 'zoveli-graph',
@@ -7,8 +7,10 @@ export const zoveliGraph = definePlugin({
 
   setup(ctx) {
     ctx.provide('graph', {
-      build: async () => getStore().buildGraph(),
-      toDot: (g: Parameters<ReturnType<typeof getStore>['toDot']>[0]) => getStore().toDot(g),
+      build: async ({ vaultPath }: { vaultPath?: string } = {}) =>
+        getStore(undefined, vaultPath ?? resolveVaultPath()).buildGraph(),
+      toDot: (g: Parameters<ReturnType<typeof getStore>['toDot']>[0], vaultPath?: string) =>
+        getStore(undefined, vaultPath ?? resolveVaultPath()).toDot(g),
     });
 
     ctx.register('graph-tools', [
@@ -22,9 +24,11 @@ export const zoveliGraph = definePlugin({
             format: { type: 'string', enum: ['json', 'dot'] },
           },
         },
-        async execute({ format }: { vaultPath?: string; format?: 'json' | 'dot' }) {
-          const g = getStore().buildGraph();
-          if (format === 'dot') return { dot: getStore().toDot(g) };
+        async execute({ format, vaultPath }: { vaultPath?: string; format?: 'json' | 'dot' } = {}) {
+          const targetVault = vaultPath ?? resolveVaultPath();
+          const store = getStore(undefined, targetVault);
+          const g = store.buildGraph();
+          if (format === 'dot') return { dot: store.toDot(g) };
           return g;
         },
       },
@@ -33,4 +37,3 @@ export const zoveliGraph = definePlugin({
 });
 
 export default zoveliGraph;
-
